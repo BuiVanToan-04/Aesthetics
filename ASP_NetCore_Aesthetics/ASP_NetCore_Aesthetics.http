@@ -1,0 +1,6 @@
+@ASP_NetCore_Aesthetics_HostAddress = http://localhost:5262
+
+GET {{ASP_NetCore_Aesthetics_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

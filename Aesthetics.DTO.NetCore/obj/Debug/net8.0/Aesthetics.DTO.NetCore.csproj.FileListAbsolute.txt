@@ -1,0 +1,11 @@
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\bin\Debug\net8.0\Aesthetics.DTO.NetCore.deps.json
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\bin\Debug\net8.0\Aesthetics.DTO.NetCore.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\bin\Debug\net8.0\Aesthetics.DTO.NetCore.pdb
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.AssemblyInfoInputs.cache
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.AssemblyInfo.cs
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.csproj.CoreCompileInputs.cache
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\refint\Aesthetics.DTO.NetCore.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\Aesthetics.DTO.NetCore.pdb
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DTO.NetCore\obj\Debug\net8.0\ref\Aesthetics.DTO.NetCore.dll

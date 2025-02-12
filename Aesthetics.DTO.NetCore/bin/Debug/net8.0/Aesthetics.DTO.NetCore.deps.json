@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Aesthetics.DTO.NetCore/1.0.0": {
+        "runtime": {
+          "Aesthetics.DTO.NetCore.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Aesthetics.DTO.NetCore/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
