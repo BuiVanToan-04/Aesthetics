@@ -72,10 +72,6 @@
               "target": "Package",
               "version": "[8.0.8, )"
             },
-            "System.Drawing.Common": {
-              "target": "Package",
-              "version": "[8.0.8, )"
-            },
             "XAct.Core.PCL": {
               "target": "Package",
               "version": "[0.0.5014, )"
