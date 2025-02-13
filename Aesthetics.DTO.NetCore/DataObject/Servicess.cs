@@ -15,7 +15,7 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public string ServiceName { get; set; }
         public string Description { get; set; }
         public string ServiceImage { get; set; }
-        public float PriceService { get; set; }
+        public double PriceService { get; set; }
         public int DeleteStatus { get; set; }
         public TypeProductsOfServices TypeProductsOfServices { get; set; }
 		public ICollection<InvoiceDetail> InvoiceDetail { get; set; } //Sửa

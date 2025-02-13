@@ -15,3 +15,4 @@ D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\obj\Debug\ne
 D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\obj\Debug\net8.0\Aesthetics.DataAccess.NetCore.pdb
 D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\obj\Debug\net8.0\Aesthetics.DataAccess.NetCore.genruntimeconfig.cache
 D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\obj\Debug\net8.0\ref\Aesthetics.DataAccess.NetCore.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\obj\Debug\net8.0\Aesthetics.DataAccess.NetCore.sourcelink.json

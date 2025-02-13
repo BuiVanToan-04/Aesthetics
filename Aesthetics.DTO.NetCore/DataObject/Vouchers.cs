@@ -13,7 +13,7 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public int VoucherID { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public float DiscountValue { get; set; }
+        public double DiscountValue { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public float MinimumOrderValue { get; set; }
