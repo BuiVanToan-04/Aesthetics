@@ -17,7 +17,7 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public string SupplierName { get; set; }
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
-        public double SellingPrice { get; set; }
+        public float SellingPrice { get; set; }
         public int Quantity { get; set; }
         public string ProductImages { get; set; }
         public int DeleteStatus { get; set; }
