@@ -45,9 +45,6 @@ D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\ru
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
@@ -153,3 +150,5 @@ D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\AS
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\staticwebassets\msbuild.ASP_NetCore_Aesthetics.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\ASP_NetCore_Aesthetics.sourcelink.json
