@@ -80,6 +80,70 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
+    "Method": "Delete_Servicess",
+    "RelativePath": "api/Servicess/Delete_Servicess",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "servicess",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Servicess",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
+    "Method": "GetList_SearchServicess",
+    "RelativePath": "api/Servicess/GetList_SearchServicess",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "servicess",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchServicess",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
+    "Method": "Insert_Servicess",
+    "RelativePath": "api/Servicess/Insert_Servicess",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "servicess",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.ServicessRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
+    "Method": "Update_Servicess",
+    "RelativePath": "api/Servicess/Update_Servicess",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "servicess",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Servicess",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.SupplierController",
     "Method": "Delete_Supplier",
     "RelativePath": "api/Supplier/Delete_Supplier",

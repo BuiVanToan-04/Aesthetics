@@ -1,8 +1,10 @@
 
 using Aesthetics.DataAccess.NetCore.Dapper;
 using Aesthetics.DataAccess.NetCore.DBContext;
+using Aesthetics.DataAccess.NetCore.Repositories.Implement;
 using Aesthetics.DataAccess.NetCore.Repositories.Impliment;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
+using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +41,7 @@ builder.Services.AddTransient<IApplicationDbConnection,ApplicationDbConnection>(
 builder.Services.AddTransient<IUserRepository,UserRepository>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<ITypeProductsOfServicesRepository, TypeProductsOfServicesRepository>();
+builder.Services.AddTransient<IServicessRepository, ServicessRepository>();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 
 builder.Services.AddEndpointsApiExplorer();

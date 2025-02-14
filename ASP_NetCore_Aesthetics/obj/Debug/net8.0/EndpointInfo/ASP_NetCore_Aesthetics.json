@@ -160,6 +160,130 @@
         }
       }
     },
+    "/api/Servicess/Insert_Servicess": {
+      "post": {
+        "tags": [
+          "Servicess"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicessRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicessRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServicessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Servicess/Update_Servicess": {
+      "post": {
+        "tags": [
+          "Servicess"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Servicess"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Servicess"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Servicess"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Servicess/Delete_Servicess": {
+      "delete": {
+        "tags": [
+          "Servicess"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Servicess"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Servicess"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Servicess"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Servicess/GetList_SearchServicess": {
+      "get": {
+        "tags": [
+          "Servicess"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchServicess"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchServicess"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchServicess"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Supplier/Insert_Supplier": {
       "post": {
         "tags": [
@@ -571,6 +695,16 @@
         },
         "additionalProperties": false
       },
+      "Delete_Servicess": {
+        "type": "object",
+        "properties": {
+          "serviceID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Delete_Supplier": {
         "type": "object",
         "properties": {
@@ -587,6 +721,30 @@
           "productsOfServicesID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_SearchServicess": {
+        "type": "object",
+        "properties": {
+          "serviceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "serviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productsOfServicesName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -640,6 +798,37 @@
         },
         "additionalProperties": false
       },
+      "ServicessRequest": {
+        "type": "object",
+        "properties": {
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productsOfServicesName": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceImage": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceService": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SupplierRequest": {
         "type": "object",
         "properties": {
@@ -683,6 +872,42 @@
           },
           "productsOfServicesType": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Update_Servicess": {
+        "type": "object",
+        "properties": {
+          "serviceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productsOfServicesName": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceImage": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceService": {
+            "type": "number",
+            "format": "float",
             "nullable": true
           }
         },
