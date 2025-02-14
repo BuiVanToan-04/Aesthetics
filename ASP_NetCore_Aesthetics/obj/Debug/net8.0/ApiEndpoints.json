@@ -80,6 +80,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "Insert_Booking",
+    "RelativePath": "api/Bookings/Insert_Booking",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.BookingRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
     "Method": "Delete_Servicess",
     "RelativePath": "api/Servicess/Delete_Servicess",
