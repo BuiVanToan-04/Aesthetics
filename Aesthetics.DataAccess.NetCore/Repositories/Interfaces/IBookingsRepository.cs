@@ -27,6 +27,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		Task<Booking> GetBookingByID(int? BookingID);
 
 		//6.Function gen NumberOrder
-		int GenerateNumberOrder();
+		Task<int?> GenerateNumberOrder();
 	}
 }

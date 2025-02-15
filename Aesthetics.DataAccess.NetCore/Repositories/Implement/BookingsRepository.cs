@@ -21,8 +21,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		private DB_Context _context;
 		private IConfiguration _configuration;
 		private IServicessRepository _servicessRepository;
-		public BookingsRepository(DB_Context context, IConfiguration configuration
-			,IServiceProvider serviceProvider, IServicessRepository servicessRepository) : base(serviceProvider) 
+		public BookingsRepository(DB_Context context, IServiceProvider serviceProvider,
+			IConfiguration configuration, IServicessRepository servicessRepository) : base(serviceProvider)
 		{
 			_context = context;
 			_configuration = configuration;
@@ -35,14 +35,39 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public int GenerateNumberOrder()
+		public async Task<int?> GenerateNumberOrder()
 		{
+			//var timeVietNam = DateTime.UtcNow.AddHours(7).Date;
+			//var latestBooking = await _context.Booking
+			//	.Where(b => b.BookingCreation >= timeVietNam)
+			//	.OrderByDescending(a => a.NumberOrder)
+			//	.FirstOrDefaultAsync();
+			//return latestBooking == null ? 1 : latestBooking.NumberOrder + 1;
+
+			//1. Lấy giờ việt nam
 			var timeVietNam = DateTime.UtcNow.AddHours(7).Date;
-			var latestBooking =  _context.Booking
-				.Where(b => b.BookingCreation >= timeVietNam)
-				.OrderByDescending(a => a.NumberOrder)
-				.FirstOrDefault();
-			return latestBooking == null ? 1 : latestBooking.NumberOrder + 1;
+			//2. Lưu thời gian cuối cùng mà NumberOrder được reset
+			var _lastResetTime = DateTime.MinValue;
+			//3. NumberOrder hiện tại
+			int _currentNumberOrder = 1;
+			//4. Kiểm tra xem có cần reset NumberOrder không?
+			if (_lastResetTime.Date != timeVietNam.Date || timeVietNam.Hour > 19)
+			{
+				_currentNumberOrder = 1;
+				_lastResetTime = timeVietNam; //cập nhật lại thời gian cuối cùng cho NumberOrder
+			}
+
+			//5.Lấy số thứ tự lớn nhất trong ngày hiện tại
+			var latestBooking = await _context.Booking
+					.Where(s => s.BookingCreation.Date == timeVietNam.Date)
+					.OrderByDescending(a => a.NumberOrder)
+					.FirstOrDefaultAsync();
+			//6. Nếu tồn tại booking trong ngày thì tăng NumberOrder
+			if(latestBooking != null)
+			{
+				_currentNumberOrder = latestBooking.NumberOrder + 1;
+			}
+			return _currentNumberOrder;
 		}
 
 		public async Task<ResponseData> Insert_Booking(BookingRequest insert_)
@@ -56,7 +81,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ!";
 					return returnData;
 				}
-				if (_servicessRepository.GetServicessByServicesID(insert_.ServiceID) == null) 
+				if (await _servicessRepository.GetServicessByServicesID(insert_.ServiceID) == null) 
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Service không tồn tại!";
@@ -118,7 +143,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				}
 
 				var BookingCreation = DateTime.Now;
-				var NumberOrder = GenerateNumberOrder();
+				var NumberOrder = await GenerateNumberOrder();
 
 				var parameters = new DynamicParameters();
 				parameters.Add("@ServiceID", insert_.ServiceID);
@@ -160,7 +185,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ!";
 						return returnData;
 					}
-					if (_servicessRepository.GetServicessByServicesID(update_.ServiceID) == null)
+					if (await _servicessRepository.GetServicessByServicesID(update_.ServiceID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = "Service không tồn tại!";
@@ -229,7 +254,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ScheduledDate", update_.ScheduledDate);
 				await DbConnection.ExecuteAsync("Insert_Booking", parameters);
 				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = "Insert Booking thành công!";
+				returnData.ResposeMessage = "Update Booking thành công!";
 				return returnData;
 			}
 			catch (Exception ex)

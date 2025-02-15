@@ -5,6 +5,7 @@ using Aesthetics.DataAccess.NetCore.Repositories.Implement;
 using Aesthetics.DataAccess.NetCore.Repositories.Impliment;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
+using Aesthetics.DTO.NetCore.DataObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
