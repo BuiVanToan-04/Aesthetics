@@ -21,6 +21,5 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public ICollection<InvoiceDetail> InvoiceDetail { get; set; } //Sửa
 		public ICollection<Comments> Comments { get; set; }
         public ICollection<Booking> Bookings { get; set; }
-
     }
 }

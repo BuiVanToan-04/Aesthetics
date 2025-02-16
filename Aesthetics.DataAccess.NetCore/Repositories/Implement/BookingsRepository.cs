@@ -29,47 +29,54 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			_servicessRepository = servicessRepository;
 		}
 
+		public async Task<string?> GetServicessNameByID(int? ServicessID)
+		{
+			return await _context.Servicess.Where(s => s.ServiceID == ServicessID)
+				.Select(v => v.ServiceName).FirstOrDefaultAsync();
+		}
+
+		public async Task<int?> GetProductsOfServicesIDByServicesID(int? ServicessID)
+		{
+			return await _context.Servicess
+								 .Where(s => s.ServiceID == ServicessID)
+								 .Select(s => s.TypeProductsOfServices.ProductsOfServicesID)
+								 .FirstOrDefaultAsync();
+		}
+
 		public async Task<Booking> GetBookingByID(int? BookingID)
 		{
 			return await _context.Booking.Where(s => s.BookingID == BookingID
 				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<int?> GenerateNumberOrder()
+		public async Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime scheduledDate, int? TypeServicessID)
 		{
-			//var timeVietNam = DateTime.UtcNow.AddHours(7).Date;
-			//var latestBooking = await _context.Booking
-			//	.Where(b => b.BookingCreation >= timeVietNam)
-			//	.OrderByDescending(a => a.NumberOrder)
-			//	.FirstOrDefaultAsync();
-			//return latestBooking == null ? 1 : latestBooking.NumberOrder + 1;
+			// 1. Lấy giờ Việt Nam
+			var timeVietNam = DateTime.UtcNow.AddHours(7);
 
-			//1. Lấy giờ việt nam
-			var timeVietNam = DateTime.UtcNow.AddHours(7).Date;
-			//2. Lưu thời gian cuối cùng mà NumberOrder được reset
-			var _lastResetTime = DateTime.MinValue;
-			//3. NumberOrder hiện tại
+			// 2. Số thứ tự hiện tại
 			int _currentNumberOrder = 1;
-			//4. Kiểm tra xem có cần reset NumberOrder không?
-			if (_lastResetTime.Date != timeVietNam.Date || timeVietNam.Hour > 19)
-			{
-				_currentNumberOrder = 1;
-				_lastResetTime = timeVietNam; //cập nhật lại thời gian cuối cùng cho NumberOrder
-			}
 
-			//5.Lấy số thứ tự lớn nhất trong ngày hiện tại
+			// 3. Lấy NumberOrder lớn nhất trong ScheduledDate
 			var latestBooking = await _context.Booking
-					.Where(s => s.BookingCreation.Date == timeVietNam.Date)
-					.OrderByDescending(a => a.NumberOrder)
-					.FirstOrDefaultAsync();
-			//6. Nếu tồn tại booking trong ngày thì tăng NumberOrder
-			if(latestBooking != null)
-			{
-				_currentNumberOrder = latestBooking.NumberOrder + 1;
-			}
-			return _currentNumberOrder;
-		}
+				.Where(s => s.ScheduledDate.Date == scheduledDate.Date && s.TypeServicessID == TypeServicessID)
+				.OrderByDescending(v => v.NumberOrder)
+				.FirstOrDefaultAsync();
 
+			// 4. Nếu tồn tại booking trong ngày thì tăng NumberOrder
+			if (latestBooking != null)
+			{
+				_currentNumberOrder = (latestBooking.NumberOrder ?? 0) + 1;
+			}
+
+			// 5. Kiểm tra xem số thứ tự có vượt quá 100 không
+			if (_currentNumberOrder > 100)
+			{
+				return (null, $"Ngày: {scheduledDate.Date} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
+			}
+
+			return (_currentNumberOrder, null);
+		}
 		public async Task<ResponseData> Insert_Booking(BookingRequest insert_)
 		{
 			var returnData = new ResponseData();
@@ -141,18 +148,34 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu ScheduledDate không hợp lệ!";
 					return returnData;
 				}
-
+				
 				var BookingCreation = DateTime.Now;
-				var NumberOrder = await GenerateNumberOrder();
+				//1.Lấy ProductsOfServicesID để so sánh ở bước 2
+				var ProductsOfServicesID = await GetProductsOfServicesIDByServicesID(insert_.ServiceID);
+
+				//2. Gen numberOrder qua ScheduledDate & ProductsOfServicesID
+				var (numberOrder,mesage) = await GenerateNumberOrder(insert_.ScheduledDate, ProductsOfServicesID);
+				if (mesage != null)
+				{
+					returnData.ResponseCode = -1;
+					returnData.ResposeMessage = mesage;
+					return returnData;
+				}
+
+				//3.Lấy ServiceName
+				var ServiceName = await GetServicessNameByID(insert_.ServiceID);
 
 				var parameters = new DynamicParameters();
+				parameters.Add("@UserName",insert_.UserName);
 				parameters.Add("@ServiceID", insert_.ServiceID);
-				parameters.Add("@UserName", insert_.UserName);
+				parameters.Add("@ServiceName", ServiceName);
+				parameters.Add("@TypeServicessID", ProductsOfServicesID);
 				parameters.Add("@Email", insert_.Email ?? null);
 				parameters.Add("@Phone", insert_.Phone ?? null);
 				parameters.Add("@BookingCreation", BookingCreation);
-				parameters.Add("@NumberOrder", NumberOrder);
 				parameters.Add("@ScheduledDate", insert_.ScheduledDate);
+				parameters.Add("@NumberOrder", numberOrder);
+
 				await DbConnection.ExecuteAsync("Insert_Booking", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert Booking thành công!";
@@ -161,7 +184,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex) 
 			{
 				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.StackTrace;
+				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}
