@@ -58,6 +58,24 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.HasOne(t => t.TypeProductsOfServices)  
 				.WithMany(s => s.Services)              
 				.HasForeignKey(v => v.ProductsOfServicesID);
+
+			//6.Chỉ định mối quan hệ 1-N của Booking(1) & Booking_Assignment(N)
+			builder.Entity<Booking_Assignment>()
+				.HasOne(b => b.Booking)
+				.WithMany(ba => ba.Booking_Assignment)
+				.HasForeignKey(s => s.BookingID);
+
+			//7.Chỉ định mối quan hệ N-N của Users & Clinic thông qua bảng trung gian Clinic_Staff
+			builder.Entity<Clinic_Staff>()
+				.HasKey(cs => cs.ClinicStaffID);
+			builder.Entity<Clinic_Staff>()
+				.HasOne(u => u.Users)
+				.WithMany(us => us.Clinic_Staff)
+				.HasForeignKey(s => s.UserID);
+			builder.Entity<Clinic_Staff>()
+				.HasOne(a => a.Clinic)
+				.WithMany(w => w.Clinic_Staff)
+				.HasForeignKey(v =>v.ClinicID);
 		}
 		public virtual DbSet<Booking> Booking { get; set; }
 		public virtual DbSet<Carts> Carts { get; set; }
@@ -75,5 +93,8 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 		public virtual DbSet<UserSession> UserSession { get; set; }
 		public virtual DbSet<Vouchers> Vouchers { get; set; }
 		public virtual DbSet<Wallets> Wallets { get; set; }
+		public virtual DbSet<Booking_Assignment> Booking_Assignment { get; set; }
+		public virtual DbSet<Clinic> Clinic { get; set; }
+		public virtual DbSet<Clinic_Staff> Clinic_Staff { get; set; }
 	}
 }

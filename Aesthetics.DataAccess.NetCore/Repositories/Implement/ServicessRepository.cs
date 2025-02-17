@@ -195,7 +195,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 						return returnData;
 					}
-					if (await _typeProductsOfServices.GetTypeByID(update_.ProductsOfServicesID) == null)
+					if (await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(update_.ProductsOfServicesID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = "ProductsOfServicesID không tồn tại. Vui lòng nhập lại!";
@@ -331,7 +331,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex) 
 			{
 				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.StackTrace;
+				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}
@@ -381,7 +381,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 						return returnData;
 					}
-					if (await _typeProductsOfServices.GetTypeByID(getList_.ProductsOfServicesID) == null)
+					if (await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(getList_.ProductsOfServicesID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = $"Danh sách Service không tồn tại Service có ProductsOfServicesID: {getList_.ProductsOfServicesID}!";
@@ -433,7 +433,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex) 
 			{
 				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.StackTrace;
+				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}

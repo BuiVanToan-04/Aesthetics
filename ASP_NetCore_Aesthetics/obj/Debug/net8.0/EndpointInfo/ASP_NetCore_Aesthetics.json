@@ -191,6 +191,37 @@
         }
       }
     },
+    "/api/Clinic/Insert_Clinic": {
+      "post": {
+        "tags": [
+          "Clinic"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClinicRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClinicRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClinicRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Servicess/Insert_Servicess": {
       "post": {
         "tags": [
@@ -746,6 +777,24 @@
             "format": "int32"
           },
           "deviceName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClinicRequest": {
+        "type": "object",
+        "properties": {
+          "clinicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productsOfServicesName": {
             "type": "string",
             "nullable": true
           }

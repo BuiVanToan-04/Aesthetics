@@ -179,6 +179,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				await DbConnection.ExecuteAsync("Insert_Booking", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert Booking thành công!";
+
+
 				return returnData;
 			}
 			catch (Exception ex) 
@@ -283,7 +285,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex)
 			{
 				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.StackTrace;
+				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}

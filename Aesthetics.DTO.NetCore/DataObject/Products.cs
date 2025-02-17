@@ -23,7 +23,7 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public int DeleteStatus { get; set; }
         public Supplier Supplier { get; set; }
         public TypeProductsOfServices TypeProductsOfServices { get; set; }
-        public ICollection<InvoiceDetail> InvoiceDetail { get; set; } //Sửa
+        public ICollection<InvoiceDetail> InvoiceDetail { get; set; } 
 		public ICollection<CartProduct> CartProducts { get; set; }
 		public ICollection<Comments> Comments { get; set; }
     }

@@ -44,6 +44,7 @@ builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<ITypeProductsOfServicesRepository, TypeProductsOfServicesRepository>();
 builder.Services.AddTransient<IServicessRepository, ServicessRepository>();
 builder.Services.AddTransient<IBookingsRepository, BookingsRepository>();
+builder.Services.AddTransient<IClinicRepository, ClinicRepository>();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 
 builder.Services.AddEndpointsApiExplorer();

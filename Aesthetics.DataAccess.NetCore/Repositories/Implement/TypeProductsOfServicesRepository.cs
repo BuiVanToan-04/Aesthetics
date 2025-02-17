@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
+namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 {
 	public class TypeProductsOfServicesRepository : BaseApplicationService, ITypeProductsOfServicesRepository
 	{
@@ -40,9 +40,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 							&& s.ProductsOfServicesType == Type).FirstOrDefaultAsync();
 		}
 
-		public async Task<TypeProductsOfServices> GetTypeByID(int? requestID)
+		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesIDByID(int? ProductsOfServicesID)
 		{
-			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == requestID).FirstOrDefaultAsync();
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == ProductsOfServicesID).FirstOrDefaultAsync();
 		}
 
 		public async Task<ResponseData> Insert_TypeProductsOfServices(TypeProductsOfServicesRequest request)
@@ -140,7 +140,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 					}
 				}
 
-				if (await GetTypeByID(update_.ProductsOfServicesID) == null)
+				if (await GetTypeProductsOfServicesIDByID(update_.ProductsOfServicesID) == null)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = $"Không tồn tại loại Product || Services có ID: {update_.ProductsOfServicesID}!";
@@ -183,7 +183,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 					return returnData;
 				}
-				if (await GetTypeByID(delete_.ProductsOfServicesID) == null)
+				if (await GetTypeProductsOfServicesIDByID(delete_.ProductsOfServicesID) == null)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = $"Không tồn tại Sản Phẩm || Dịch vụ có ID: {delete_.ProductsOfServicesID}!";
@@ -222,7 +222,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 						return returnData;
 					}
-					if (await GetTypeByID(getList_Search.ProductsOfServicesID) == null)
+					if (await GetTypeProductsOfServicesIDByID(getList_Search.ProductsOfServicesID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = $"Không tồn tại loại Product || Services có ID: {getList_Search.ProductsOfServicesID}!";
@@ -285,6 +285,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 				returnData.ResposeMessage= ex.Message;
 				return returnData;
 			}
+		}
+
+		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesName)
+		{
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == ProductsOfServicesName)
+				.FirstOrDefaultAsync();
 		}
 	}
 }

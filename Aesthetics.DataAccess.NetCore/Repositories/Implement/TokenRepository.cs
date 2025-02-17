@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
+namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 {
 	public class TokenRepository : ITokenRepository
 	{

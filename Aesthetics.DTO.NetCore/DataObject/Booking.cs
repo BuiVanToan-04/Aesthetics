@@ -15,7 +15,6 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public int? ServiceID { get; set; }
 		public string? ServiceName { get; set; }
 		public int? TypeServicessID { get; set; }
-		public int? ClinicID { get; set; }
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
 		public DateTime? BookingCreation { get; set; }
@@ -24,5 +23,6 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public int? NumberOrder { get; set; }
 		public int? DeleteStatus { get; set; }
 		public ICollection<Servicess> Servicesses { get; set; }
+		public ICollection<Booking_Assignment> Booking_Assignment { get; set; }
 	}
 }

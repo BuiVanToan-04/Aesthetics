@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using XAct.Users;
 using static System.Collections.Specialized.BitVector32;
 
-namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
+namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 {
 	public class UserRepository : BaseApplicationService, IUserRepository
 	{

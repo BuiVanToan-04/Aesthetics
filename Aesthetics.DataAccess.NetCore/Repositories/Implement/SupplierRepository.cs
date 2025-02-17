@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
+namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 {
 	public class SupplierRepository : BaseApplicationService, ISupplierRepository
 	{
@@ -165,7 +165,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 			catch (Exception ex)
 			{
 				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.StackTrace;
+				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}

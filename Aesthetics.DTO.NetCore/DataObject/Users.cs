@@ -34,5 +34,6 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public ICollection<Invoice> Invoice { get; set; }
         public ICollection<InvoiceDetail> InvoicesDetail { get; set; }
         public ICollection<Permission> Permissions { get; set; }
-    }
+		public ICollection<Clinic_Staff> Clinic_Staff { get; set; }
+	}
 }

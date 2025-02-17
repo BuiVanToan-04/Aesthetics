@@ -96,6 +96,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
+    "Method": "Insert_Clinic",
+    "RelativePath": "api/Clinic/Insert_Clinic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clinic",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.ClinicRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
     "Method": "Delete_Servicess",
     "RelativePath": "api/Servicess/Delete_Servicess",

@@ -28,6 +28,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 		Task<TypeProductsOfServices> GetTypeByName(string? Name, string? Type);
 
 		//6.Funciton get TypeProductsOfServices by TypeProductsOfServicesID
-		Task<TypeProductsOfServices> GetTypeByID(int? requestID);
+		Task<TypeProductsOfServices> GetTypeProductsOfServicesIDByID(int? ProductsOfServicesID);
+
+		//7.Function get TypeProductsOfServices by ProductsOfServicesName
+		Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesName);
 	}
 }
