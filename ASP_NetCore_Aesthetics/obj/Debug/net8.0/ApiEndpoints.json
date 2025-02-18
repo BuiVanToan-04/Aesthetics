@@ -96,6 +96,54 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "Update_StatusBooking",
+    "RelativePath": "api/Bookings/Update_StatusBooking",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "delete_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Booking",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
+    "Method": "Delete_Clinic",
+    "RelativePath": "api/Clinic/Delete_Clinic",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "delete_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Clinic",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
+    "Method": "GetList_SearchClinic",
+    "RelativePath": "api/Clinic/GetList_SearchClinic",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_Search",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
     "Method": "Insert_Clinic",
     "RelativePath": "api/Clinic/Insert_Clinic",
@@ -106,6 +154,22 @@
       {
         "Name": "clinic",
         "Type": "Aesthetics.DTO.NetCore.RequestData.ClinicRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
+    "Method": "Update_Clinic",
+    "RelativePath": "api/Clinic/Update_Clinic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "update_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Clinic",
         "IsRequired": true
       }
     ],

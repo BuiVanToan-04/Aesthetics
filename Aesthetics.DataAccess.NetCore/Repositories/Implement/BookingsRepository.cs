@@ -29,6 +29,14 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			_servicessRepository = servicessRepository;
 		}
 
+		public async Task<int?> GetClinicByProductsOfServicesID(int? ProductsOfServicesID)
+		{
+			return await _context.Clinic.Where(s => s.ProductsOfServicesID == ProductsOfServicesID
+						&& s.ClinicStatus == 1)
+						.Select(a => a.ClinicID)
+						.FirstOrDefaultAsync();
+		}
+
 		public async Task<string?> GetServicessNameByID(int? ServicessID)
 		{
 			return await _context.Servicess.Where(s => s.ServiceID == ServicessID)
@@ -75,32 +83,38 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				return (null, $"Ngày: {scheduledDate.Date} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
 			}
 
+			//6. Qua 19h tối thì reset _currentNumberOrder về 1
+			if (timeVietNam.Hour > 19)
+			{
+				_currentNumberOrder = 1;
+			}
 			return (_currentNumberOrder, null);
 		}
+		
 		public async Task<ResponseData> Insert_Booking(BookingRequest insert_)
 		{
 			var returnData = new ResponseData();
 			try
 			{
-				if(insert_.ServiceID <=0)
+				if (insert_.ServiceID <= 0)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ!";
 					return returnData;
 				}
-				if (await _servicessRepository.GetServicessByServicesID(insert_.ServiceID) == null) 
+				if (await _servicessRepository.GetServicessByServicesID(insert_.ServiceID) == null)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Service không tồn tại!";
 					return returnData;
 				}
-				if(!Validation.CheckString(insert_.UserName))
+				if (!Validation.CheckString(insert_.UserName))
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu đầu vào UserName không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(insert_.UserName)) 
+				if (!Validation.CheckXSSInput(insert_.UserName))
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu UserName chứa kí tự không hợp lệ!";
@@ -112,7 +126,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Vui lòng nhập Phone || Email để liên hệ!";
 					return returnData;
 				}
-				if (insert_.Email != null) 
+				if (insert_.Email != null)
 				{
 					if (!Validation.CheckString(insert_.Email))
 					{
@@ -142,19 +156,19 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						return returnData;
 					}
 				}
-				if (insert_.ScheduledDate < DateTime.Now) 
+				if (insert_.ScheduledDate < DateTime.Now)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu ScheduledDate không hợp lệ!";
 					return returnData;
 				}
-				
+
 				var BookingCreation = DateTime.Now;
 				//1.Lấy ProductsOfServicesID để so sánh ở bước 2
 				var ProductsOfServicesID = await GetProductsOfServicesIDByServicesID(insert_.ServiceID);
 
 				//2. Gen numberOrder qua ScheduledDate & ProductsOfServicesID
-				var (numberOrder,mesage) = await GenerateNumberOrder(insert_.ScheduledDate, ProductsOfServicesID);
+				var (numberOrder, mesage) = await GenerateNumberOrder(insert_.ScheduledDate, ProductsOfServicesID);
 				if (mesage != null)
 				{
 					returnData.ResponseCode = -1;
@@ -166,7 +180,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var ServiceName = await GetServicessNameByID(insert_.ServiceID);
 
 				var parameters = new DynamicParameters();
-				parameters.Add("@UserName",insert_.UserName);
+				parameters.Add("@UserName", insert_.UserName);
 				parameters.Add("@ServiceID", insert_.ServiceID);
 				parameters.Add("@ServiceName", ServiceName);
 				parameters.Add("@TypeServicessID", ProductsOfServicesID);
@@ -174,16 +188,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@Phone", insert_.Phone ?? null);
 				parameters.Add("@BookingCreation", BookingCreation);
 				parameters.Add("@ScheduledDate", insert_.ScheduledDate);
-				parameters.Add("@NumberOrder", numberOrder);
-
+				parameters.Add("@NumberOrder", numberOrder);	
 				await DbConnection.ExecuteAsync("Insert_Booking", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert Booking thành công!";
-
-
 				return returnData;
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
@@ -202,7 +213,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào BookingID không hợp lệ!";
 					return returnData;
 				}
-				if(update_.ServiceID != null)
+				if (update_.ServiceID != null)
 				{
 					if (update_.ServiceID <= 0)
 					{
@@ -299,7 +310,5 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		{
 			throw new NotImplementedException();
 		}
-
-		
 	}
 }

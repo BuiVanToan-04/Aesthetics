@@ -27,5 +27,47 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex);
 			}
 		}
+
+		[HttpPost("Update_Clinic")]
+		public async Task<IActionResult> Update_Clinic(Update_Clinic update_)
+		{
+			try
+			{
+				var responseData = await _clinicRepository.Update_Clinic(update_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex);
+			}
+		}
+
+		[HttpDelete("Delete_Clinic")]
+		public async Task<IActionResult> Delete_Clinic(Delete_Clinic delete_)
+		{
+			try
+			{
+				var responseData = await _clinicRepository.Delete_Clinic(delete_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex);
+			}
+		}
+
+		[HttpGet("GetList_SearchClinic")]
+		public async Task<IActionResult> GetList_SearchClinic(GetList_Search getList_)
+		{
+			try
+			{
+				var responseData = await _clinicRepository.GetList_SearchClinic(getList_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex);
+			}
+		}
 	}
 }

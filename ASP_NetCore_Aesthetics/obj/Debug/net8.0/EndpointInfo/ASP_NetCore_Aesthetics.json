@@ -191,6 +191,37 @@
         }
       }
     },
+    "/api/Bookings/Update_StatusBooking": {
+      "post": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Clinic/Insert_Clinic": {
       "post": {
         "tags": [
@@ -211,6 +242,99 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/ClinicRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Clinic/Update_Clinic": {
+      "post": {
+        "tags": [
+          "Clinic"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Clinic"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Clinic"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Clinic"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Clinic/Delete_Clinic": {
+      "delete": {
+        "tags": [
+          "Clinic"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Clinic"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Clinic"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Clinic"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Clinic/GetList_SearchClinic": {
+      "get": {
+        "tags": [
+          "Clinic"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_Search"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_Search"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_Search"
               }
             }
           }
@@ -801,6 +925,26 @@
         },
         "additionalProperties": false
       },
+      "Delete_Booking": {
+        "type": "object",
+        "properties": {
+          "bookingID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Delete_Clinic": {
+        "type": "object",
+        "properties": {
+          "clinicID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Delete_Servicess": {
         "type": "object",
         "properties": {
@@ -827,6 +971,30 @@
           "productsOfServicesID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_Search": {
+        "type": "object",
+        "properties": {
+          "clinicID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clinicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productsOfServicesName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -977,6 +1145,29 @@
             "nullable": true
           },
           "productsOfServicesType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Update_Clinic": {
+        "type": "object",
+        "properties": {
+          "clinicID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clinicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "productsOfServicesID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productsOfServicesName": {
             "type": "string",
             "nullable": true
           }

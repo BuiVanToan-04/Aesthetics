@@ -19,7 +19,6 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public string? Phone { get; set; }
 		public DateTime? BookingCreation { get; set; }
 		public DateTime ScheduledDate { get; set; }
-		public int? StatusBooking { get; set; }  //0: Đang chờ xử lí, 1: Đã xử lí
 		public int? NumberOrder { get; set; }
 		public int? DeleteStatus { get; set; }
 		public ICollection<Servicess> Servicesses { get; set; }

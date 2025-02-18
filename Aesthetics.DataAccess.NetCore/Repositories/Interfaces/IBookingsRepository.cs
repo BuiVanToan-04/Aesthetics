@@ -34,5 +34,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 
 		//8.Funciton get ServicessName by ServicessID 
 		Task<string?> GetServicessNameByID (int? ServicessID);
+
+		//9.Function get Clinic by ProductsOfServicesID
+		Task<int?> GetClinicByProductsOfServicesID(int? ProductsOfServicesID);
 	}
 }

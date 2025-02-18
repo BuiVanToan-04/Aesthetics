@@ -1,5 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
+using Aesthetics.DTO.NetCore.DataObject;
 using Aesthetics.DTO.NetCore.RequestData;
+using Aesthetics.DTO.NetCore.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		Task<ResponseData> Delete_Clinic(Delete_Clinic delete_);
 
 		//4.Function get list & Search Clinic
-		Task<ResponseData> GetList_SearchClinic(GetList_Search getList_);
+		Task<ResponesClinicData> GetList_SearchClinic(GetList_Search getList_);
+
+		//5.Function get Clinic by ClinicName
+		Task<Clinic> GetClinicByName(string? name);
+
+		//Function get Clinic by ClinicID
+		Task<Clinic> GetClinicByID(int? ClinicID);
 	}
 }
