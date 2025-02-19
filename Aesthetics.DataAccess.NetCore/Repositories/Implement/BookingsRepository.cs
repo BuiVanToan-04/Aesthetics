@@ -155,6 +155,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			{
 				// Tìm booking theo ID
 				var booking = await _context.Booking.FindAsync(update_.BookingID);
+
 				// Tìm booking assignment theo BookingID
 				var booking_Ass = await GetBooking_AssignmentByBookingID(update_.BookingID);
 
@@ -177,7 +178,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				// Cập nhật BookingID trong Booking_Assignment
 				booking_Ass.BookingID = update_.BookingID; 
 
-				// Kiểm tra nếu ServiceID hợp lệ
 				if (update_.ServiceID != null)
 				{
 					if (update_.ServiceID <= 0 || await _servicessRepository.GetServicessByServicesID(update_.ServiceID) == null)
@@ -216,11 +216,15 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				booking.ScheduledDate = update_.ScheduledDate;
 				booking_Ass.AssignedDate = update_.ScheduledDate;
 
-				// Lưu lại thông tin cũ của booking
 				var ServiceID = booking.ServiceID;
 				var ScheduledDate = booking.ScheduledDate;
+
+				//Lấy ProductsOfServicesID qua BooKingID
 				var ProductsOfServicesID = await GetProductsOfServicesIDByBooKingID(update_.BookingID);
+				//Lấy ProductsOfServicesID qua ServiceID
 				var newProductsOfServicesID = await GetProductsOfServicesIDByServicesID(update_.ServiceID);
+				// ==> Mục đích kiểm tra xem ProductsOfServicesID của Booking ban đầu và ProductsOfServicesID của
+				// update_.ServiceID mới truyền vào có trùng nhau hay không ở (*)
 
 				// Nếu ServiceID thay đổi thì cập nhật ServiceName
 				if (update_.ServiceID != ServiceID)
@@ -230,7 +234,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					booking_Ass.ServiceName = serviceName;
 				}
 
-				// Kiểm tra nếu ngày đặt lịch hoặc loại dịch vụ thay đổi
+				//(*) Kiểm tra nếu ngày đặt lịch hoặc loại dịch vụ thay đổi
 				if (update_.ScheduledDate != ScheduledDate || newProductsOfServicesID != ProductsOfServicesID)
 				{
 					// Tạo số thứ tự mới cho booking
@@ -266,7 +270,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				await transaction.RollbackAsync(); // Rollback nếu có lỗi xảy ra
+				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
 				return returnData;
