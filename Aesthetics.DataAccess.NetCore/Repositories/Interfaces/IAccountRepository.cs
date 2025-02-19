@@ -9,6 +9,7 @@ using BE_102024.DataAces.NetCore.DataOpject.RequestData;
 using System.Security.Claims;
 using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DTO.NetCore.DataObject;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 {
@@ -37,5 +38,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 
 		//8.Hàm giải mã Token
 		Task<ClaimsPrincipal?> GetPrincipalFromExpiredToken(string? token);
+
+		//9.Hàm Tạo Token
+		public Task<JwtSecurityToken> CreateToken(List<Claim> authClaims);
+		//10.Hàm Tạo chuỗi kí tự  Token
+		public Task<string> GenerateRefreshToken();
 	}
 }

@@ -36,7 +36,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddTransient<IAccountRepository,AccountRepository>();
-builder.Services.AddTransient<ITokenRepository,TokenRepository>();
 builder.Services.AddTransient<IUserSessionRepository,UserSessionRepository>();
 builder.Services.AddTransient<IApplicationDbConnection,ApplicationDbConnection>();
 builder.Services.AddTransient<IUserRepository,UserRepository>();

@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using XAct.Users;
@@ -99,6 +100,34 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Impliment
 		public async Task<Users> User_GetByID(int UserID)
 		{
 			return _context.Users.ToList().Where(s => s.UserID == UserID).FirstOrDefault();
+		}
+
+		public async Task<JwtSecurityToken> CreateToken(List<Claim> authClaims)
+		{
+			if (authClaims == null)
+			{
+				throw new ArgumentNullException(nameof(authClaims), "authClaims cannot be null");
+			}
+			var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+			_ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+
+			var token = new JwtSecurityToken(
+				issuer: _configuration["JWT:ValidIssuer"],
+				audience: _configuration["JWT:ValidAudience"],
+				expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
+				claims: authClaims,
+				signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+				);
+
+			return token;
+		}
+
+		public async Task<string> GenerateRefreshToken()
+		{
+			var randomNumber = new byte[64];
+			using var rng = RandomNumberGenerator.Create();
+			rng.GetBytes(randomNumber);
+			return Convert.ToBase64String(randomNumber);
 		}
 	}
 }

@@ -11,31 +11,43 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 {
 	public interface IBookingsRepository
 	{
-		//1.Function add Booking
+		//Function add Booking
 		Task<ResponseData> Insert_Booking(BookingRequest insert_);
 
-		//2.Function update Booking
+		//Function update Booking
 		Task<ResponseData> Update_Booking(Update_Booking update_);
 
-		//3.Function delete Booking
+		//Function delete Booking
 		Task<ResponseData> Delete_Booking(Delete_Booking delete_);
 
-		//4.Function get list & search Booking
+		//Function get list & search Booking
 		Task<ResponseData> GetList_SearchBooking(GetList_SearchBooking getList_);
 
-		//5.Function get Booking by BookingID
+		//Function get Booking by BookingID
 		Task<Booking> GetBookingByID(int? BookingID);
 
-		//6.Function gen NumberOrder
+		//Function gen NumberOrder
 		Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime scheduledDate, int? TypeServicessID);
 
-		//7.Function get TypeProductsOfServicesID by ServicessID
+		//Function get TypeProductsOfServicesID by ServicessID
 		Task<int?> GetProductsOfServicesIDByServicesID(int? ServicessID);
 
-		//8.Funciton get ServicessName by ServicessID 
+		//Funciton get ServicessName by ServicessID 
 		Task<string?> GetServicessNameByID (int? ServicessID);
 
-		//9.Function get Clinic by ProductsOfServicesID
+		//Function get Clinic by ProductsOfServicesID
 		Task<int?> GetClinicByProductsOfServicesID(int? ProductsOfServicesID);
+
+		//Function get ProductsOfServicesID by BooKingID
+		Task<int?> GetProductsOfServicesIDByBooKingID(int? BookingID);
+
+		//Function get ServicesID by BooKingID
+		Task<int?> GetServicesIDByBookingID(int? BookingID);
+
+		//Function get ScheduledDate by BooKingID
+		Task<DateTime?> GetScheduledDateByBookingID(int? BookingID);
+
+		//Function get Booking_Assignment by bookingID 
+		Task<Booking_Assignment> GetBooking_AssignmentByBookingID(int? BookingID);
 	}
 }

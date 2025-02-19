@@ -22,7 +22,7 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? ServiceID { get; set; }
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
-		public DateTime? ScheduledDate { get; set; }
+		public DateTime ScheduledDate { get; set; }
 	}
 
 	public class Delete_Booking

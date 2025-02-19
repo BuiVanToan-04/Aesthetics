@@ -27,5 +27,19 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex.StackTrace);
 			}
 		}
+
+		[HttpPost("Update_Booking")]
+		public async Task<IActionResult> Update_Booking(Update_Booking request)
+		{
+			try
+			{
+				var responseData = await _bookings.Update_Booking(request);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex.StackTrace);
+			}
+		}
 	}
 }

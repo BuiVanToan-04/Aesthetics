@@ -191,7 +191,7 @@
         }
       }
     },
-    "/api/Bookings/Update_StatusBooking": {
+    "/api/Bookings/Update_Booking": {
       "post": {
         "tags": [
           "Bookings"
@@ -200,17 +200,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Delete_Booking"
+                "$ref": "#/components/schemas/Update_Booking"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Delete_Booking"
+                "$ref": "#/components/schemas/Update_Booking"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Delete_Booking"
+                "$ref": "#/components/schemas/Update_Booking"
               }
             }
           }
@@ -925,16 +925,6 @@
         },
         "additionalProperties": false
       },
-      "Delete_Booking": {
-        "type": "object",
-        "properties": {
-          "bookingID": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "Delete_Clinic": {
         "type": "object",
         "properties": {
@@ -1147,6 +1137,37 @@
           "productsOfServicesType": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Update_Booking": {
+        "type": "object",
+        "properties": {
+          "bookingID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "scheduledDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

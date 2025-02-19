@@ -18,16 +18,14 @@ namespace ASP_NetCore_Aesthetics.Controllers
 	public class AuthenticationController : ControllerBase
 	{
 		private IAccountRepository _accountRepository;
-		private ITokenRepository _tokenRepository;
 		private IUserSessionRepository _userSession;
 		private IConfiguration _configuration;
 		private DB_Context _context;
 		private readonly IDistributedCache _cache;
-		public AuthenticationController(IAccountRepository accountRepository, ITokenRepository tokenRepository,
+		public AuthenticationController(IAccountRepository accountRepository,
 			IConfiguration configuration, DB_Context context, IDistributedCache cache, IUserSessionRepository userSession)
 		{
 			_accountRepository = accountRepository;
-			_tokenRepository = tokenRepository;
 			_configuration = configuration;
 			_context = context;
 			_cache = cache;
@@ -47,7 +45,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					responseData.ResposeMessage = "Đăng Nhập Thất Bại, Vui Lòng Kiểm Tra Lại UserName || PassWord!";
 					return Ok(responseData);
 				}
-
+				//Tạo Token
 				var authClaims = new List<Claim>
 				{
 					new Claim(ClaimTypes.Name, user.UserName),
@@ -56,15 +54,21 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					new Claim(ClaimTypes.Authentication, user.RefeshToken ?? string.Empty)
 				};
 
-				var newToken = await _tokenRepository.CreateToken(authClaims);
+				//Lưu RefreshToken
+				var newToken = await _accountRepository.CreateToken(authClaims);
 				_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-				var refeshToken = await _tokenRepository.GenerateRefreshToken();
+				var refeshToken = await _accountRepository.GenerateRefreshToken();
 				await _accountRepository.UserUpdate_RefeshToken(user.UserID, refeshToken, DateTime.Now.AddDays(refreshTokenValidityInDays));
 
+				//Lấy tên thiết bị
 				var DeviceName = await _accountRepository.GetDeviceName();
+
+				//Lấy địa chỉ IP
 				var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
 
+				//Lưu vào RedisCaching
 				var cachKey = "User_" + user.UserID + "-" + DeviceName;
+
 				//Lưu vào db
 				var user_Session = new Aesthetics.DTO.NetCore.DataObject.UserSession
 				{
@@ -98,6 +102,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 
 				_cache.Set(cachKey, dataToCache, options);
 
+				//Trả về token & thông tin
 				responseData.ResponseCode = 1;
 				responseData.ResposeMessage = "Đăng nhập thành công!";
 				responseData.DeviceName = DeviceName;
@@ -165,8 +170,8 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						responeData.ResposeMessage = "Token không hợp lệ!";
 						return Ok(responeData);
 					}
-					var newToken = await _tokenRepository.CreateToken(principal.Claims.ToList());
-					var newRefreshToken = await _tokenRepository.GenerateRefreshToken();
+					var newToken = await _accountRepository.CreateToken(principal.Claims.ToList());
+					var newRefreshToken = await _accountRepository.GenerateRefreshToken();
 
 					//3. Tạo Token và RefreshToken mới
 					_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
@@ -235,8 +240,8 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					return Ok(responseData);
 				}
 
-				var newToken = await _tokenRepository.CreateToken(principal.Claims.ToList());
-				var newRefeshToken = await _tokenRepository.GenerateRefreshToken();
+				var newToken = await _accountRepository.CreateToken(principal.Claims.ToList());
+				var newRefeshToken = await _accountRepository.GenerateRefreshToken();
 
 				//Bước 3: Tạo Token mới và RefresToken mới
 				_ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
@@ -357,6 +362,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 							db.KeyDelete(key);
 						}
 					}
+					//Xóa trong db
 					await _userSession.DeleleAll_Session(user.UserID);
 					Console.WriteLine($"Đã đang xuất tất cả các thiết bị của {user.UserID}");
 				}
