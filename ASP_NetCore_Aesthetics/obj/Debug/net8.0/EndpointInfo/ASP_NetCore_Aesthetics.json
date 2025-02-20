@@ -862,9 +862,13 @@
       "BookingRequest": {
         "type": "object",
         "properties": {
-          "serviceID": {
-            "type": "integer",
-            "format": "int32"
+          "serviceIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           },
           "userName": {
             "type": "string",

@@ -18,8 +18,8 @@ namespace Aesthetics.DTO.NetCore.DataObject
         public double PriceService { get; set; }
         public int DeleteStatus { get; set; }
         public TypeProductsOfServices TypeProductsOfServices { get; set; }
-		public ICollection<InvoiceDetail> InvoiceDetail { get; set; } //Sửa
+		public ICollection<InvoiceDetail> InvoiceDetail { get; set; } 
 		public ICollection<Comments> Comments { get; set; }
-        public ICollection<Booking> Bookings { get; set; }
-    }
+		public ICollection<Booking_Servicess> Booking_Servicesses { get; set; }
+	}
 }

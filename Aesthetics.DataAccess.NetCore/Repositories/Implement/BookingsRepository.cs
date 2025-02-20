@@ -9,11 +9,14 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XAct;
 using XAct.Services;
+using XAct.Users;
 
 namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 {
@@ -33,47 +36,49 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		public async Task<ResponseData> Insert_Booking(BookingRequest insert_)
 		{
 			var returnData = new ResponseData();
+
+			// Bắt đầu một transaction để đảm bảo tính toàn vẹn dữ liệu
 			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
-				if (insert_.ServiceID <= 0)
+				// Kiểm tra nếu danh sách dịch vụ rỗng hoặc null thì trả về lỗi
+				if (insert_.ServiceIDs == null || insert_.ServiceIDs.Count == 0) 
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ!";
+					returnData.ResposeMessage = "Vui lòng chọn ít nhất một Servicess!";
 					return returnData;
 				}
-				if (await _servicessRepository.GetServicessByServicesID(insert_.ServiceID) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Service không tồn tại!";
-					return returnData;
-				}
+				// Kiểm tra UserName có hợp lệ hay không (không chứa ký tự đặc biệt, không bị XSS)
 				if (!Validation.CheckString(insert_.UserName) || !Validation.CheckXSSInput(insert_.UserName))
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu UserName không hợp lệ hoặc chứa kí tự không hợp lệ!";
 					return returnData;
 				}
+				// Kiểm tra phải tồn tại 1 Email hoặc Phone
 				if (insert_.Email == null && insert_.Phone == null)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Vui lòng nhập Phone || Email để liên hệ!";
 					return returnData;
 				}
-				if (insert_.Email != null && (!Validation.CheckString(insert_.Email) 
+				// Kiểm tra Email có hợp lệ hay không (không chứa ký tự đặc biệt, không bị XSS)
+				if (insert_.Email != null && (!Validation.CheckString(insert_.Email)
 					|| !Validation.CheckXSSInput(insert_.Email)))
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu Email không hợp lệ hoặc chứa kí tự không hợp lệ!";
 					return returnData;
 				}
-				if (insert_.Phone != null && (!Validation.CheckXSSInput(insert_.Phone) 
+				// Kiểm tra Phone có hợp lệ hay không (không chứa ký tự đặc biệt, không bị XSS, đủ số)
+				if (insert_.Phone != null && (!Validation.CheckXSSInput(insert_.Phone)
 					|| !Validation.CheckNumber(insert_.Phone)))
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Phone không hợp lệ. Phone gồm các số(10-11số)!";
 					return returnData;
 				}
+				// Kiểm tra ngày đặt lịch không được nhỏ hơn ngày hiện tại
 				if (insert_.ScheduledDate < DateTime.Now)
 				{
 					returnData.ResponseCode = -1;
@@ -81,194 +86,96 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 
-				var BookingCreation = DateTime.Now;
-				//1. Lấy ProductsOfServicesID để so sánh ở bước 2
-				var ProductsOfServicesID = await GetProductsOfServicesIDByServicesID(insert_.ServiceID);
+				//1.Lấy thời gian hiệ tại
+				var bookingCreation = DateTime.Now;
 
-				//2. Gen numberOrder qua ScheduledDate & ProductsOfServicesID
-				var (numberOrder, mesage) = await GenerateNumberOrder(insert_.ScheduledDate, ProductsOfServicesID);
-				if (mesage != null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = mesage;
-					return returnData;
-				}
-
-				//3. Lấy ServiceName
-				var serviceName = await GetServicessNameByID(insert_.ServiceID);
-
-				//4. Thêm vào db
-				var newBooking = new Booking
+				var newBooking = new Booking()
 				{
 					UserName = insert_.UserName,
-					ServiceID = insert_.ServiceID,
-					ServiceName = serviceName,
-					TypeServicessID = ProductsOfServicesID,
-					Email = insert_.Email,
-					Phone = insert_.Phone,
-					BookingCreation = BookingCreation,
-					NumberOrder = numberOrder,
+					Email = insert_.Email ?? null,
+					Phone = insert_.Phone ?? null,
+					BookingCreation = bookingCreation,
 					ScheduledDate = insert_.ScheduledDate,
 					DeleteStatus = 1
 				};
 				await _context.Booking.AddAsync(newBooking);
 				await _context.SaveChangesAsync();
 
-				//Lấy ClinicID
-				var clinicID = await GetClinicByProductsOfServicesID(ProductsOfServicesID) ?? 0;
+				// Dictionary lưu NumberOrder theo từng ProductsOfServicesID
+				var numberOrderMap = new Dictionary<int, int>();
+				int numberOrder;
+				//Dictionary numberOrderMap<int, int> lưu NumberOrder cho mỗi ProductsOfServicesID.
+				//Key: ProductsOfServicesID
+				//Value: NumberOrder
+				//Kiểm tra nếu ProductsOfServicesID đã có NumberOrder
+				//Nếu có → sử dụng lại.
+				//Nếu chưa có → gọi GenerateNumberOrder() để tạo mới.
 
-				//Thêm Booking_Assignment sau khi thêm Booking thành công
-				var newBooking_Ass = new Booking_Assignment
+				//Duyệt qua list ServiceIDs đầu vào để xử lý các servicessID
+				foreach (var servicessID in insert_.ServiceIDs)
 				{
-					BookingID = newBooking.BookingID,
-					ClinicID = clinicID,
-					UserName = insert_.UserName,
-					ServiceName = serviceName,
-					NumberOrder = numberOrder,
-					AssignedDate = insert_.ScheduledDate,
-					Status = 0
-				};
-				await _context.Booking_Assignment.AddAsync(newBooking_Ass);
+					//Kiểm tra servicessID có tồn tại hay kh?
+					var servicess = await GetServicessByServicessID(servicessID);
+					if (servicess == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = $"ServicessID: {servicessID} không tồn tại!";
+						return returnData;
+					}
+					
+					// Kiểm tra xem ProductsOfServicesID đã có NumberOrder chưa
+					if (numberOrderMap.ContainsKey(servicess.ProductsOfServicesID))
+					{
+						// Nếu đã có, sử dụng lại NumberOrder
+						numberOrder = numberOrderMap[servicess.ProductsOfServicesID];
+					}
+					else
+					{
+						// Nếu chưa có, tạo mới NumberOrder
+						var (generatedNumberOrder, mesage) = await GenerateNumberOrder(insert_.ScheduledDate, servicess.ProductsOfServicesID);
+						if (mesage != null)
+						{
+							returnData.ResponseCode = -1;
+							returnData.ResposeMessage = mesage;
+							return returnData;
+						}
+
+						numberOrder = generatedNumberOrder ?? 0;
+						numberOrderMap[servicess.ProductsOfServicesID] = numberOrder;
+					}
+
+					var newBooking_Servicess = new Booking_Servicess
+					{
+						BookingID = newBooking.BookingID,
+						ProductsOfServicesID = servicess.ProductsOfServicesID,
+						ServiceID = servicess.ServiceID,
+						ServiceName = servicess.ServiceName,
+						NumberOrder = numberOrder,
+						AssignedDate = insert_.ScheduledDate,
+					};
+					await _context.Booking_Servicess.AddAsync(newBooking_Servicess);
+					await _context.SaveChangesAsync();
+
+					var newBooking_Assignment = new Booking_Assignment
+					{
+						BookingServiceID = newBooking_Servicess.BookingServiceID,
+						ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
+						UserName = insert_.UserName,
+						ServiceName = servicess.ServiceName,
+						NumberOrder = numberOrder,
+						AssignedDate = insert_.ScheduledDate,
+					};
+					await _context.Booking_Assignment.AddAsync(newBooking_Assignment);
+				}
 				await _context.SaveChangesAsync();
-
-				await transaction.CommitAsync(); //Commit transaction nếu thành công
-
 				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = "Insert Booking & Booking_Assignment thành công!";
-				return returnData;
-			}
-			catch (Exception ex)
-			{
-				await transaction.RollbackAsync(); 
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
-			}
-		}
+				returnData.ResposeMessage = "Insert Booking thành công!";
 
-
-		public async Task<ResponseData> Update_Booking(Update_Booking update_)
-		{
-			var returnData = new ResponseData(); 
-			using var transaction = await _context.Database.BeginTransactionAsync(); 
-			try
-			{
-				// Tìm booking theo ID
-				var booking = await _context.Booking.FindAsync(update_.BookingID);
-
-				// Tìm booking assignment theo BookingID
-				var booking_Ass = await GetBooking_AssignmentByBookingID(update_.BookingID);
-
-				// Kiểm tra nếu không tìm thấy booking
-				if (booking == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Booking không tồn tại!";
-					return returnData;
-				}
-
-				// Kiểm tra nếu không tìm thấy booking assignment
-				if (booking_Ass == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Booking_Assignment không tồn tại!";
-					return returnData;
-				}
-
-				// Cập nhật BookingID trong Booking_Assignment
-				booking_Ass.BookingID = update_.BookingID; 
-
-				if (update_.ServiceID != null)
-				{
-					if (update_.ServiceID <= 0 || await _servicessRepository.GetServicessByServicesID(update_.ServiceID) == null)
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ hoặc Service không tồn tại!";
-						return returnData;
-					}
-				}
-
-				// Cập nhật ServiceID cho booking
-				booking.ServiceID = update_.ServiceID; 
-
-				if (!string.IsNullOrEmpty(update_.UserName) && Validation.CheckString(update_.UserName) && Validation.CheckXSSInput(update_.UserName))
-				{
-					booking.UserName = update_.UserName;
-					booking_Ass.UserName = update_.UserName;
-				}
-
-				if (!string.IsNullOrEmpty(update_.Email) && Validation.CheckString(update_.Email) && Validation.CheckXSSInput(update_.Email))
-				{
-					booking.Email = update_.Email;
-				}
-
-				if (!string.IsNullOrEmpty(update_.Phone) && Validation.CheckXSSInput(update_.Phone) && Validation.CheckNumber(update_.Phone))
-				{
-					booking.Phone = update_.Phone;
-				}
-
-				if (update_.ScheduledDate <= DateTime.Now)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ScheduledDate không hợp lệ. Vui lòng nhập lại ScheduledDate!";
-					return returnData;
-				}
-				booking.ScheduledDate = update_.ScheduledDate;
-				booking_Ass.AssignedDate = update_.ScheduledDate;
-
-				var ServiceID = booking.ServiceID;
-				var ScheduledDate = booking.ScheduledDate;
-
-				//Lấy ProductsOfServicesID qua BooKingID
-				var ProductsOfServicesID = await GetProductsOfServicesIDByBooKingID(update_.BookingID);
-				//Lấy ProductsOfServicesID qua ServiceID
-				var newProductsOfServicesID = await GetProductsOfServicesIDByServicesID(update_.ServiceID);
-				// ==> Mục đích kiểm tra xem ProductsOfServicesID của Booking ban đầu và ProductsOfServicesID của
-				// update_.ServiceID mới truyền vào có trùng nhau hay không ở (*)
-
-				// Nếu ServiceID thay đổi thì cập nhật ServiceName
-				if (update_.ServiceID != ServiceID)
-				{
-					var serviceName = await GetServicessNameByID(update_.ServiceID);
-					booking.ServiceName = serviceName;
-					booking_Ass.ServiceName = serviceName;
-				}
-
-				//(*) Kiểm tra nếu ngày đặt lịch hoặc loại dịch vụ thay đổi
-				if (update_.ScheduledDate != ScheduledDate || newProductsOfServicesID != ProductsOfServicesID)
-				{
-					// Tạo số thứ tự mới cho booking
-					var result = await GenerateNumberOrder(update_.ScheduledDate, newProductsOfServicesID);
-
-					// Kiểm tra nếu vượt quá số lượng cho phép
-					if (result.Item2 != null)
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = result.Item2;
-						return returnData;
-					}
-
-					// Cập nhật số thứ tự mới
-					booking.NumberOrder = result.Item1;
-					booking_Ass.NumberOrder = result.Item1;
-					booking.TypeServicessID = newProductsOfServicesID;
-
-					// Lấy ClinicID và cập nhật cho booking_Ass
-					var clinicID = await GetClinicByProductsOfServicesID(newProductsOfServicesID) ?? 0;
-					booking_Ass.ClinicID = clinicID;
-				}
-
-				// Cập nhật booking và booking assignment trong database
-				_context.Booking.Update(booking);
-				_context.Booking_Assignment.Update(booking_Ass);
-				await _context.SaveChangesAsync();
+				//Commit transaction nếu thành công
 				await transaction.CommitAsync();
-
-				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = "Update thành công Booking & Booking_Assignment!";
 				return returnData;
 			}
-			catch (Exception ex)
+			catch (Exception ex) 
 			{
 				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
@@ -277,6 +184,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
+		public Task<ResponseData> Update_Booking(Update_Booking update_)
+		{
+			throw new NotImplementedException();
+		}
 
 		public Task<ResponseData> Delete_Booking(Delete_Booking delete_)
 		{
@@ -288,36 +199,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			throw new NotImplementedException();
 		}
 
-		public async Task<int?> GetClinicByProductsOfServicesID(int? ProductsOfServicesID)
-		{
-			return await _context.Clinic.Where(s => s.ProductsOfServicesID == ProductsOfServicesID
-						&& s.ClinicStatus == 1)
-						.Select(a => a.ClinicID)
-						.FirstOrDefaultAsync();
-		}
-
-		public async Task<string?> GetServicessNameByID(int? ServicessID)
-		{
-			return await _context.Servicess.Where(s => s.ServiceID == ServicessID 
-					&& s.DeleteStatus ==1)
-					.Select(v => v.ServiceName).FirstOrDefaultAsync();
-		}
-
-		public async Task<int?> GetProductsOfServicesIDByServicesID(int? ServicessID)
-		{
-			return await _context.Servicess
-								 .Where(s => s.ServiceID == ServicessID && s.DeleteStatus ==1)
-								 .Select(s => s.TypeProductsOfServices.ProductsOfServicesID)
-								 .FirstOrDefaultAsync();
-		}
-
-		public async Task<Booking> GetBookingByID(int? BookingID)
-		{
-			return await _context.Booking.Where(s => s.BookingID == BookingID
-				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
-		}
-
-		public async Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime scheduledDate, int? TypeServicessID)
+		public async Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime assignedDate, int? ProductsOfServicesID)
 		{
 			// 1. Lấy giờ Việt Nam
 			var timeVietNam = DateTime.UtcNow.AddHours(7);
@@ -326,8 +208,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			int _currentNumberOrder = 1;
 
 			// 3. Lấy NumberOrder lớn nhất trong ScheduledDate
-			var latestBooking = await _context.Booking
-				.Where(s => s.ScheduledDate.Date == scheduledDate.Date && s.TypeServicessID == TypeServicessID)
+			var latestBooking = await _context.Booking_Servicess
+				.Where(s => s.AssignedDate.Date == assignedDate.Date && s.ProductsOfServicesID == ProductsOfServicesID)
 				.OrderByDescending(v => v.NumberOrder)
 				.FirstOrDefaultAsync();
 
@@ -340,7 +222,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			// 5. Kiểm tra xem số thứ tự có vượt quá 100 không
 			if (_currentNumberOrder > 100)
 			{
-				return (null, $"Ngày: {scheduledDate.Date} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
+				return (null, $"Ngày: {assignedDate.Date} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
 			}
 
 			//6. Qua 19h tối thì reset _currentNumberOrder về 1
@@ -351,32 +233,18 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return (_currentNumberOrder, null);
 		}
 
-		public async Task<int?> GetProductsOfServicesIDByBooKingID(int? BookingID)
+		public async Task<Servicess> GetServicessByServicessID(int servicessID)
 		{
-			return await _context.Booking.Where(s => s.BookingID == BookingID && s.DeleteStatus ==1)
-					.Select(s => s.TypeServicessID)
-					.FirstOrDefaultAsync();
+			return await _context.Servicess.Where(s => s.ServiceID == servicessID 
+					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<int?> GetServicesIDByBookingID(int? BookingID)
+		public async Task<int> GetClinicIDByProductsOfServicesID(int? ProductsOfServicesID)
 		{
-			return await _context.Booking.Where(s => s.BookingID == BookingID
-							&& s.DeleteStatus == 1)
-					.Select(v => v.ServiceID)
-					.FirstOrDefaultAsync();
-		}
-
-		public async Task<DateTime?> GetScheduledDateByBookingID(int? BookingID)
-		{
-			return await _context.Booking.Where(s => s.BookingID == BookingID 
-						&& s.DeleteStatus == 1)
-				.Select(v => v.ScheduledDate)
+			return await _context.Clinic.Where(s => s.ClinicStatus == 1 
+					&& s.ProductsOfServicesID == ProductsOfServicesID)
+				.Select(s => s.ClinicID)
 				.FirstOrDefaultAsync();
-		}
-
-		public async Task<Booking_Assignment> GetBooking_AssignmentByBookingID(int? BookingID)
-		{
-			return await _context.Booking_Assignment.Where(s => s.BookingID == BookingID).FirstOrDefaultAsync();
 		}
 	}
 }

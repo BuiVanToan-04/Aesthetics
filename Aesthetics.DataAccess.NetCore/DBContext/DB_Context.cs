@@ -59,13 +59,7 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.WithMany(s => s.Services)              
 				.HasForeignKey(v => v.ProductsOfServicesID);
 
-			//6.Chỉ định mối quan hệ 1-N của Booking(1) & Booking_Assignment(N)
-			builder.Entity<Booking_Assignment>()
-				.HasOne(b => b.Booking)
-				.WithMany(ba => ba.Booking_Assignment)
-				.HasForeignKey(s => s.BookingID);
-
-			//7.Chỉ định mối quan hệ N-N của Users & Clinic thông qua bảng trung gian Clinic_Staff
+			//6.Chỉ định mối quan hệ N-N của Users & Clinic thông qua bảng trung gian Clinic_Staff
 			builder.Entity<Clinic_Staff>()
 				.HasKey(cs => cs.ClinicStaffID);
 			builder.Entity<Clinic_Staff>()
@@ -76,6 +70,24 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.HasOne(a => a.Clinic)
 				.WithMany(w => w.Clinic_Staff)
 				.HasForeignKey(v =>v.ClinicID);
+
+			//7.Chỉ định mối quan hệ N - N của Booking & Servicess qua bảng trung gian Booking_Servicess
+			builder.Entity<Booking_Servicess>()
+				.HasKey(bs => bs.BookingServiceID);
+			builder.Entity<Booking_Servicess>()
+				.HasOne(b => b.Booking)
+				.WithMany(s => s.Booking_Servicesses)
+				.HasForeignKey(a => a.BookingID);
+			builder.Entity<Booking_Servicess>()
+				.HasOne(s => s.Servicess)
+				.WithMany(b => b.Booking_Servicesses)
+				.HasForeignKey(c => c.ServiceID);
+
+			//8.Chỉ định mối quan hệ 1 - N của Booking_Servicess(1) - Booking_Assignment(N)
+			builder.Entity<Booking_Assignment>()
+				.HasOne(bs => bs.Booking_Servicess)
+				.WithMany(ba => ba.Booking_Assignment)
+				.HasForeignKey(a => a.BookingServiceID);
 		}
 		public virtual DbSet<Booking> Booking { get; set; }
 		public virtual DbSet<Carts> Carts { get; set; }
@@ -94,6 +106,7 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 		public virtual DbSet<Vouchers> Vouchers { get; set; }
 		public virtual DbSet<Wallets> Wallets { get; set; }
 		public virtual DbSet<Booking_Assignment> Booking_Assignment { get; set; }
+		public virtual DbSet<Booking_Servicess> Booking_Servicess { get; set; }
 		public virtual DbSet<Clinic> Clinic { get; set; }
 		public virtual DbSet<Clinic_Staff> Clinic_Staff { get; set; }
 	}

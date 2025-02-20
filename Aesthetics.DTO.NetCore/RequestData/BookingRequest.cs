@@ -8,7 +8,7 @@ namespace Aesthetics.DTO.NetCore.RequestData
 {
 	public class BookingRequest
 	{
-		public int ServiceID { get; set; }
+		public List<int> ServiceIDs { get; set; }
 		public string UserName { get; set; }
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
