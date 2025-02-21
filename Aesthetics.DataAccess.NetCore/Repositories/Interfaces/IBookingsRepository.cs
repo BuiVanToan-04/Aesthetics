@@ -31,5 +31,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 
 		//Function get ClinicID by ProductsOfServicesID
 		Task<int> GetClinicIDByProductsOfServicesID(int? ProductsOfServicesID);
+
+		//Function get Booking by BookingID 
+		Task<Booking> GetBooKingByBookingID(int? BookingID);
 	}
 }

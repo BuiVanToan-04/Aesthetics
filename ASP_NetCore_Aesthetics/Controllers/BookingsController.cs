@@ -9,17 +9,17 @@ namespace ASP_NetCore_Aesthetics.Controllers
 	[ApiController]
 	public class BookingsController : ControllerBase
 	{
-		private IBookingsRepository _bookings;
-		public BookingsController(IBookingsRepository bookings)
+		private IBookingsRepository _bookingRepository;
+		public BookingsController(IBookingsRepository bookingRepository)
 		{
-			_bookings = bookings;
+			_bookingRepository = bookingRepository;
 		}
 		[HttpPost("Insert_Booking")]
 		public async Task<IActionResult> Insert_Booking(BookingRequest request)
 		{
 			try
 			{
-				var responseData = await _bookings.Insert_Booking(request);
+				var responseData = await _bookingRepository.Insert_Booking(request);
 				return Ok(responseData);
 			}
 			catch (Exception ex) 
@@ -33,7 +33,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 		{
 			try
 			{
-				var responseData = await _bookings.Update_Booking(request);
+				var responseData = await _bookingRepository.Update_Booking(request);
 				return Ok(responseData);
 			}
 			catch (Exception ex)

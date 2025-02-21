@@ -15,8 +15,8 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
 		public DateTime? BookingCreation { get; set; }
-		public DateTime ScheduledDate { get; set; }
 		public int? DeleteStatus { get; set; }
 		public ICollection<Booking_Servicess> Booking_Servicesses { get; set; }
+		public ICollection<Booking_Assignment> Booking_Assignment { get; set; }
 	}
 }

@@ -17,9 +17,9 @@ namespace Aesthetics.DTO.NetCore.RequestData
 
 	public class Update_Booking
 	{
+		public List<int>? ServiceIDs { get; set; }
 		public int BookingID { get; set; }
 		public string? UserName { get; set; }
-		public int? ServiceID { get; set; }
 		public string? Email { get; set; }
 		public string? Phone { get; set; }
 		public DateTime ScheduledDate { get; set; }

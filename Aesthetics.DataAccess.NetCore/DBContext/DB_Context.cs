@@ -83,11 +83,11 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.WithMany(b => b.Booking_Servicesses)
 				.HasForeignKey(c => c.ServiceID);
 
-			//8.Chỉ định mối quan hệ 1 - N của Booking_Servicess(1) - Booking_Assignment(N)
+			//8.Chỉ định mối quan hệ 1 - N của Booking(1) - Booking_Assignment(N)
 			builder.Entity<Booking_Assignment>()
-				.HasOne(bs => bs.Booking_Servicess)
+				.HasOne(b => b.Booking)
 				.WithMany(ba => ba.Booking_Assignment)
-				.HasForeignKey(a => a.BookingServiceID);
+				.HasForeignKey(a => a.BookingID);
 		}
 		public virtual DbSet<Booking> Booking { get; set; }
 		public virtual DbSet<Carts> Carts { get; set; }

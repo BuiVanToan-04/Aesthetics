@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XAct;
+using XAct.Messages;
 using XAct.Services;
 using XAct.Users;
 
@@ -25,7 +26,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		private DB_Context _context;
 		private IConfiguration _configuration;
 		private IServicessRepository _servicessRepository;
-		public BookingsRepository(DB_Context context, IServiceProvider serviceProvider, 
+		public BookingsRepository(DB_Context context, IServiceProvider serviceProvider,
 			IConfiguration configuration, IServicessRepository servicessRepository) : base(serviceProvider)
 		{
 			_context = context;
@@ -42,7 +43,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			try
 			{
 				// Kiểm tra nếu danh sách dịch vụ rỗng hoặc null thì trả về lỗi
-				if (insert_.ServiceIDs == null || insert_.ServiceIDs.Count == 0) 
+				if (insert_.ServiceIDs == null || insert_.ServiceIDs.Count == 0)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Vui lòng chọn ít nhất một Servicess!";
@@ -95,7 +96,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					Email = insert_.Email ?? null,
 					Phone = insert_.Phone ?? null,
 					BookingCreation = bookingCreation,
-					ScheduledDate = insert_.ScheduledDate,
 					DeleteStatus = 1
 				};
 				await _context.Booking.AddAsync(newBooking);
@@ -122,7 +122,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = $"ServicessID: {servicessID} không tồn tại!";
 						return returnData;
 					}
-					
+
 					// Kiểm tra xem ProductsOfServicesID đã có NumberOrder chưa
 					if (numberOrderMap.ContainsKey(servicess.ProductsOfServicesID))
 					{
@@ -147,19 +147,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					var newBooking_Servicess = new Booking_Servicess
 					{
 						BookingID = newBooking.BookingID,
-						ProductsOfServicesID = servicess.ProductsOfServicesID,
 						ServiceID = servicess.ServiceID,
-						ServiceName = servicess.ServiceName,
-						NumberOrder = numberOrder,
-						AssignedDate = insert_.ScheduledDate,
 					};
 					await _context.Booking_Servicess.AddAsync(newBooking_Servicess);
 					await _context.SaveChangesAsync();
 
 					var newBooking_Assignment = new Booking_Assignment
 					{
-						BookingServiceID = newBooking_Servicess.BookingServiceID,
+						BookingID = newBooking.BookingID,
 						ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
+						ProductsOfServicesID = servicess.ProductsOfServicesID,
 						UserName = insert_.UserName,
 						ServiceName = servicess.ServiceName,
 						NumberOrder = numberOrder,
@@ -175,7 +172,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				await transaction.CommitAsync();
 				return returnData;
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
@@ -184,9 +181,38 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public Task<ResponseData> Update_Booking(Update_Booking update_)
+		public async Task<ResponseData> Update_Booking(Update_Booking update_)
 		{
-			throw new NotImplementedException();
+			var returnData = new ResponseData();
+
+			// Bắt đầu một transaction để đảm bảo tính toàn vẹn dữ liệu
+			using var transaction = await _context.Database.BeginTransactionAsync();
+
+			try
+			{
+				// Lấy Booking từ database và lấy các bản ghi ở Booking_Assignment & Booking_Assignment
+				// có liên quan đến BookingID
+				var booking = await _context.Booking
+					.Include(b => b.Booking_Assignment)
+					.Include(b => b.Booking_Servicesses)
+					.FirstOrDefaultAsync(b => b.BookingID == update_.BookingID);
+
+				
+				await _context.SaveChangesAsync();
+				//Commit transaction nếu thành công
+				await transaction.CommitAsync();
+
+				returnData.ResponseCode = 1;
+				returnData.ResposeMessage = "Cập nhật Booking thành công!";
+				return returnData;
+			}
+			catch (Exception ex)
+			{
+				await transaction.RollbackAsync();
+				returnData.ResponseCode = -99;
+				returnData.ResposeMessage = ex.Message;
+				return returnData;
+			}
 		}
 
 		public Task<ResponseData> Delete_Booking(Delete_Booking delete_)
@@ -208,7 +234,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			int _currentNumberOrder = 1;
 
 			// 3. Lấy NumberOrder lớn nhất trong ScheduledDate
-			var latestBooking = await _context.Booking_Servicess
+			var latestBooking = await _context.Booking_Assignment
 				.Where(s => s.AssignedDate.Date == assignedDate.Date && s.ProductsOfServicesID == ProductsOfServicesID)
 				.OrderByDescending(v => v.NumberOrder)
 				.FirstOrDefaultAsync();
@@ -235,16 +261,22 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 		public async Task<Servicess> GetServicessByServicessID(int servicessID)
 		{
-			return await _context.Servicess.Where(s => s.ServiceID == servicessID 
+			return await _context.Servicess.Where(s => s.ServiceID == servicessID
 					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
 		public async Task<int> GetClinicIDByProductsOfServicesID(int? ProductsOfServicesID)
 		{
-			return await _context.Clinic.Where(s => s.ClinicStatus == 1 
+			return await _context.Clinic.Where(s => s.ClinicStatus == 1
 					&& s.ProductsOfServicesID == ProductsOfServicesID)
 				.Select(s => s.ClinicID)
 				.FirstOrDefaultAsync();
+		}
+
+		public async Task<Booking> GetBooKingByBookingID(int? BookingID)
+		{
+			return await _context.Booking.Where(s => s.BookingID == BookingID
+				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 	}
 }

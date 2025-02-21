@@ -1148,17 +1148,20 @@
       "Update_Booking": {
         "type": "object",
         "properties": {
+          "serviceIDs": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
           "bookingID": {
             "type": "integer",
             "format": "int32"
           },
           "userName": {
             "type": "string",
-            "nullable": true
-          },
-          "serviceID": {
-            "type": "integer",
-            "format": "int32",
             "nullable": true
           },
           "email": {
