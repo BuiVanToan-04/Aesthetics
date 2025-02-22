@@ -19,6 +19,7 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public int? NumberOrder { get; set; }
 		public DateTime AssignedDate { get; set; }
 		public int Status { get; set; }
+		public int DeleteStatus { get; set; }
 		public Booking Booking { get; set; }
 	}
 }
