@@ -38,5 +38,11 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 
 		//9.Function get Booking by BookingID 
 		Task<Booking> GetBooKingByBookingID(int? BookingID);
+
+		//10.Funcion get Booking_Assignment by Booking_AssignmentID 
+		Task<Booking_Assignment> GetBooking_AssignmentByID(int? AssignmentID);
+
+		//11.Funciton get Servicess by ServicessName
+		Task<Servicess> GetServicessByServicessName(string? servicessName);
 	}
 }

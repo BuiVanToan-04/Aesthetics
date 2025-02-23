@@ -43,8 +43,8 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? AssignmentID { get; set; }
 		public int? BookingID { get; set; }
 		public int? ClinicID { get; set; }
-		public int? ProductsOfServicesID { get; set; }
 		public string? UserName { get; set; }
 		public string? ServiceName { get; set; }
+		public DateTime? AssignedDate { get; set; }
 	}
 }

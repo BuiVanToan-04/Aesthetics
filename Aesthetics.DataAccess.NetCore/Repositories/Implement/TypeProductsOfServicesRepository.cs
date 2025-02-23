@@ -29,6 +29,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			_configuration = configuration;
 		}
 
+		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesName)
+		{
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == ProductsOfServicesName)
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<TypeProductsOfServices> GetTypeByName(string? Name, string? Type)
 		{
 			//return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == Name
@@ -264,7 +270,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ProductsOfServicesName", getList_Search.ProductsOfServicesName ?? null);
 				parameters.Add("@ProductsOfServicesType", getList_Search.ProductsOfServicesType ?? null);
 				var result = await DbConnection.QueryAsync<ProductsOfServicesRespones>
-					("GetList&SearchTypeProductsOfServices", parameters);
+					("GetList_SearchProductsOfServices", parameters);
 				if(result != null && result.Any())
 				{
 					returnData.ResponseCode = 1;
@@ -285,12 +291,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				returnData.ResposeMessage= ex.Message;
 				return returnData;
 			}
-		}
-
-		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesName)
-		{
-			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == ProductsOfServicesName)
-				.FirstOrDefaultAsync();
 		}
 	}
 }

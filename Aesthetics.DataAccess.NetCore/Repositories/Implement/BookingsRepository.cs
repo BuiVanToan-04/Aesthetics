@@ -29,12 +29,15 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		private DB_Context _context;
 		private IConfiguration _configuration;
 		private IServicessRepository _servicessRepository;
+		private IClinicRepository _clinicRepository;
 		public BookingsRepository(DB_Context context, IServiceProvider serviceProvider,
-			IConfiguration configuration, IServicessRepository servicessRepository) : base(serviceProvider)
+			IConfiguration configuration, IServicessRepository servicessRepository,
+			IClinicRepository clinicRepository) : base(serviceProvider)
 		{
 			_context = context;
 			_configuration = configuration;
 			_servicessRepository = servicessRepository;
+			_clinicRepository = clinicRepository;
 		}
 
 		public async Task<ResponseData> Insert_Booking(BookingRequest insert_)
@@ -534,7 +537,74 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 		public async Task<ResponseBooking_AssignmentData> GetList_SearchBooking_Assignment(GetList_SearchBooking_Assignment getList_)
 		{
-			throw new NotImplementedException();
+			var returnData = new ResponseBooking_AssignmentData();
+			var listData = new List<ResponseBooking_Assignment>();
+			try
+			{
+				if (getList_.BookingID != null) 
+				{
+					if(getList_.BookingID <= 0 || await GetBooKingByBookingID(getList_.BookingID) == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = $"BookingID: {getList_.BookingID} không hợp lệ || không tồn tại!";
+						return returnData;
+					}
+				}
+				if (getList_.AssignmentID != null)
+				{
+					if (getList_.AssignmentID <= 0 || await GetBooking_AssignmentByID(getList_.AssignmentID) == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = $"AssignmentID: {getList_.AssignmentID} không hợp lệ || không tồn tại!";
+						return returnData;
+					}
+				} 
+				if (getList_.ClinicID != null)
+				{
+					if(getList_.ClinicID <= 0 || await _clinicRepository.GetClinicByID(getList_.ClinicID) == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = $"ClinicID: {getList_.ClinicID} không hợp lệ || không tồn tại!";
+						return returnData;
+					}
+				}
+				if (getList_.UserName != null)
+				{
+					if (!Validation.CheckString(getList_.UserName) || !Validation.CheckXSSInput(getList_.UserName))
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = "Dữ liệu UserName không hợp lệ hoặc chứa kí tự không hợp lệ!";
+						return returnData;
+					}
+				}
+				if (getList_.ServiceName != null)
+				{
+					if (!Validation.CheckString(getList_.ServiceName) || !Validation.CheckXSSInput(getList_.ServiceName))
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = "Dữ liệu ServiceName không hợp lệ hoặc chứa kí tự không hợp lệ!";
+						return returnData;
+					}
+					if (await GetServicessByServicessName(getList_.ServiceName) == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = "Dữ liệu ServiceName tồn tại!";
+						return returnData;
+					}
+				}
+				var parameters = new DynamicParameters();
+				parameters.Add("@AssignmentID", getList_.AssignmentID ?? null);
+				parameters.Add("@BookingID", getList_.BookingID ?? null);
+				parameters.Add("@ClinicID", getList_.ClinicID ?? null);
+				parameters.Add("@UserName", getList_.UserName ?? null);
+				parameters.Add("@ServiceName", getList_.ServiceName ?? null);
+				parameters.Add("@AssignedDate", getList_.AssignmentID ?? null);
+				var result = await DbConnection.QueryAsync<ResponseBooking_Assignment>("GetList_SearchBooking_Assignment", parameters);
+			}
+			catch (Exception ex) 
+			{
+
+			}
 		}
 
 		public async Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime assignedDate, int? ProductsOfServicesID)
@@ -591,6 +661,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		
+		public async Task<Booking_Assignment> GetBooking_AssignmentByID(int? AssignmentID)
+		{
+			return await _context.Booking_Assignment.Where(s => s.DeleteStatus == 1 
+				&& s.AssignmentID == AssignmentID).FirstOrDefaultAsync();
+		}
+
+		public async Task<Servicess> GetServicessByServicessName(string? servicessName)
+		{
+			return await _context.Servicess.Where(s => s.ServiceName == servicessName
+				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
+		}
 	}
 }
