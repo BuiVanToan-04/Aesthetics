@@ -9,6 +9,7 @@ using Aesthetics.DTO.NetCore.DataObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -60,6 +61,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+	OnPrepareResponse = ctx =>
+	{
+		ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+		ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
+		  "Origin, X-Requested-With, Content-Type, Accept");
+	},
+	FileProvider = new PhysicalFileProvider(
+		   Path.Combine(builder.Environment.ContentRootPath, "FilesImages/Servicess")),
+	RequestPath = "/FilesImages/Servicess"
+});
 app.MapControllers();
 app.Run();

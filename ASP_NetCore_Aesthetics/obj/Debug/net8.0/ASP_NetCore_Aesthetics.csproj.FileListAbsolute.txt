@@ -152,3 +152,11 @@ D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\st
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\obj\Debug\net8.0\ASP_NetCore_Aesthetics.sourcelink.json
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\ClosedXML.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\ClosedXML.Parser.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\ExcelNumberFormat.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\RBush.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\SixLabors.Fonts.dll
+D:\Dự Án CV\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\bin\Debug\net8.0\System.IO.Packaging.dll

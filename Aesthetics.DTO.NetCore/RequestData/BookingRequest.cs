@@ -34,6 +34,17 @@ namespace Aesthetics.DTO.NetCore.RequestData
 	{
 		public int? BookingID { get; set; }
 		public string? UserName { get; set; }
-		public DateTime? ScheduledDate { get; set; }
+		public DateTime? StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
+	}
+
+	public class GetList_SearchBooking_Assignment
+	{
+		public int? AssignmentID { get; set; }
+		public int? BookingID { get; set; }
+		public int? ClinicID { get; set; }
+		public int? ProductsOfServicesID { get; set; }
+		public string? UserName { get; set; }
+		public string? ServiceName { get; set; }
 	}
 }

@@ -38,4 +38,9 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? ProductsOfServicesID { get; set; }
 		public string? ProductsOfServicesName { get; set; }
 	}
+
+	public class ExportExcel
+	{
+		public string filePath { get; set; }
+	}
 }

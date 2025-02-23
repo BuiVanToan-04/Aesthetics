@@ -81,6 +81,38 @@
   },
   {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "Delete_Booking",
+    "RelativePath": "api/Bookings/Delete_Booking",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "delete_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Booking",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "GetList_SearchBooking",
+    "RelativePath": "api/Bookings/GetList_SearchBooking",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchBooking",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
     "Method": "Insert_Booking",
     "RelativePath": "api/Bookings/Insert_Booking",
     "HttpMethod": "POST",
@@ -186,6 +218,22 @@
       {
         "Name": "servicess",
         "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Servicess",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
+    "Method": "ExportServicessToExcel",
+    "RelativePath": "api/Servicess/ExportServicessToExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filePath",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.ExportExcel",
         "IsRequired": true
       }
     ],

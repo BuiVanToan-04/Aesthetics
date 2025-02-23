@@ -3,9 +3,12 @@ using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
 using Aesthetics.DTO.NetCore.DataObject;
 using Aesthetics.DTO.NetCore.RequestData;
+using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
 using BE_102024.DataAces.NetCore.Dapper;
 using Dapper;
+using DocumentFormat.OpenXml.VariantTypes;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -198,9 +201,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var booking = await _context.Booking
 					.Include(b => b.Booking_Assignment)
 					.Include(b => b.Booking_Servicesses)
+					.AsSplitQuery()
 					.FirstOrDefaultAsync(b => b.BookingID == update_.BookingID);
 
-				if(booking == null)
+				if (booking == null)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = $"BookingID: {update_.BookingID} không tồn tại!";
@@ -308,9 +312,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						//Lấy tất cả Booking_Assignment có liên quan đến bookingID
 						var book_Assi = booking.Booking_Assignment
 							.Where(s => s.BookingID == booking.BookingID).ToList();
-						if (book_Assi.Any()) 
+						if (book_Assi.Any())
 						{
-							foreach (var book in book_Assi) 
+							foreach (var book in book_Assi)
 							{
 								book.BookingID = booking.BookingID;
 								book.UserName = update_.UserName;
@@ -350,14 +354,14 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 							}
 						}
 
-						
+
 
 						//4.2 Update Booking_Servicess
 						//Lấy tất cả Booking_Servicess có liên quan đên booking
 						var booking_Servicess = booking.Booking_Servicesses
-							.Where(s=> s.BookingID == booking.BookingID 
+							.Where(s => s.BookingID == booking.BookingID
 							&& s.ProductsOfServicesID == servicess.ProductsOfServicesID).ToList();
-						if (booking_Servicess.Any()) 
+						if (booking_Servicess.Any())
 						{
 							//Nếu có booking_Servicess thì update
 							foreach (var booking_Ser in booking_Servicess)
@@ -411,6 +415,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var booking = await _context.Booking
 					.Include(x => x.Booking_Assignment)
 					.Include(x => x.Booking_Servicesses)
+					.AsSplitQuery()
 					.FirstOrDefaultAsync(x => x.BookingID == delete_.BookingID);
 
 				if (booking != null)
@@ -423,9 +428,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						.Where(s => s.BookingID == booking.BookingID).ToList();
 
 					//Nếu booking_Servicess tồn tại 
-					if (booking_Servicess.Any()) 
+					if (booking_Servicess.Any())
 					{
-						foreach(var item in booking_Servicess)
+						foreach (var item in booking_Servicess)
 						{
 							item.DeleteStatus = 0;
 						}
@@ -436,7 +441,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						.Where(x => x.BookingID == delete_.BookingID).ToList();
 					if (booking_Assignment.Any())
 					{
-						foreach(var itemm in booking_Assignment)
+						foreach (var itemm in booking_Assignment)
 						{
 							itemm.DeleteStatus = 0;
 						}
@@ -457,7 +462,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
@@ -466,7 +471,68 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public Task<ResponseData> GetList_SearchBooking(GetList_SearchBooking getList_)
+		public async Task<ResponseBookingData> GetList_SearchBooking(GetList_SearchBooking getList_)
+		{
+			var responseData = new ResponseBookingData();
+			var listData = new List<ResponseBooking>();
+			try
+			{
+				if (getList_.BookingID != null)
+				{
+					if (getList_.BookingID <= 0 || await GetBooKingByBookingID(getList_.BookingID) == null)
+					{
+						responseData.ResponseCode = -1;
+						responseData.ResposeMessage = $"BookingID: {getList_.BookingID} không hợp lệ || không tồn tại!";
+						return responseData;
+					}
+				}
+				if (getList_.UserName != null)
+				{
+					if (!Validation.CheckString(getList_.UserName) || !Validation.CheckXSSInput(getList_.UserName))
+					{
+						responseData.ResponseCode = -1;
+						responseData.ResposeMessage = "UserName không hợp lệ || UserName chứa kí tự không hợp lệ";
+						return responseData;
+					}
+				}
+				if (getList_.StartDate != null && getList_.EndDate != null)
+				{
+					if (getList_.StartDate > getList_.EndDate)
+					{
+						responseData.ResponseCode = -1;
+						responseData.ResposeMessage = "StartDate không thể lớn hơn EndDate";
+						return responseData;
+					}
+				}
+				var parameters = new DynamicParameters();
+				parameters.Add("@BookingID", getList_.BookingID ?? null);
+				parameters.Add("@UserName", getList_.UserName ?? null);
+				parameters.Add("@StartDate", getList_.StartDate ?? null);
+				parameters.Add("@EndDate", getList_.EndDate ?? null);
+				var result = await DbConnection.QueryAsync<ResponseBooking>("GetList_SearchBooking", parameters);
+				if(result != null && result.Any())
+				{
+					responseData.ResponseCode = 1;
+					responseData.ResposeMessage = "Lấy thành công danh sách!";
+					responseData.Data = result.ToList();
+					return responseData;
+				}
+				else
+				{
+					responseData.ResponseCode = 0;
+					responseData.ResposeMessage = "Danh sách rỗng";
+					return responseData;
+				}
+			}
+			catch (Exception ex)
+			{
+				responseData.ResponseCode = -99;
+				responseData.ResposeMessage = ex.Message;
+				return responseData;
+			}
+		}
+
+		public async Task<ResponseBooking_AssignmentData> GetList_SearchBooking_Assignment(GetList_SearchBooking_Assignment getList_)
 		{
 			throw new NotImplementedException();
 		}
@@ -524,5 +590,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return await _context.Booking.Where(s => s.BookingID == BookingID
 				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
+
+		
 	}
 }

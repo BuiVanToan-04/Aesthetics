@@ -35,5 +35,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 
 		//8.Function get TypeProductsOfServices by ProductsOfServicesType
 		Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesType);
+
+		//9.Function Export Servicess list to Excel
+		Task<ResponseData> ExportServicessToExcel(ExportExcel filePath);
 	}
 }

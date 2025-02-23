@@ -1,6 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DTO.NetCore.DataObject;
 using Aesthetics.DTO.NetCore.RequestData;
+using Aesthetics.DTO.NetCore.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,28 +12,31 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 {
 	public interface IBookingsRepository
 	{
-		//Function add Booking
+		//1.Function add Booking
 		Task<ResponseData> Insert_Booking(BookingRequest insert_);
 
-		//Function update Booking
+		//2.Function update Booking
 		Task<ResponseData> Update_Booking(Update_Booking update_);
 
-		//Function delete Booking
+		//3.Function delete Booking
 		Task<ResponseData> Delete_Booking(Delete_Booking delete_);
 
-		//Function get list & search Booking
-		Task<ResponseData> GetList_SearchBooking(GetList_SearchBooking getList_);
+		//4.Function get list & search Booking
+		Task<ResponseBookingData> GetList_SearchBooking(GetList_SearchBooking getList_);
 
-		//Function gen NumberOrder
+		//5.Function get list & search Booking_Assignment
+		Task<ResponseBooking_AssignmentData> GetList_SearchBooking_Assignment(GetList_SearchBooking_Assignment getList_);
+
+		//6.Function gen NumberOrder
 		Task<(int? NumberOrder, string? Message)> GenerateNumberOrder(DateTime assignedDate, int? ProductsOfServicesID);
 
-		//Funciton get Servicess by ServicessID 
+		//7.Funciton get Servicess by ServicessID 
 		Task<Servicess> GetServicessByServicessID (int servicessID);
 
-		//Function get ClinicID by ProductsOfServicesID
+		//8.Function get ClinicID by ProductsOfServicesID
 		Task<int> GetClinicIDByProductsOfServicesID(int? ProductsOfServicesID);
 
-		//Function get Booking by BookingID 
+		//9.Function get Booking by BookingID 
 		Task<Booking> GetBooKingByBookingID(int? BookingID);
 	}
 }

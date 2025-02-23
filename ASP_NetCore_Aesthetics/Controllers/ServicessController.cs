@@ -42,6 +42,21 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex.StackTrace);
 			}
 		}
+
+		[HttpPost("ExportServicessToExcel")]
+		public async Task<IActionResult> ExportServicessToExcel(ExportExcel filePath)
+		{
+			try
+			{
+				var responseData = await _servicess.ExportServicessToExcel(filePath);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex.Message);
+			}
+		}
+
 		[HttpDelete("Delete_Servicess")]
 		public async Task<IActionResult> Delete_Servicess(Delete_Servicess servicess)
 		{

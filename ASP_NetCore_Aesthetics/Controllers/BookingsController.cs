@@ -41,5 +41,33 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex.StackTrace);
 			}
 		}
+
+		[HttpDelete("Delete_Booking")]
+		public async Task<IActionResult> Delete_Booking(Delete_Booking delete_)
+		{
+			try
+			{
+				var responseData = await _bookingRepository.Delete_Booking(delete_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex.StackTrace);
+			}
+		}
+
+		[HttpGet("GetList_SearchBooking")]
+		public async Task<IActionResult> GetList_SearchBooking(GetList_SearchBooking getList_)
+		{
+			try
+			{
+				var responseData = await _bookingRepository.GetList_SearchBooking(getList_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex.StackTrace);
+			}
+		}
 	}
 }

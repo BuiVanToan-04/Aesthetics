@@ -7,7 +7,9 @@ using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
 using BE_102024.DataAces.NetCore.Dapper;
+using ClosedXML.Excel;
 using Dapper;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -24,12 +26,14 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		private DB_Context _context;
 		private IConfiguration _configuration;
 		private ITypeProductsOfServicesRepository _typeProductsOfServices;
+		private static List<Servicess> _listSevicess;
 		public ServicessRepository(DB_Context context, IConfiguration configuration,
 			ITypeProductsOfServicesRepository typeProductsOfServices, IServiceProvider serviceProvider) : base(serviceProvider)
 		{
 			_context = context;
 			_configuration = configuration;
 			_typeProductsOfServices = typeProductsOfServices;
+			_listSevicess = new List<Servicess>();
 		}
 
 		public async Task<string> BaseProcessingFunction64(string? ServicessImage)
@@ -421,6 +425,15 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = "Lấy danh sách người dùng thành công!";
 					returnData.Data = result.ToList();
+					_listSevicess = returnData.Data.Select(x => new Servicess
+					{
+						ServiceID = x.ServiceID ?? 0,
+						ProductsOfServicesID = x.ProductsOfServicesID ?? 0,
+						ServiceName = x.ServiceName,
+						Description = x.Description,
+						ServiceImage = x.ServiceImage,
+						PriceService = x.PriceService ?? 0,
+					}).ToList();
 					return returnData;
 				}
 				else
@@ -437,5 +450,64 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				return returnData;
 			}
 		}
+
+		public async Task<ResponseData> ExportServicessToExcel(ExportExcel filePath)
+		{
+			var returnData = new ResponseData();
+			try
+			{
+				if (filePath == null || string.IsNullOrWhiteSpace(filePath.filePath))
+				{
+					returnData.ResponseCode = -1;
+					returnData.ResposeMessage = "Đường dẫn file không hợp lệ!";
+					return returnData;
+				}
+
+				var listServicess = await DbConnection.QueryAsync<ResponseServicess>("GetList_SearchServicess", new DynamicParameters());
+
+				if (listServicess == null || !listServicess.Any())
+				{
+					returnData.ResponseCode = 0;
+					returnData.ResposeMessage = "Không có dữ liệu để xuất!";
+					return returnData;
+				}
+
+				using (var workBook = new XLWorkbook())
+				{
+					var workSheet = workBook.AddWorksheet("List_Servicess");
+					workSheet.Cell(1, 1).Value = "ServiceID";
+					workSheet.Cell(1, 2).Value = "ProductsOfServicesID";
+					workSheet.Cell(1, 3).Value = "ServiceName";
+					workSheet.Cell(1, 4).Value = "Description";
+					workSheet.Cell(1, 5).Value = "ServiceImage";
+					workSheet.Cell(1, 6).Value = "PriceService";
+
+					int row = 2;
+					foreach (var item in listServicess)
+					{
+						workSheet.Cell(row, 1).Value = item.ServiceID;
+						workSheet.Cell(row, 2).Value = item.ProductsOfServicesID;
+						workSheet.Cell(row, 3).Value = item.ServiceName;
+						workSheet.Cell(row, 4).Value = item.Description;
+						workSheet.Cell(row, 5).Value = item.ServiceImage;
+						workSheet.Cell(row, 6).Value = item.PriceService;
+						row++;
+					}
+					string fullPath = filePath.filePath.EndsWith(".xlsx") ? filePath.filePath : filePath.filePath + ".xlsx";
+					workBook.SaveAs(fullPath);
+				}
+
+				returnData.ResponseCode = 1;
+				returnData.ResposeMessage = "Xuất file Excel thành công!";
+				return returnData;
+			}
+			catch (Exception ex)
+			{
+				returnData.ResponseCode = -99;
+				returnData.ResposeMessage = ex.Message;
+				return returnData;
+			}
+		}
+
 	}
 }
