@@ -69,5 +69,19 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex.StackTrace);
 			}
 		}
+
+		[HttpGet("GetList_SearchBooking_Assignment")]
+		public async Task<IActionResult> GetList_SearchBooking_Assignment(GetList_SearchBooking_Assignment getList_)
+		{
+			try
+			{
+				var responseData = await _bookingRepository.GetList_SearchBooking_Assignment(getList_);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				return Ok(ex.StackTrace);
+			}
+		}
 	}
 }

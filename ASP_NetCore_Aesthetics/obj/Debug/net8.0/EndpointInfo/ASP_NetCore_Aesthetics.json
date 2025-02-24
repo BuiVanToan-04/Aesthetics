@@ -284,6 +284,37 @@
         }
       }
     },
+    "/api/Bookings/GetList_SearchBooking_Assignment": {
+      "get": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Assignment"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Assignment"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Assignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Clinic/Insert_Clinic": {
       "post": {
         "tags": [
@@ -1124,6 +1155,40 @@
             "nullable": true
           },
           "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_SearchBooking_Assignment": {
+        "type": "object",
+        "properties": {
+          "assignmentID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "bookingID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clinicID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "assignedDate": {
             "type": "string",
             "format": "date-time",
             "nullable": true

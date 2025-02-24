@@ -113,6 +113,22 @@
   },
   {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "GetList_SearchBooking_Assignment",
+    "RelativePath": "api/Bookings/GetList_SearchBooking_Assignment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchBooking_Assignment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
     "Method": "Insert_Booking",
     "RelativePath": "api/Bookings/Insert_Booking",
     "HttpMethod": "POST",

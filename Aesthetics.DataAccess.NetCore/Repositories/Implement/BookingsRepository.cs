@@ -598,12 +598,27 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ClinicID", getList_.ClinicID ?? null);
 				parameters.Add("@UserName", getList_.UserName ?? null);
 				parameters.Add("@ServiceName", getList_.ServiceName ?? null);
-				parameters.Add("@AssignedDate", getList_.AssignmentID ?? null);
+				parameters.Add("@AssignedDate", getList_.AssignedDate ?? null);
 				var result = await DbConnection.QueryAsync<ResponseBooking_Assignment>("GetList_SearchBooking_Assignment", parameters);
+				if (result != null && result.Any())
+				{
+					returnData.ResponseCode = 1;
+					returnData.ResposeMessage = "Lấy thành công danh sách!";
+					returnData.Data = result.ToList();
+					return returnData;
+				}
+				else
+				{
+					returnData.ResponseCode = 0;
+					returnData.ResposeMessage = "Danh sách rỗng";
+					return returnData;
+				}
 			}
 			catch (Exception ex) 
 			{
-
+				returnData.ResponseCode = -99;
+				returnData.ResposeMessage = ex.Message;
+				return returnData;
 			}
 		}
 
@@ -621,6 +636,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				.OrderByDescending(v => v.NumberOrder)
 				.FirstOrDefaultAsync();
 
+			//4. Qua 19h tối thì reset _currentNumberOrder về 1
+			if (timeVietNam.Hour > 19)
+			{
+				_currentNumberOrder = 1;
+			}
+
 			// 4. Nếu tồn tại booking trong ngày thì tăng NumberOrder
 			if (latestBooking != null)
 			{
@@ -630,14 +651,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			// 5. Kiểm tra xem số thứ tự có vượt quá 100 không
 			if (_currentNumberOrder > 100)
 			{
-				return (null, $"Ngày: {assignedDate.Date} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
+				return (null, $"Ngày: {assignedDate.ToString("dd/MM/yyyy")} đã đủ lượt Booking. Vui lòng chọn ngày khác!");
 			}
 
-			//6. Qua 19h tối thì reset _currentNumberOrder về 1
-			if (timeVietNam.Hour > 19)
-			{
-				_currentNumberOrder = 1;
-			}
 			return (_currentNumberOrder, null);
 		}
 
