@@ -208,11 +208,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				{
 					responseData.ResponseCode = 1;
 					responseData.ResposeMessage = "Lấy danh sách Supplier thành công!";
-					responseData.Data = result.Select(s => new ResponseSupplier
-					{
-						SupplierID = s.SupplierID,
-						SupplierName = s.SupplierName,
-					}).ToList();
+					responseData.Data = result.ToList();
 					return responseData;
 				}
 				else

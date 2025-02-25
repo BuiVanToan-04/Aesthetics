@@ -74,12 +74,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return await _context.Servicess.Where(s => s.ServiceID == ServicesID && s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<TypeProductsOfServices> GetTypeProductsOfServices(int? TypeProductsOfServicesID, string? ProductsOfServicesType)
-		{
-			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == TypeProductsOfServicesID
-					&& s.ProductsOfServicesType == ProductsOfServicesType
-					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
-		}
+		//public async Task<TypeProductsOfServices> GetTypeProductsOfServices(int? TypeProductsOfServicesID, string? ProductsOfServicesType)
+		//{
+		//	return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == TypeProductsOfServicesID
+		//			&& s.ProductsOfServicesType == ProductsOfServicesType
+		//			&& s.DeleteStatus == 1).FirstOrDefaultAsync();
+		//}
 
 		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesType)
 		{
@@ -140,29 +140,11 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceImage không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(servicess_.ProductsOfServicesName))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ProductsOfServicesName chứa kí tự không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckString(servicess_.ProductsOfServicesName))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ!";
-					return returnData;
-				}
-				if (await GetTypeProductsOfServices(servicess_.ProductsOfServicesID, servicess_.ProductsOfServicesName) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "ProductsOfServicesID || ProductsOfServicesName không hợp lệ. Vui lòng nhập lại!";
-					return returnData;
-				}
+				
 
 				var imagePathServicess = await BaseProcessingFunction64(servicess_.ServiceImage);
 				var parameters = new DynamicParameters();
 				parameters.Add("@ProductsOfServicesID",servicess_.ProductsOfServicesID);
-				parameters.Add("@ProductsOfServicesName", servicess_.ProductsOfServicesName);
 				parameters.Add("@ServiceName", servicess_.ServiceName);
 				parameters.Add("@Description", servicess_.Description);
 				parameters.Add("@ServiceImage", imagePathServicess);
@@ -206,27 +188,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						return returnData;
 					}
 				}
-				if (update_.ProductsOfServicesName != null) 
-				{
-					if (!Validation.CheckString(update_.ProductsOfServicesName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ!";
-						return returnData;
-					}
-					if (!Validation.CheckXSSInput(update_.ProductsOfServicesName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu ProductsOfServicesName chứa kí tự không hợp lệ!";
-						return returnData;
-					}
-					if (await GetTypeProductsOfServices(update_.ProductsOfServicesID, update_.ProductsOfServicesName) == null)
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "ProductsOfServicesID || ProductsOfServicesName không hợp lệ. Vui lòng nhập lại!";
-						return returnData;
-					}
-				}
+	
 				if (update_.ServiceName != null) 
 				{
 					if (!Validation.CheckString(update_.ServiceName))
@@ -287,7 +249,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var parameters = new DynamicParameters();
 				parameters.Add("@ServiceID", update_.ServiceID);
 				parameters.Add("@ProductsOfServicesID", update_.ProductsOfServicesID ?? null);
-				parameters.Add("@ProductsOfServicesName", update_.ProductsOfServicesName ?? null);
 				parameters.Add("@ServiceName", update_.ServiceName ?? null);
 				parameters.Add("@Description", update_.Description ?? null);
 				parameters.Add("@ServiceImage",imagePathServicess ?? null);
@@ -392,33 +353,11 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						return returnData;
 					}
 				}
-				if (getList_.ProductsOfServicesName != null)
-				{
-					if (!Validation.CheckString(getList_.ProductsOfServicesName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ!";
-						return returnData;
-					}
-					if (!Validation.CheckXSSInput(getList_.ProductsOfServicesName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu ProductsOfServicesName chứa kí tự không hợp lệ!";
-						return returnData;
-					}
-					if (await GetTypeProductsOfServicesByName(getList_.ProductsOfServicesName) == null)
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = $"Không tồn tại Service có ProductsOfServicesName: {getList_.ProductsOfServicesName}!";
-						return returnData;
-					}
-				}
-
+			
 				var parameters = new DynamicParameters();
 				parameters.Add("@ServiceID", getList_.ServiceID ?? null);
 				parameters.Add("@ServiceName", getList_.ServiceName ?? null);
 				parameters.Add("@ProductsOfServicesID", getList_.ProductsOfServicesID ?? null);
-				parameters.Add("@ProductsOfServicesName", getList_.ProductsOfServicesName ?? null);
 				var result = await DbConnection.QueryAsync<ResponseServicess>("GetList_SearchServicess", parameters);
 				if (result != null && result.Any()) 
 				{

@@ -6,18 +6,19 @@ using Aesthetics.DataAccess.NetCore.Repositories.Impliment;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
 using Aesthetics.DTO.NetCore.DataObject;
+using ASP_NetCore_Aesthetics.Loggin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using NLog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
-
 builder.Services.AddDbContext<DB_Context>(options =>
 			   options.UseSqlServer(configuration.GetConnectionString("Aesthetics_ConnString")));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -45,7 +46,9 @@ builder.Services.AddTransient<ITypeProductsOfServicesRepository, TypeProductsOfS
 builder.Services.AddTransient<IServicessRepository, ServicessRepository>();
 builder.Services.AddTransient<IBookingsRepository, BookingsRepository>();
 builder.Services.AddTransient<IClinicRepository, ClinicRepository>();
+builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/NLog.config"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

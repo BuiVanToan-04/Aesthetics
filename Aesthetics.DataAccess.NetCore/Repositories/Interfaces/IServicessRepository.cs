@@ -30,13 +30,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		//6.Function get Servicess by ServicesID 
 		Task<Servicess> GetServicessByServicesID(int? ServicesID);
 
-		//7.Function get TypeProductsOfServices by TypeProductsOfServicesID and ProductsOfServicesType
-		Task<TypeProductsOfServices> GetTypeProductsOfServices(int? TypeProductsOfServicesID, string? ProductsOfServicesType);
-
-		//8.Function get TypeProductsOfServices by ProductsOfServicesType
+		//7.Function get TypeProductsOfServices by ProductsOfServicesType
 		Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesType);
 
-		//9.Function Export Servicess list to Excel
+		//8.Function Export Servicess list to Excel
 		Task<ResponseData> ExportServicessToExcel(ExportExcel filePath);
 	}
 }

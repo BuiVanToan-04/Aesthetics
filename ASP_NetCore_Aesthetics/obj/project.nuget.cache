@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "igikhybZMdY=",
+  "dgSpecHash": "9tDihOoTb8M=",
   "success": true,
-  "projectFilePath": "D:\\Dự Án CV\\ASP_NetCore_Aesthetics\\ASP_NetCore_Aesthetics\\ASP_NetCore_Aesthetics.csproj",
+  "projectFilePath": "D:\\Aesthetics\\ASP_NetCore_Aesthetics\\ASP_NetCore_Aesthetics\\ASP_NetCore_Aesthetics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\buito\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -55,6 +55,7 @@
     "C:\\Users\\buito\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\buito\\.nuget\\packages\\nlog\\5.2.8\\nlog.5.2.8.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\rbush\\4.0.0\\rbush.4.0.0.nupkg.sha512",
     "C:\\Users\\buito\\.nuget\\packages\\sixlabors.fonts\\1.0.0\\sixlabors.fonts.1.0.0.nupkg.sha512",

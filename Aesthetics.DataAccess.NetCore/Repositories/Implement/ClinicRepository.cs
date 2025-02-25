@@ -106,7 +106,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ProductsOfServicesID", insert_.ProductsOfServicesID);
 				parameters.Add("@ProductsOfServicesName", insert_.ProductsOfServicesName);
 				await DbConnection.ExecuteAsync("Insert_Clinic", parameters);
-				returnData.ResponseCode = 11;
+				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Clinic!";
 				return returnData;
 			}

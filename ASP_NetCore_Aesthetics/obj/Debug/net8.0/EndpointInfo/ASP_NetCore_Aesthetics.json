@@ -1212,10 +1212,6 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
-          },
-          "productsOfServicesName": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1275,10 +1271,6 @@
           "productsOfServicesID": {
             "type": "integer",
             "format": "int32"
-          },
-          "productsOfServicesName": {
-            "type": "string",
-            "nullable": true
           },
           "serviceName": {
             "type": "string",
@@ -1415,10 +1407,6 @@
           "productsOfServicesID": {
             "type": "integer",
             "format": "int32",
-            "nullable": true
-          },
-          "productsOfServicesName": {
-            "type": "string",
             "nullable": true
           },
           "serviceName": {

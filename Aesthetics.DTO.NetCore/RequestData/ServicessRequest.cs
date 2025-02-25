@@ -9,7 +9,6 @@ namespace Aesthetics.DTO.NetCore.RequestData
 	public class ServicessRequest
 	{
 		public int ProductsOfServicesID { get; set; }
-		public string? ProductsOfServicesName { get; set; }
 		public string? ServiceName { get; set; }
 		public string? Description { get; set; }
 		public string? ServiceImage { get; set; }
@@ -20,7 +19,6 @@ namespace Aesthetics.DTO.NetCore.RequestData
 	{
 		public int ServiceID { get; set; }
 		public int? ProductsOfServicesID { get; set; }
-		public string? ProductsOfServicesName { get; set; }
 		public string? ServiceName { get; set; }
 		public string? Description { get; set; }
 		public string? ServiceImage { get; set; }
@@ -36,7 +34,6 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? ServiceID { get; set; }
 		public string? ServiceName { get; set; }
 		public int? ProductsOfServicesID { get; set; }
-		public string? ProductsOfServicesName { get; set; }
 	}
 
 	public class ExportExcel

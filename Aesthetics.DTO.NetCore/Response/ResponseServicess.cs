@@ -11,7 +11,6 @@ namespace Aesthetics.DTO.NetCore.Response
 	{
 		public int? ServiceID { get; set; }
 		public int? ProductsOfServicesID { get; set; }
-		public string? ProductsOfServicesName { get; set; }
 		public string? ServiceName { get; set; }
 		public string? Description { get; set; }
 		public string? ServiceImage { get; set; }
