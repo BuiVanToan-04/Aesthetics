@@ -173,7 +173,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 		public async Task<ResponseSupplierData> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier)
 		{
 			var responseData = new ResponseSupplierData();
-			var responeSupplier = new List<Supplier>();
+			var responeSupplier = new List<ResponseSupplier>();
 			try
 			{
 				if (_searchSupplier.SupplierID <= 0)
@@ -203,7 +203,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var parameters = new DynamicParameters();
 				parameters.Add("@SupplierID", _searchSupplier.SupplierID ?? null);
 				parameters.Add("@SupplierName", _searchSupplier.SupplierName ?? null);
-				var result = await DbConnection.QueryAsync<Supplier>("GetList_SearchSupplier", parameters);
+				var result = await DbConnection.QueryAsync<ResponseSupplier>("GetList_SearchSupplier", parameters);
 				if (result != null && result.Any())
 				{
 					responseData.ResponseCode = 1;

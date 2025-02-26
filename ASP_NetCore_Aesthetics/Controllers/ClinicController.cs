@@ -115,12 +115,13 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				//1.1 Lưu log request
 				_loggerManager.LogInfo("GetList_SearchClinic Request: " + JsonConvert.SerializeObject(getList_));
 
+				// 1.2. Nếu Redis Cache có dữ liệu, giải mã dữ liệu từ cache và trả về client
 				if (cachedData != null)
 				{
 					cachedDataString = Encoding.UTF8.GetString(cachedData);
 					listClinic = JsonConvert.DeserializeObject<List<ResponesClinic>>(cachedDataString);
 
-					//1.2 Lọc dữ liệu trong cache khi có request
+					//1.3 Lọc dữ liệu trong cache khi có request
 					listClinic = listClinic
 						.Where(c =>
 							(getList_.ClinicID == null || c.ClinicID == getList_.ClinicID) &&
@@ -129,8 +130,11 @@ namespace ASP_NetCore_Aesthetics.Controllers
 							(string.IsNullOrEmpty(getList_.ProductsOfServicesName) || c.ProductsOfServicesName.Contains(getList_.ProductsOfServicesName, StringComparison.OrdinalIgnoreCase))
 						)
 						.ToList();
-					//1.3 Lưu log dữ liệu clinic trả về trong cache
+					//1.4 Lưu log dữ liệu clinic trả về trong cache
 					_loggerManager.LogInfo("GetList_SearchClinic cache: " + cachedDataString);
+
+					//1.5 Lưu log kết quả dữ liệu khi có request
+					_loggerManager.LogInfo("GetList_SearchClinic cache Request: " + JsonConvert.SerializeObject(listClinic));
 					return Ok(listClinic);
 				}
 				else

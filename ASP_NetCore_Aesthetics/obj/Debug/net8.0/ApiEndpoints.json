@@ -456,7 +456,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UserID",
+        "Name": "delete_",
         "Type": "Aesthetics.DTO.NetCore.RequestData.User_Delete",
         "IsRequired": true
       }

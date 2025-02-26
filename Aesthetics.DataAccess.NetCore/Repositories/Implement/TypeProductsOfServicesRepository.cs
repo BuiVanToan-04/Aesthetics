@@ -37,11 +37,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 		public async Task<TypeProductsOfServices> GetTypeByName(string? Name, string? Type)
 		{
-			//return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == Name
-			//		&& s.DeleteStatus == 1)
-			//	.OrderByDescending(s => _context.TypeProductsOfServices
-			//	.Any(t => t.ProductsOfServicesName == Name && t.ProductsOfServicesType == s.ProductsOfServicesType))
-			//	.FirstOrDefaultAsync();
 			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == Name
 							&& s.ProductsOfServicesType == Type).FirstOrDefaultAsync();
 		}

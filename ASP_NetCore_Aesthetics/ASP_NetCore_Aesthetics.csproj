@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Aesthetics.DTO.NetCore\Aesthetics.DTO.NetCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FilesImages\Servicess\" />
+  </ItemGroup>
+
 </Project>

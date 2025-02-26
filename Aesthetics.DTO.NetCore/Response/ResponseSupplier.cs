@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 
 namespace Aesthetics.DTO.NetCore.Response
 {
-
+	public class ResponseSupplier
+	{
+		public int SupplierID { get; set; }
+		public string SupplierName { get; set; }
+	}
 	public class ResponseSupplierData : ResponseData
 	{
-		public List<Supplier> Data { get; set; }
+		public List<ResponseSupplier> Data { get; set; }
 	}
 }

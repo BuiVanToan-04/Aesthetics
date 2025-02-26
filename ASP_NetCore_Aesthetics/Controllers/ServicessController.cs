@@ -144,6 +144,9 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						).ToList();
 					//1.4. Lưu log dữ liệu servicess trả về trong cache
 					_loggerManager.LogInfo("GetList_SearchServicess cache: " + cachedDataString);
+
+					//1.5 Lưu log kết quả dữ liệu khi có request
+					_loggerManager.LogInfo("GetList_SearchServicess cache Request: " + JsonConvert.SerializeObject(listServicess));
 					return Ok(listServicess);
 				}
 				else
@@ -166,11 +169,9 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cachedDataString = JsonConvert.SerializeObject(listServicess);
 					var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
 
-					//2.3Cấu hình thời gian hết hạn cho Redis Cache
+					//2.3 Cấu hình thời gian hết hạn cho Redis Cache
 					DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
-						//-- Cache sẽ tồn tại tối đa 5 phút
 						.SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
-						//-- Nếu không có truy cập trong 3 phút, cache sẽ bị xóa
 						.SetSlidingExpiration(TimeSpan.FromMinutes(3));
 
 					//2.4. Lưu log dữ liệu servicess trong db
