@@ -41,7 +41,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetClinic_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Insert Clinic: " + JsonConvert.SerializeObject(clinic));
+					_loggerManager.LogInfo("Insert Clinic Request: " + JsonConvert.SerializeObject(clinic));
 				}
 				return Ok(responseData);
 			}
@@ -65,7 +65,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetClinic_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Update Clinic: " + JsonConvert.SerializeObject(update_));
+					_loggerManager.LogInfo("Update Clinic Request: " + JsonConvert.SerializeObject(update_));
 				}
 				return Ok(responseData);
 			}
@@ -88,7 +88,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetClinic_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Delete Clinic: " + JsonConvert.SerializeObject(delete_));
+					_loggerManager.LogInfo("Delete Clinic Request: " + JsonConvert.SerializeObject(delete_));
 				}
 				return Ok(responseData);
 			}
@@ -113,7 +113,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				byte[] cachedData = await _cache.GetAsync(cacheKey);
 				string cachedDataString = null;
 				//1.1 Lưu log request
-				_loggerManager.LogInfo("GetList_SearchClinic: " + JsonConvert.SerializeObject(getList_));
+				_loggerManager.LogInfo("GetList_SearchClinic Request: " + JsonConvert.SerializeObject(getList_));
 
 				if (cachedData != null)
 				{
@@ -130,7 +130,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						)
 						.ToList();
 					//1.3 Lưu log dữ liệu clinic trả về trong cache
-					_loggerManager.LogInfo("Get data cache Clinic: " + JsonConvert.SerializeObject(listClinic));
+					_loggerManager.LogInfo("GetList_SearchClinic cache: " + cachedDataString);
 					return Ok(listClinic);
 				}
 				else
@@ -156,12 +156,16 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						.SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
 						.SetSlidingExpiration(TimeSpan.FromMinutes(3));
 
-					await _cache.SetAsync(cacheKey, dataToCache, options);
+					//2.3 Nếu lấy thành công danh danh thì lưu cache
+					if(responseData.ResponseCode == 1)
+					{
+						await _cache.SetAsync(cacheKey, dataToCache, options);
+					}
 
-					//2.3. Lưu log dữ liệu servicess trong db
-					_loggerManager.LogInfo("Get data db Clinic: "+cachedDataString);
+					//2.4. Lưu log dữ liệu servicess trong db
+					_loggerManager.LogInfo("GetList_SearchClinic db: " + cachedDataString);
 
-					return Ok(listClinic);
+					return Ok(responseData);
 				}
 			}
 			catch (Exception ex)

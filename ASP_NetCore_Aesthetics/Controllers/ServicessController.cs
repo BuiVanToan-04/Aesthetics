@@ -39,7 +39,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Insert Servicess: " + JsonConvert.SerializeObject(servicess));
+					_loggerManager.LogInfo("Insert Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}
@@ -62,7 +62,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Update Servicess: " + JsonConvert.SerializeObject(servicess));
+					_loggerManager.LogInfo("Update Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}
@@ -105,7 +105,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
 					//2. Lưu log
-					_loggerManager.LogInfo("Delete Servicess: " + JsonConvert.SerializeObject(servicess));
+					_loggerManager.LogInfo("Delete Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}
@@ -117,9 +117,9 @@ namespace ASP_NetCore_Aesthetics.Controllers
 		[HttpGet("GetList_SearchServicess")]
 		public async Task<IActionResult> GetList_SearchServicess(GetList_SearchServicess servicess)
 		{
-			var listServicess = new List<ResponseServicess>();
 			try
 			{
+				var listServicess = new List<ResponseServicess>();
 				// Khóa để lưu trữ dữ liệu trong Redis
 				var cacheKey = "GetServicess_Caching";
 
@@ -127,7 +127,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				byte[] cachedData = await _cache.GetAsync(cacheKey);
 
 				//1.1 Lưu log request
-				_loggerManager.LogInfo("GetList_SearchServicess: " + JsonConvert.SerializeObject(servicess));
+				_loggerManager.LogInfo("GetList_SearchServicess Requets: " + JsonConvert.SerializeObject(servicess));
 
 				// 1.2. Nếu Redis Cache có dữ liệu, giải mã dữ liệu từ cache và trả về client
 				if (cachedData != null)
@@ -143,7 +143,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						(servicess.ProductsOfServicesID == null || s.ProductsOfServicesID == servicess.ProductsOfServicesID)
 						).ToList();
 					//1.4. Lưu log dữ liệu servicess trả về trong cache
-					_loggerManager.LogInfo("GetList_SearchServicess cache: " + JsonConvert.SerializeObject(cachedDataString));
+					_loggerManager.LogInfo("GetList_SearchServicess cache: " + cachedDataString);
 					return Ok(listServicess);
 				}
 				else
@@ -174,10 +174,13 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						.SetSlidingExpiration(TimeSpan.FromMinutes(3));
 
 					//2.4. Lưu log dữ liệu servicess trong db
-					_loggerManager.LogInfo("GetList_SearchServicess db: " + JsonConvert.SerializeObject(cachedDataString));
+					_loggerManager.LogInfo("GetList_SearchServicess db: " + cachedDataString);
 
-					//2.5. Lưu dữ liệu vào Redis Cache
-					await _cache.SetAsync(cacheKey, dataToCache, options);
+					//2.5. Kiểm tra nếu lấy thành công danh sách thì lưu cache
+					if(responseData.ResponseCode == 1)
+					{
+						await _cache.SetAsync(cacheKey, dataToCache, options);
+					}
 					return Ok(responseData);
 				}
 			}
