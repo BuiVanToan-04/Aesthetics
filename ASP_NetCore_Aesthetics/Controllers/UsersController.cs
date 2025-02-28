@@ -34,12 +34,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Create_Account
 				var responseData = await _user.CreateAccount(account);
+				//2. Lưu log
+				_loggerManager.LogInfo("Create_Account Request: " + JsonConvert.SerializeObject(account));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Create_Account Request: " + JsonConvert.SerializeObject(account));
 				}
 				return Ok(responseData);
 			}
@@ -59,12 +59,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Update_User
 				var responseData = await _user.UpdateUser(user_);
+				//2. Lưu log
+				_loggerManager.LogInfo("Update_User Request: " + JsonConvert.SerializeObject(user_));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Update_User Request: " + JsonConvert.SerializeObject(user_));
 				}
 				return Ok(responseData);
 			}
@@ -83,12 +83,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_User
 				var responseData = await _user.DeleteUser(delete_);
+				//2. Lưu log
+				_loggerManager.LogInfo("Delete_User Request: " + JsonConvert.SerializeObject(delete_));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Delete_User Request: " + JsonConvert.SerializeObject(delete_));
 				}
 				return Ok(responseData);
 			}

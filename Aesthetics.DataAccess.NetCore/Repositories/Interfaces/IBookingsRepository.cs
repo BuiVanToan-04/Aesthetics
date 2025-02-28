@@ -13,13 +13,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 	public interface IBookingsRepository
 	{
 		//1.Function add Booking
-		Task<ResponseData> Insert_Booking(BookingRequest insert_);
+		Task<ResponseBooking_Ser_Ass> Insert_Booking(BookingRequest insert_);
 
 		//2.Function update Booking
-		Task<ResponseData> Update_Booking(Update_Booking update_);
+		Task<ResponseBookingUpdate_Ser_Ass> Update_Booking(Update_Booking update_);
 
 		//3.Function delete Booking
-		Task<ResponseData> Delete_Booking(Delete_Booking delete_);
+		Task<ResponseBooking_Ser_Ass> Delete_Booking(Delete_Booking delete_);
 
 		//4.Function get list & search Booking
 		Task<ResponseBookingData> GetList_SearchBooking(GetList_SearchBooking getList_);

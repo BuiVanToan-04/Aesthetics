@@ -34,12 +34,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Insert Servicess
 				var responseData = await _servicess.Insert_Servicess(servicess);
+				//2. Lưu log
+				_loggerManager.LogInfo("Insert Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Insert Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}
@@ -57,12 +57,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Update Servicess
 				var responseData = await _servicess.Update_Servicess(servicess);
+				//2. Lưu log
+				_loggerManager.LogInfo("Update Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Update Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}
@@ -100,12 +100,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Delete servicess
 				var responseData = await _servicess.Delete_Servicess(servicess);
+				//2. Lưu log
+				_loggerManager.LogInfo("Delete Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Delete Servicess Request: " + JsonConvert.SerializeObject(servicess));
 				}
 				return Ok(responseData);
 			}

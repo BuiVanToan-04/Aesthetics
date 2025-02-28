@@ -34,12 +34,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
             {
 				//1.Insert_Supplier 
 				var responseData = await _supplierRepository.Insert_Supplier(supplier);
+				//2. Lưu log
+				_loggerManager.LogInfo("Insert_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Insert_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				}
 				return Ok(responseData);
             }
@@ -58,12 +58,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Update_Supplier
 				var responseData = await _supplierRepository.Update_Supplier(supplier);
+				//2. Lưu log
+				_loggerManager.LogInfo("Update_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Update_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				}
 				return Ok(responseData);
 			}
@@ -82,12 +82,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_Supplier
 				var responseData = await _supplierRepository.Delete_Supplier(supplier);
+				//2. Lưu log
+				_loggerManager.LogInfo("Delete_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Delete_Supplier Request: " + JsonConvert.SerializeObject(supplier));
 				}
 				return Ok(responseData);
 			}

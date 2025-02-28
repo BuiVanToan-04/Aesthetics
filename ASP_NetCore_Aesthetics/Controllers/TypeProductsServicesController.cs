@@ -34,12 +34,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Insert_ProductsOfServices
 				var responesData = await _repository.Insert_TypeProductsOfServices(request);
+				//2. Lưu log
+				_loggerManager.LogInfo("Insert_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				if (responesData.ResponseCode == 1)
 				{
 					var cacheKey = "GetProductOfServicess_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Insert_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				}
 				return Ok(responesData);
 			}
@@ -58,12 +58,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Update_ProductsOfServices
 				var responesData = await _repository.Update_TypeProductsOfServices(request);
+				//2. Lưu log
+				_loggerManager.LogInfo("Update_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				if (responesData.ResponseCode == 1)
 				{
 					var cacheKey = "GetProductOfServicess_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Update_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				}
 				return Ok(responesData);
 			}
@@ -82,12 +82,12 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_ProductsOfServices 
 				var responesData = await _repository.Delete_TypeProductsOfServices(request);
+				//2. Lưu log
+				_loggerManager.LogInfo("Delete_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				if (responesData.ResponseCode == 1)
 				{
 					var cacheKey = "GetProductOfServicess_Cache";
 					await _cache.RemoveAsync(cacheKey);
-					//2. Lưu log
-					_loggerManager.LogInfo("Delete_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
 				}
 				return Ok(responesData);
 			}

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASP_NetCore_Aesthetics")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+03aa48f24c43ee46f6881ef6fc64e77942cee9f0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f57c651ba8ab53ba417e87a196059b48db76f40")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASP_NetCore_Aesthetics")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASP_NetCore_Aesthetics")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

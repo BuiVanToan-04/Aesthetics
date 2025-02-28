@@ -16,4 +16,12 @@ namespace Aesthetics.DTO.NetCore.DataObject
 		public Booking Booking { get; set; }
 		public Servicess Servicess { get; set; }
 	}
+
+	public class Booking_ServicessModel
+	{
+		public int BookingID { get; set; }
+		public int ServiceID { get; set; }
+		public int ProductsOfServicesID { get; set; }
+		public int DeleteStatus { get; set; }
+	}
 }

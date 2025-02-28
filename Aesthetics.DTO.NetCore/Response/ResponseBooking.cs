@@ -1,4 +1,5 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
+using Aesthetics.DTO.NetCore.DataObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,5 +37,20 @@ namespace Aesthetics.DTO.NetCore.Response
 	public class ResponseBooking_AssignmentData : ResponseData
 	{
 		public List<ResponseBooking_Assignment>? Data { get; set; }
+	}
+
+	public class ResponseBooking_Ser_Ass : ResponseData
+	{
+		public List<Booking_AssignmentModel> Booking_AssData { get; set; }
+
+		public List<Booking_ServicessModel> Booking_SerData { get; set; }
+	}
+
+	public class ResponseBookingUpdate_Ser_Ass : ResponseData
+	{
+		public List<Booking_AssignmentModel> Booking_AssData_Insert { get; set; }
+		public List<Booking_AssignmentModel> Booking_AssData_Update { get; set; }
+		public List<Booking_ServicessModel> Booking_SerData_Insert { get; set; }
+		public List<Booking_ServicessModel> Booking_SerData_Update { get; set; }
 	}
 }
