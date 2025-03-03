@@ -1,5 +1,5 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using System;

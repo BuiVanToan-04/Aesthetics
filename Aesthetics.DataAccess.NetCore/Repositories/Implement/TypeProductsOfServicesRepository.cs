@@ -1,7 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;

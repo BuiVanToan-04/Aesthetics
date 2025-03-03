@@ -1,7 +1,8 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
@@ -119,8 +120,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 
 				// Danh sách lưu tất cả các Booking_Assignment & Booking_Servicess được tạo
-				var bookingAss_List = new List<Booking_AssignmentModel>();
-				var bookingSer_List = new List<Booking_ServicessModel>();
+				var bookingAss_List = new List<Booking_AssignmentLoggin>();
+				var bookingSer_List = new List<Booking_ServicessLoggin>();
 
 				//Duyệt qua list ServiceIDs đầu vào để xử lý các servicessID
 				foreach (var servicessID in insert_.ServiceIDs)
@@ -155,7 +156,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						numberOrderMap[servicess.ProductsOfServicesID] = numberOrder;
 					}
 
-					var newBooking_Servicess = new Booking_Servicess
+					var newBooking_Servicess = new BookingServicess
 					{
 						BookingID = newBooking.BookingID,
 						ServiceID = servicess.ServiceID,
@@ -163,7 +164,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						DeleteStatus = 1
 					};
 					await _context.Booking_Servicess.AddAsync(newBooking_Servicess);
-					bookingSer_List.Add(new Booking_ServicessModel
+					bookingSer_List.Add(new Booking_ServicessLoggin
 					{
 						BookingID = newBooking_Servicess.BookingID,
 						ServiceID = newBooking_Servicess.ServiceID,
@@ -172,7 +173,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					});
 					await _context.SaveChangesAsync();
 
-					var newBooking_Assignment = new Booking_Assignment
+					var newBooking_Assignment = new BookingAssignment
 					{
 						BookingID = newBooking.BookingID,
 						ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
@@ -188,7 +189,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					await _context.SaveChangesAsync();
 
 					//Thêm newBooking_Assignment vào danh sách
-					bookingAss_List.Add(new Booking_AssignmentModel
+					bookingAss_List.Add(new Booking_AssignmentLoggin
 					{
 						BookingID = newBooking_Assignment.BookingID,
 						ClinicID = newBooking_Assignment.ClinicID,
@@ -289,10 +290,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				await _context.SaveChangesAsync();
 
 				// Danh sách lưu tất cả các Booking_Assignment & Booking_Servicess được tạo
-				var bookingAss_Insert = new List<Booking_AssignmentModel>();
-				var bookingAss_Update = new List<Booking_AssignmentModel>();
-				var bookingSer_Insert = new List<Booking_ServicessModel>();
-				var bookingSer_Update = new List<Booking_ServicessModel>();
+				var bookingAss_Insert = new List<Booking_AssignmentLoggin>();
+				var bookingAss_Update = new List<Booking_AssignmentLoggin>();
+				var bookingSer_Insert = new List<Booking_ServicessLoggin>();
+				var bookingSer_Update = new List<Booking_ServicessLoggin>();
 
 				//4. Nếu ServiceIDs khác null & ServiceIDs.Count > 0
 				//=> Update Booking_Servicess & Booking_Assignment
@@ -356,9 +357,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 							// Lấy danh sách Booking_Assignment liên quan đến BookingID hoặc ProductsOfServicesID
 							var bookingAssignments = booking.Booking_Assignment
 								.Where(s => s.BookingID == booking.BookingID 
-								&& s.ProductsOfServicesID == servicess.ProductsOfServicesID
-								&& s.AssignedDate == update_.ScheduledDate)
-								.ToList();
+								&& s.AssignedDate == update_.ScheduledDate).ToList();
 
 							if (bookingAssignments.Any())
 							{
@@ -377,7 +376,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 										assignment.NumberOrder = numberOrder;
 										assignment.DeleteStatus = 1;
 									}
-									bookingAss_Update.Add(new Booking_AssignmentModel
+									bookingAss_Update.Add(new Booking_AssignmentLoggin
 									{
 										BookingID = assignment.BookingID,
 										ClinicID = assignment.ClinicID,
@@ -389,7 +388,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 									});
 								}
 							}
-							else
 							{
 								// Nếu chưa có thì thêm Booking_Assignment mới
 								var (generatedNumberOrder, message) = await GenerateNumberOrder(update_.ScheduledDate, servicess.ProductsOfServicesID);
@@ -403,7 +401,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								numberOrder = generatedNumberOrder ?? 0;
 								numberOrderMap[servicess.ProductsOfServicesID] = numberOrder;
 
-								var newAssignment = new Booking_Assignment
+								var newAssignment = new BookingAssignment
 								{
 									BookingID = booking.BookingID,
 									ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
@@ -418,7 +416,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 								await _context.Booking_Assignment.AddAsync(newAssignment);
 
-								bookingAss_Insert.Add(new Booking_AssignmentModel
+								bookingAss_Insert.Add(new Booking_AssignmentLoggin
 								{
 									BookingID = newAssignment.BookingID,
 									ClinicID = newAssignment.ClinicID,
@@ -432,6 +430,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								});
 							}
 						}
+						//if (update_.ScheduledDate.Date != )
 
 						//4.2 Update Booking_Servicess
 						//Lấy tất cả Booking_Servicess có liên quan đên booking
@@ -446,7 +445,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								booking_Ser.BookingID = booking.BookingID;
 								booking_Ser.ServiceID = servicess.ServiceID;
 								booking_Ser.ProductsOfServicesID = servicess.ProductsOfServicesID;
-								bookingSer_Update.Add(new Booking_ServicessModel
+								bookingSer_Update.Add(new Booking_ServicessLoggin
 								{
 									BookingID = booking_Ser.BookingID,
 									ServiceID = booking_Ser.ServiceID,
@@ -457,7 +456,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						}
 						else
 						{
-							var newbookingServicess = new Booking_Servicess
+							var newbookingServicess = new BookingServicess
 							{
 								BookingID = booking.BookingID,
 								ServiceID = servicess.ServiceID,
@@ -465,7 +464,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								DeleteStatus = 1
 							};
 							await _context.Booking_Servicess.AddAsync(newbookingServicess);
-							bookingSer_Insert.Add(new Booking_ServicessModel
+							bookingSer_Insert.Add(new Booking_ServicessLoggin
 							{
 								BookingID = newbookingServicess.BookingID,
 								ServiceID = newbookingServicess.ServiceID,
@@ -514,8 +513,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					.FirstOrDefaultAsync(x => x.BookingID == delete_.BookingID);
 
 				// Danh sách lưu tất cả các Booking_Assignment & Booking_Servicess được tạo
-				var bookingAss_List = new List<Booking_Assignment>();
-				var bookingSer_List = new List<Booking_Servicess>();
+				var bookingAss_List = new List<Booking_AssignmentLoggin>();
+				var bookingSer_List = new List<Booking_ServicessLoggin>();
 
 				if (booking != null)
 				{
@@ -532,7 +531,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						foreach (var item in booking_Servicess)
 						{
 							item.DeleteStatus = 0;
-							bookingSer_List.Add(item);
+							bookingSer_List.Add(new Booking_ServicessLoggin
+							{
+								BookingID = item.BookingID,
+								ServiceID = item.ServiceID,
+								ProductsOfServicesID = item.ProductsOfServicesID,
+								DeleteStatus = item.DeleteStatus
+							});
 						}
 					}
 
@@ -544,7 +549,18 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						foreach (var itemm in booking_Assignment)
 						{
 							itemm.DeleteStatus = 0;
-							bookingAss_List.Add(itemm);
+							bookingAss_List.Add(new Booking_AssignmentLoggin
+							{
+								BookingID = itemm.BookingID,
+								ClinicID = itemm.ClinicID,
+								ProductsOfServicesID = itemm.ProductsOfServicesID,
+								UserName = itemm.UserName,
+								ServiceName = itemm.ServiceName,
+								NumberOrder = itemm.NumberOrder,
+								AssignedDate = itemm.AssignedDate,
+								Status = itemm.Status,
+								DeleteStatus = itemm.DeleteStatus
+							});
 						}
 					}
 
@@ -554,8 +570,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = $"Xóa thành công BookingID: {delete_.BookingID}!";
-					//returnData.Booking_AssData = bookingAss_List;
-					//returnData.Booking_SerData = bookingSer_List;
+					returnData.Booking_AssData = bookingAss_List;
+					returnData.Booking_SerData = bookingSer_List;
 					return returnData;
 				}
 				else
@@ -777,7 +793,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<Booking_Assignment> GetBooking_AssignmentByID(int? AssignmentID)
+		public async Task<BookingAssignment> GetBooking_AssignmentByID(int? AssignmentID)
 		{
 			return await _context.Booking_Assignment.Where(s => s.DeleteStatus == 1
 				&& s.AssignmentID == AssignmentID).FirstOrDefaultAsync();

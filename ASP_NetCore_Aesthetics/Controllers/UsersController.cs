@@ -34,8 +34,13 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Create_Account
 				var responseData = await _user.CreateAccount(account);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Create_Account Request: " + JsonConvert.SerializeObject(account));
+				//3. Lưu log data carts
+				_loggerManager.LogInfo("Create_Account Response data : " + JsonConvert.SerializeObject(responseData.listCarts));
+				//4. Lưu log data user
+				_loggerManager.LogInfo("Create_Account Response data : " + JsonConvert.SerializeObject(responseData.listUser));
+
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";
@@ -59,8 +64,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Update_User
 				var responseData = await _user.UpdateUser(user_);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Update_User Request: " + JsonConvert.SerializeObject(user_));
+				//3. Lưu log data 
+				_loggerManager.LogInfo("Update_User data: " + JsonConvert.SerializeObject(responseData.listUser));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";
@@ -83,8 +90,21 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_User
 				var responseData = await _user.DeleteUser(delete_);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Delete_User Request: " + JsonConvert.SerializeObject(delete_));
+				//3. Lưu log data carts
+				_loggerManager.LogInfo("Delete Response data carts: " + JsonConvert.SerializeObject(responseData.listCarts));
+				//4. Lưu log data user
+				_loggerManager.LogInfo("Delete Response data user: " + JsonConvert.SerializeObject(responseData.listUser));
+				//5. Lưu log data ClinicStaff
+				_loggerManager.LogInfo("Delete Response data ClinicStaff: " + JsonConvert.SerializeObject(responseData.listClinicStaff));
+				//6. Lưu log data Wallets
+				_loggerManager.LogInfo("Delete Response data Wallets: " + JsonConvert.SerializeObject(responseData.listWallets));
+				//5. Lưu log data UserSession
+				_loggerManager.LogInfo("Delete Response data UserSession: " + JsonConvert.SerializeObject(responseData.listUserSession));
+				//6. Lưu log data Permission
+				_loggerManager.LogInfo("Delete Response data Permission: " + JsonConvert.SerializeObject(responseData.listPermission));
+
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetUser_Cache";

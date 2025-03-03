@@ -70,7 +70,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				var cachKey = "User_" + user.UserID + "-" + DeviceName;
 
 				//Lưu vào db
-				var user_Session = new Aesthetics.DTO.NetCore.DataObject.UserSession
+				var user_Session = new Aesthetics.DTO.NetCore.DataObject.Model.UserSession
 				{
 					UserID = user.UserID,
 					Token = new JwtSecurityTokenHandler().WriteToken(newToken),
@@ -82,7 +82,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				await _userSession.Insert_Sesion(user_Session);
 
 				//Xét vào caching
-				var user_SessionCach = new Aesthetics.DTO.NetCore.DataObject.UserSession
+				var user_SessionCach = new Aesthetics.DTO.NetCore.DataObject.Model.UserSession
 				{
 					UserID = user.UserID,
 					Token = new JwtSecurityTokenHandler().WriteToken(newToken),

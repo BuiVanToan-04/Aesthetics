@@ -2,7 +2,8 @@
 using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
@@ -10,9 +11,11 @@ using BE_102024.DataAces.NetCore.Dapper;
 using BE_102024.DataAces.NetCore.DataOpject.RequestData;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,33 +83,24 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return await _context.Users.Where(s => s.UserID == UserID && s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<ResponseData> CreateAccount(User_CreateAccount account)
+		public async Task<ResponseUser_InsertLoggin> CreateAccount(User_CreateAccount account)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseUser_InsertLoggin();
+			using var transaction = await _context.Database.BeginTransactionAsync();
+			var listCarst = new List<Carts_Loggin>();
+			var listUser = new List<User_Loggin>();
 			try
 			{
-				if (!Validation.CheckString(account.UserName))
+				if (!Validation.CheckString(account.UserName) || !Validation.CheckXSSInput(account.UserName))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Tài khoản không hợp lệ!";
+					returnData.ResposeMessage = "Tài khoản không hợp lệ || Tài khoản chứa kí tự không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(account.UserName))
+				if (!Validation.CheckString(account.PassWord) || !Validation.CheckXSSInput(account.PassWord))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Tài khoản chứa kí tự không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckString(account.PassWord))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Mật khẩu không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckXSSInput(account.PassWord))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Mật khẩu chứa kí tự không hợp lệ!";
+					returnData.ResposeMessage = "Mật khẩu không hợp lệ || Mật khẩu chứa kí tự không hợp lệ!";
 					return returnData;
 				}
 				if (!Validation.CheckXSSInput(account.ReferralCode))
@@ -124,48 +118,101 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 				var passWordHash = Security.EncryptPassWord(account.PassWord);
 
-				//1.Lấy User qua ReferralCode
-				var user = await GetUserIdByReferralCode(account.ReferralCode);
-				if (user == null)
+				Users user = null;
+				if (account.ReferralCode != null)
 				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Mã giới thiệu người dùng không tồn tại!";
+					//1.Lấy User qua ReferralCode
+					user = await GetUserIdByReferralCode(account.ReferralCode);
+					if (user == null)
+					{
+						returnData.ResponseCode = -1;
+						returnData.ResposeMessage = "Mã giới thiệu người dùng không tồn tại!";
+						return returnData;
+					}
 				}
 
 				//2.Tạo mã giới thiệu
 				var ReferralCode_User = await GenerateUniqueReferralCode();
 
 				//3.Ngày tạo Account
-				var Creation = DateTime.Now;
+				var creation = DateTime.Now;
 
 				//4.Thêm người dùng
-				var parameters = new DynamicParameters();
-				parameters.Add("@UserName", account.UserName);
-				parameters.Add("@PassWord", passWordHash);
-				parameters.Add("@Creation", Creation);
-				parameters.Add("@ReferralCode", ReferralCode_User);
-				await DbConnection.ExecuteAsync("Create_Account", parameters);
-				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = "Tạo Tài Khoản Thành Công!";
+				var newUsers = new Users
+				{
+					UserName = account.UserName,
+					PassWord = passWordHash,
+					Creation = creation,
+					TypePerson = "Client",
+					AccumulatedPoints = 0,
+					DeleteStatus = 1,
+					Moneyy = 0,
+					ReferralCode = ReferralCode_User,
+					RatingPoints = 0,
+					RankMember = "Bronze"
+				};
+				await _context.Users.AddAsync(newUsers);
+				await _context.SaveChangesAsync();
+				listUser.Add(new User_Loggin
+				{
+					UserID = newUsers.UserID,
+					UserName = newUsers.UserName,
+					PassWord = newUsers.PassWord,
+					Creation = newUsers.Creation,
+					TypePerson = newUsers.TypePerson,
+					AccumulatedPoints = newUsers.AccumulatedPoints,
+					ReferralCode = newUsers.ReferralCode,
+					DeleteStatus = newUsers.DeleteStatus,
+					Moneyy = newUsers.Moneyy,
+					RatingPoints = newUsers.RatingPoints,
+					RankMember = newUsers.RankMember
+				});
 
-				//5.Cập nhật điểm
+				//5. Tạo Cart cho user mới
+				int newUserID = newUsers.UserID;
+				var creationDate = DateTime.Now;
+				var carts = new Carts()
+				{
+					UserID = newUserID,
+					CreationDate = creationDate,
+				};
+
+				await _context.Carts.AddAsync(carts);
+				await _context.SaveChangesAsync();
+				listCarst.Add(new Carts_Loggin
+				{
+					CartID = carts.CartID,
+					UserID = carts.UserID,
+					CreationDate = carts.CreationDate
+				});
+
+				//6. Commit transaction nếu thành công
+				await transaction.CommitAsync();
+
+				//7.Cập nhật điểm
 				if (user != null)
 				{
 					await UpdateAccumulatedPoints(user.UserID);
 				}
+				returnData.ResponseCode = 1;
+				returnData.ResposeMessage = "Tạo Tài Khoản Thành Công!";
+				returnData.listUser = listUser;
+				returnData.listCarts = listCarst;
 				return returnData;
 			}
 			catch (Exception ex)
 			{
+				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
 				return returnData;
 			}
 		}
 
-		public async Task<ResponseData> UpdateUser(User_Update user_Update)
+		public async Task<ResponseUser_UpdateLoggin> UpdateUser(User_Update user_Update)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseUser_UpdateLoggin();
+			var listUser = new List<User_Loggin>();
 			try
 			{
 				if (user_Update.UserID <= 0 || user_Update.UserID == null)
@@ -246,10 +293,21 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@Addres", user_Update.Addres ?? string.Empty);
 				parameters.Add("@IDCard", user_Update.IDCard ?? string.Empty);
 				var result = await DbConnection.ExecuteAsync("UpdateUser_ByUserID", parameters);
+				listUser.Add(new User_Loggin
+				{
+					UserID = user_Update.UserID,
+					Email = user_Update.Email ?? null,
+					DateBirth = user_Update.DateBirth ?? null,
+					Sex = user_Update.Sex ?? null,
+					Phone = user_Update.Phone ?? null,
+					Addres = user_Update.Addres ?? null,
+					IDCard = user_Update.IDCard ?? null
+				});
 				if (result > 0)
 				{
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = $"Cập nhật User có mã: {user_Update.UserID} thành công!";
+					returnData.listUser = listUser;
 					return returnData;
 				}
 			}
@@ -261,9 +319,17 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return returnData;
 		}
 
-		public async Task<ResponseData> DeleteUser(User_Delete user_Delete)
+		public async Task<ResponseUser_DeleteLoggin> DeleteUser(User_Delete user_Delete)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseUser_DeleteLoggin();
+			var listUser = new List<User_Loggin>();
+			var listCarts = new List<Carts_Loggin>();
+			var listClinicStaff = new List<Clinic_Staff_Loggin>();
+			var listWallets = new List<Wallets_Loggin>();
+			var listPermission = new List<Permission_Loggin>();
+			var listUserSession = new List<UserSession_Loggin>();
+
+			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				if (user_Delete.UserID <= 0)
@@ -272,29 +338,148 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = $"User: {user_Delete.UserID} không hợp lệ!";
 					return returnData;
 				}
-				if (await GetUserByUserID(user_Delete.UserID) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"Không tồn tại User: {user_Delete.UserID}!";
-					return returnData;
-				}
-
-				var user = await _context.Users.FindAsync(user_Delete.UserID);
+				var user = await _context.Users
+					.Include(s => s.Clinic_Staff)
+					.Include(s => s.Wallets)
+					.Include(s => s.UserSession)
+					.Include(s => s.Permissions)
+					.Include(s => s.Carts)
+					.AsSplitQuery()
+					.FirstOrDefaultAsync(v => v.UserID == user_Delete.UserID);
 				if (user != null)
 				{
+					//1.Xóa User nếu tìm thấy
 					user.DeleteStatus = 0;
-					var result = await _context.SaveChangesAsync();
-					if (result > 0)
+					listUser.Add(new User_Loggin
 					{
-						returnData.ResponseCode = 1;
-						returnData.ResposeMessage = $"Xóa User: {user_Delete.UserID} thành công!";
-						return returnData;
+						UserID = user.UserID,
+						UserName = user.UserName,
+						PassWord = user.PassWord,
+						Email = user.Email ?? null,
+						DateBirth = user.DateBirth ?? null,
+						Sex = user.Sex ?? null,
+						Creation = user.Creation,
+						Phone = user.Phone ?? null,
+						Addres = user.Addres ?? null,
+						IDCard = user.IDCard ?? null,
+						TypePerson = user.TypePerson,
+						AccumulatedPoints = user.AccumulatedPoints,
+						ReferralCode = user.ReferralCode,
+						RefeshToken = user.RefeshToken ?? null,
+						DeleteStatus = user.DeleteStatus,
+						Moneyy = user.Moneyy,
+						TokenExprired = user.TokenExprired ?? null,
+						RatingPoints = user.RatingPoints,
+						RankMember = user.RankMember
+					});
+
+					//2. Xóa các bản ghi ở Clinic_Staff nếu liên quan đến UserID
+					var clinic_staff = user.Clinic_Staff
+						.Where(s => s.UserID == user.UserID).ToList();
+					if (clinic_staff != null)
+					{
+						foreach (var user_clinic_staff in clinic_staff)
+						{
+							user_clinic_staff.DeleteStatus = 0;
+							listClinicStaff.Add(new Clinic_Staff_Loggin
+							{
+								ClinicStaffID = user_clinic_staff.ClinicStaffID,
+								ClinicID = user_clinic_staff.ClinicID,
+								UserID = user_clinic_staff.UserID,
+								DeleteStatus = user_clinic_staff.DeleteStatus
+							});
+						}
 					}
+
+					//3. Xóa các bản ghi ở Wallets nếu liên quan đến UserID
+					if (user.Wallets.Any())
+					{
+						_context.Wallets.RemoveRange(user.Wallets);
+						foreach (var wallet in user.Wallets)
+						{
+							listWallets.Add(new Wallets_Loggin
+							{
+								WalletsID = wallet.WalletsID,
+								UserID = wallet.UserID,
+								VoucherID = wallet.VoucherID
+							});
+						}
+					}
+
+
+					//4. Xóa các bản ghi ở UserSession nếu liên quan đến UserID
+					var userSession = user.UserSession
+						.Where(s => s.UserID == user.UserID).ToList();
+					if (userSession != null)
+					{
+						foreach (var user_userSession in userSession)
+						{
+							user_userSession.DeleteStatus = 0;
+							listUserSession.Add(new UserSession_Loggin
+							{
+								UserSessionID = user_userSession.UserSessionID,
+								UserID = user_userSession.UserID,
+								Token = user_userSession.Token,
+								DeviceName = user_userSession.DeviceName,
+								Ip = user_userSession.Ip,
+								CreateTime = user_userSession.CreateTime,
+								DeleteStatus = user_userSession.DeleteStatus
+							});
+						}
+					}
+
+					//5. Xóa các bản ghi ở Permissions nếu liên quan đến UserID
+					if (user.Permissions.Any())
+					{
+						_context.Permission.RemoveRange(user.Permissions);
+						foreach (var permission in user.Permissions)
+						{
+							listPermission.Add(new Permission_Loggin
+							{
+								PermissionID = permission.PermissionID,
+								UserID = permission.UserID,
+								UserName = permission.UserName,
+								FunctionID = permission.FunctionID,
+								IsView = permission.IsView,
+								IsInsert = permission.IsInsert,
+								IsUpdate = permission.IsUpdate,
+								IsDelete = permission.IsDelete
+							});
+						}
+					}
+
+					//6. Xóa các bản ghi ở Carts nếu liên quan đến UserID
+					if (user.Carts != null)
+					{
+						_context.Carts.RemoveRange(user.Carts);
+						listCarts.Add(new Carts_Loggin
+						{
+							CartID = user.Carts.CartID,
+							UserID = user.Carts.UserID,
+							CreationDate = user.Carts.CreationDate
+						});
+					}
+
+					//Commit transaction nếu thành công
+					await _context.SaveChangesAsync();
+					await transaction.CommitAsync();
+					returnData.ResponseCode = 1;
+					returnData.ResposeMessage = $"Delete User: {user_Delete.UserID} thành công!";
+					returnData.listUser = listUser;
+					returnData.listCarts = listCarts;
+					returnData.listClinicStaff = listClinicStaff;
+					returnData.listWallets = listWallets;
+					returnData.listPermission = listPermission;
+					returnData.listUserSession = listUserSession;
+					return returnData;
 				}
+				returnData.ResponseCode = -1;
+				returnData.ResposeMessage = $"Không tìm thấy User: {user_Delete.UserID}!";
 				return returnData;
 			}
 			catch (Exception ex)
 			{
+				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
 				return returnData;

@@ -36,8 +36,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Insert Clinic
 				var responseData = await _clinicRepository.Insert_Clinic(clinic);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Insert Clinic Request: " + JsonConvert.SerializeObject(clinic));
+				//3. Lưu log data
+				_loggerManager.LogInfo("Insert Clinic data: " + JsonConvert.SerializeObject(responseData.listClinics));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetClinic_Caching";
@@ -60,8 +62,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Update clinic
 				var responseData = await _clinicRepository.Update_Clinic(update_);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Update Clinic Request: " + JsonConvert.SerializeObject(update_));
+				//3. Lưu log data
+				_loggerManager.LogInfo("Update Clinic data: " + JsonConvert.SerializeObject(responseData.listClinics));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetClinic_Caching";
@@ -84,8 +88,14 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_Clinic
 				var responseData = await _clinicRepository.Delete_Clinic(delete_);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Delete Clinic Request: " + JsonConvert.SerializeObject(delete_));
+				//3. Lưu log data clinic
+				_loggerManager.LogInfo("Delete Clinic data: " + JsonConvert.SerializeObject(responseData.clinic_Loggins));
+				//4. Lưu log data clinic
+				_loggerManager.LogInfo("Delete Clinic_Staff data: " + JsonConvert.SerializeObject(responseData.clinic_Staff_Loggins));
+				//5. Lưu log data clinic
+				_loggerManager.LogInfo("Delete Booking_Assignment data: " + JsonConvert.SerializeObject(responseData.booking_AssignmentLoggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetClinic_Caching";

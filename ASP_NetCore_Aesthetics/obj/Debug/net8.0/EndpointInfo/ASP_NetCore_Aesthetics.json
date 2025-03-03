@@ -1286,8 +1286,7 @@
           },
           "priceService": {
             "type": "number",
-            "format": "float",
-            "nullable": true
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -1423,7 +1422,7 @@
           },
           "priceService": {
             "type": "number",
-            "format": "float",
+            "format": "double",
             "nullable": true
           }
         },

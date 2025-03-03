@@ -1,4 +1,4 @@
-﻿using Aesthetics.DTO.NetCore.DataObject;
+﻿using Aesthetics.DTO.NetCore.DataObject.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 		{
 			//1.Chỉ định mối quan hệ 1-1 của Users & Carts
 			builder.Entity<Users>()
-				.HasOne(u => u.Cart)
+				.HasOne(u => u.Carts)
 				.WithOne(c => c.Users)
 				.HasForeignKey<Carts>(c => c.UserID);
 
@@ -34,7 +34,7 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.WithMany(p => p.Permissions)           
 				.HasForeignKey(s => s.UserID);          
 
-			//4.Chỉ định mối quan hệ của Carts & Products qua bảng trung gian CartProduct
+			//4.Chỉ định mối quan hệ N-N của Carts & Products qua bảng trung gian CartProduct
 			builder.Entity<CartProduct>()
 				.HasKey(cp => cp.CartProductID);        
 			builder.Entity<CartProduct>()
@@ -72,22 +72,58 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.HasForeignKey(v =>v.ClinicID);
 
 			//7.Chỉ định mối quan hệ N - N của Booking & Servicess qua bảng trung gian Booking_Servicess
-			builder.Entity<Booking_Servicess>()
+			builder.Entity<BookingServicess>()
 				.HasKey(bs => bs.BookingServiceID);
-			builder.Entity<Booking_Servicess>()
+			builder.Entity<BookingServicess>()
 				.HasOne(b => b.Booking)
 				.WithMany(s => s.Booking_Servicesses)
 				.HasForeignKey(a => a.BookingID);
-			builder.Entity<Booking_Servicess>()
+			builder.Entity<BookingServicess>()
 				.HasOne(s => s.Servicess)
 				.WithMany(b => b.Booking_Servicesses)
 				.HasForeignKey(c => c.ServiceID);
 
-			//8.Chỉ định mối quan hệ 1 - N của Booking(1) - Booking_Assignment(N)
-			builder.Entity<Booking_Assignment>()
+			//8. Chỉ định mối quan hệ N - N của User & Vouchers
+			builder.Entity<Wallets>()
+				.HasKey(w => w.WalletsID);
+			builder.Entity<Wallets>()
+				.HasOne(a => a.Users)
+				.WithMany(b => b.Wallets)
+				.HasForeignKey(c => c.UserID);
+			builder.Entity<Wallets>()
+				.HasOne(v => v.Vouchers)
+				.WithMany(w => w.Wallets)
+				.HasForeignKey(v => v.VoucherID);
+
+			//9. Chỉ định mối quan hệ N - N của Clinic & Booking qua Booking_Assignment
+			builder.Entity<BookingAssignment>()
+				.HasKey(ba => ba.AssignmentID);
+			builder.Entity<BookingAssignment>()
 				.HasOne(b => b.Booking)
-				.WithMany(ba => ba.Booking_Assignment)
-				.HasForeignKey(a => a.BookingID);
+				.WithMany(a => a.Booking_Assignment)
+				.HasForeignKey(c => c.BookingID);
+			builder.Entity<BookingAssignment>()
+				.HasOne(d => d.Clinic)
+				.WithMany(e => e.BookingAssignment)
+				.HasForeignKey(f => f.ClinicID);
+
+			//10. Chỉ định mối quan hệ 1 - N giữa Servicess(1) & Comments(N)
+			builder.Entity<Comments>()
+				.HasOne(t => t.Servicess)
+				.WithMany(p => p.Comments)
+				.HasForeignKey(s => s.ServiceID);
+
+			//11. Chỉ định mối quan hệ 1 - N giữa Users(1) & Comment(N)
+			builder.Entity<Comments>()
+				.HasOne(v => v.Users)
+				.WithMany(c => c.Comments)
+				.HasForeignKey(d => d.UserID);
+
+			//12. Chỉ định mối quan hệ 1 - N giữa Products(1) & Comments(N)
+			builder.Entity<Comments>()
+				.HasOne(t => t.Products)
+				.WithMany(p => p.Comments)
+				.HasForeignKey(s => s.ProductID);
 		}
 		public virtual DbSet<Booking> Booking { get; set; }
 		public virtual DbSet<Carts> Carts { get; set; }
@@ -105,8 +141,8 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 		public virtual DbSet<UserSession> UserSession { get; set; }
 		public virtual DbSet<Vouchers> Vouchers { get; set; }
 		public virtual DbSet<Wallets> Wallets { get; set; }
-		public virtual DbSet<Booking_Assignment> Booking_Assignment { get; set; }
-		public virtual DbSet<Booking_Servicess> Booking_Servicess { get; set; }
+		public virtual DbSet<BookingAssignment> Booking_Assignment { get; set; }
+		public virtual DbSet<BookingServicess> Booking_Servicess { get; set; }
 		public virtual DbSet<Clinic> Clinic { get; set; }
 		public virtual DbSet<Clinic_Staff> Clinic_Staff { get; set; }
 	}

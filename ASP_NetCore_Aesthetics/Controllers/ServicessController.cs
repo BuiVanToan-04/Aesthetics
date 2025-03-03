@@ -34,8 +34,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Insert Servicess
 				var responseData = await _servicess.Insert_Servicess(servicess);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Insert Servicess Request: " + JsonConvert.SerializeObject(servicess));
+				//3. Lưu log data servicess
+				_loggerManager.LogInfo("Insert Servicess Response data : " + JsonConvert.SerializeObject(responseData.servicess_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";
@@ -57,8 +59,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Update Servicess
 				var responseData = await _servicess.Update_Servicess(servicess);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Update Servicess Request: " + JsonConvert.SerializeObject(servicess));
+				//3. Lưu log data servicess
+				_loggerManager.LogInfo("Update Servicess Response data : " + JsonConvert.SerializeObject(responseData.servicess_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";
@@ -100,8 +104,14 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Delete servicess
 				var responseData = await _servicess.Delete_Servicess(servicess);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Delete Servicess Request: " + JsonConvert.SerializeObject(servicess));
+				//3. Lưu log data delete Servicess
+				_loggerManager.LogInfo("Delete Servicess Response Data: " + JsonConvert.SerializeObject(responseData.servicess_Loggins));
+				//4. Lưu log data delete booking_Servicess
+				_loggerManager.LogInfo("Delete Booking_Servicess Response Data: " + JsonConvert.SerializeObject(responseData.booking_ServicessLoggins));
+				//5. Lưu log data delete Comment
+				_loggerManager.LogInfo("Delete Comment Response Data: " + JsonConvert.SerializeObject(responseData.comment_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetServicess_Caching";

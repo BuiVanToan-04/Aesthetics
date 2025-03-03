@@ -108,11 +108,18 @@ namespace ASP_NetCore_Aesthetics.Controllers
 		{
 			try
 			{
+				//1. GetList_SearchBooking
 				var responseData = await _bookingRepository.GetList_SearchBooking(getList_);
+				//2. Lưu log request
+				_loggerManager.LogInfo("GetList_SearchBooking Requets: " + JsonConvert.SerializeObject(getList_));
+				//3. Lưu log data trả về
+				_loggerManager.LogInfo("GetList_SearchBooking data: " + JsonConvert.SerializeObject(responseData.Data));
 				return Ok(responseData);
 			}
 			catch (Exception ex)
 			{
+				_loggerManager.LogError("{Error Insert Clinic} Message: " + ex.Message +
+					"|" + "Stack Trace: " + ex.StackTrace);
 				return Ok(ex.Message);
 			}
 		}
@@ -122,11 +129,18 @@ namespace ASP_NetCore_Aesthetics.Controllers
 		{
 			try
 			{
+				//1. GetList_SearchBooking_Assignment
 				var responseData = await _bookingRepository.GetList_SearchBooking_Assignment(getList_);
+				//2. Lưu log request
+				_loggerManager.LogInfo("GetList_SearchBooking_Assignment Requets: " + JsonConvert.SerializeObject(getList_));
+				//3. Lưu log data trả về
+				_loggerManager.LogInfo("GetList_SearchBooking_Assignment data: " + JsonConvert.SerializeObject(responseData.Data));
 				return Ok(responseData);
 			}
 			catch (Exception ex)
 			{
+				_loggerManager.LogError("{Error Insert Clinic} Message: " + ex.Message +
+					"|" + "Stack Trace: " + ex.StackTrace);
 				return Ok(ex.Message);
 			}
 		}

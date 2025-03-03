@@ -2,7 +2,8 @@
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
@@ -43,9 +44,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return await _context.Clinic.Where(s => s.ClinicID == ClinicID && s.ClinicStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<ResponseData> Insert_Clinic(ClinicRequest insert_)
+		public async Task<ResponesClinic_Loggin> Insert_Clinic(ClinicRequest insert_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponesClinic_Loggin();
+			var listClinics = new List<Clinic_Loggin>();
 			try
 			{
 				if (!Validation.CheckString(insert_.ClinicName))
@@ -105,9 +107,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ClinicName", insert_.ClinicName);
 				parameters.Add("@ProductsOfServicesID", insert_.ProductsOfServicesID);
 				parameters.Add("@ProductsOfServicesName", insert_.ProductsOfServicesName);
+				listClinics.Add(new Clinic_Loggin
+				{
+					ClinicName = insert_.ClinicName,
+					ProductsOfServicesID = insert_.ProductsOfServicesID,
+					ProductsOfServicesName = insert_.ProductsOfServicesName
+				});
 				await DbConnection.ExecuteAsync("Insert_Clinic", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Clinic!";
+				returnData.listClinics = listClinics;
 				return returnData;
 			}
 			catch (Exception ex)
@@ -118,9 +127,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseData> Update_Clinic(Update_Clinic update_)
+		public async Task<ResponesClinic_Loggin> Update_Clinic(Update_Clinic update_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponesClinic_Loggin();
+			var listClinics = new List<Clinic_Loggin>();
 			try
 			{
 				if (update_.ClinicID <= 0)
@@ -200,9 +210,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ClinicName", update_.ClinicName ?? null);
 				parameters.Add("@ProductsOfServicesID", update_.ProductsOfServicesID ?? null);
 				parameters.Add("@ProductsOfServicesName", update_.ProductsOfServicesName ?? null);
+				listClinics.Add(new Clinic_Loggin
+				{
+					ClinicName = update_.ClinicName ?? null,
+					ProductsOfServicesID = update_.ProductsOfServicesID ?? null,
+					ProductsOfServicesName = update_.ProductsOfServicesName ?? null
+				});
 				await DbConnection.ExecuteAsync("Update_Clinic", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Update thành công Clinic!";
+				returnData.listClinics = listClinics;
 				return returnData;
 			}
 			catch (Exception ex)
@@ -213,9 +230,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseData> Delete_Clinic(Delete_Clinic delete_)
+		public async Task<ResponesClinic_DeleteLoggin> Delete_Clinic(Delete_Clinic delete_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponesClinic_DeleteLoggin();
+			var clinic_Loggins = new List<Clinic_Loggin>();
+			var booking_AssignmentLoggins = new List<Booking_AssignmentLoggin>();
+			var clinic_Staff_Loggins = new List<Clinic_Staff_Loggin>();
+			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				if (delete_.ClinicID <= 0)
@@ -224,25 +245,83 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "ClinicID không hợp lệ!";
 					return returnData;
 				}
-				if (await GetClinicByID(delete_.ClinicID) == null)
+				var dataClinic = await _context.Clinic
+					.Include(s => s.Clinic_Staff)
+					.Include(s => s.BookingAssignment)
+					.AsSplitQuery()
+					.FirstOrDefaultAsync(v => v.ClinicID == delete_.ClinicID);
+				if (dataClinic != null)
 				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"ClinicID: {delete_.ClinicID} không tồn tại!";
-					return returnData;
-				}
-				var Clinic = await _context.Clinic.FindAsync(delete_.ClinicID);
-				if (Clinic != null)
-				{
-					Clinic.ClinicStatus = 0;
+					//1. Xóa Clinic nếu tìm thấy
+					dataClinic.ClinicStatus = 0;
+					clinic_Loggins.Add(new Clinic_Loggin
+					{
+						ClinicID = dataClinic.ClinicID,
+						ClinicName = dataClinic.ClinicName,
+						ProductsOfServicesID = dataClinic.ProductsOfServicesID,
+						ProductsOfServicesName = dataClinic.ProductsOfServicesName,
+						ClinicStatus = dataClinic.ClinicStatus
+					});
+
+					//2. Xóa Clinic_Staff liên quan đến ClinicID
+					var clinic_Staff = dataClinic.Clinic_Staff
+						.Where(s => s.ClinicID == dataClinic.ClinicID).ToList();
+					if (clinic_Staff.Any() && clinic_Staff != null)
+					{
+						foreach(var clinStaf in clinic_Staff)
+						{
+							clinStaf.DeleteStatus = 0;
+							clinic_Staff_Loggins.Add(new Clinic_Staff_Loggin
+							{
+								ClinicStaffID = clinStaf.ClinicStaffID,
+								ClinicID = clinStaf.ClinicID,
+								UserID = clinStaf.UserID,
+								DeleteStatus = clinStaf.DeleteStatus
+							});
+						}
+					}
+
+					//3. Xóa BookingAssignment liên quan đến ClinicID
+					var bookingAssignment = dataClinic.BookingAssignment
+						.Where(s => s.ClinicID == dataClinic.ClinicID).ToList();
+					if (bookingAssignment != null && bookingAssignment.Any()) 
+					{
+						foreach (var bookAssign in bookingAssignment)
+						{
+							bookAssign.DeleteStatus = 0;
+							booking_AssignmentLoggins.Add(new Booking_AssignmentLoggin
+							{
+								AssignmentID = bookAssign.AssignmentID,
+								BookingID = bookAssign.BookingID,
+								ClinicID = bookAssign.ClinicID,
+								ProductsOfServicesID = bookAssign.ProductsOfServicesID,
+								UserName = bookAssign.UserName,
+								ServiceName = bookAssign.ServiceName,
+								NumberOrder = bookAssign.NumberOrder,
+								AssignedDate = bookAssign.AssignedDate,
+								Status = bookAssign.Status,
+								DeleteStatus = bookAssign.DeleteStatus
+							});
+						}
+					}
+					//Commit transaction nếu thành công
 					await _context.SaveChangesAsync();
+					await transaction.CommitAsync();
+
 					returnData.ResponseCode = 1;
-					returnData.ResposeMessage = "Delete thành công!";
+					returnData.ResposeMessage = "Xóa Clinic thành công!";
+					returnData.clinic_Loggins = clinic_Loggins;
+					returnData.booking_AssignmentLoggins = booking_AssignmentLoggins;
+					returnData.clinic_Staff_Loggins = clinic_Staff_Loggins;
 					return returnData;
 				}
+				returnData.ResponseCode = -1;
+				returnData.ResposeMessage = "Không tìm thấy Clinic nào!";
 				return returnData;
 			}
 			catch (Exception ex)
 			{
+				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
 				return returnData;

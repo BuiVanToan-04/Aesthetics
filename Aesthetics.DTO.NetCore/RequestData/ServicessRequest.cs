@@ -9,10 +9,10 @@ namespace Aesthetics.DTO.NetCore.RequestData
 	public class ServicessRequest
 	{
 		public int ProductsOfServicesID { get; set; }
-		public string? ServiceName { get; set; }
-		public string? Description { get; set; }
-		public string? ServiceImage { get; set; }
-		public float? PriceService { get; set; }
+		public string ServiceName { get; set; }
+		public string Description { get; set; }
+		public string ServiceImage { get; set; }
+		public double PriceService { get; set; }
 	}
 
 	public class Update_Servicess
@@ -22,7 +22,7 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public string? ServiceName { get; set; }
 		public string? Description { get; set; }
 		public string? ServiceImage { get; set; }
-		public float? PriceService { get; set; }
+		public double? PriceService { get; set; }
 	}
 	public class Delete_Servicess
 	{

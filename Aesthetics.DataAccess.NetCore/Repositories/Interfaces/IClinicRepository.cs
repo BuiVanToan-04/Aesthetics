@@ -1,5 +1,5 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using System;
@@ -13,13 +13,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 	public interface IClinicRepository
 	{
 		//1.Function insert Clinic
-		Task<ResponseData> Insert_Clinic(ClinicRequest insert_);
+		Task<ResponesClinic_Loggin> Insert_Clinic(ClinicRequest insert_);
 
 		//2.Function update Clinic
-		Task<ResponseData> Update_Clinic(Update_Clinic update_);
+		Task<ResponesClinic_Loggin> Update_Clinic(Update_Clinic update_);
 
 		//3.Function delete Clinic
-		Task<ResponseData> Delete_Clinic(Delete_Clinic delete_);
+		Task<ResponesClinic_DeleteLoggin> Delete_Clinic(Delete_Clinic delete_);
 
 		//4.Function get list & Search Clinic
 		Task<ResponesClinicData> GetList_SearchClinic(GetList_Search getList_);

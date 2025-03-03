@@ -8,8 +8,8 @@ using XAct.Users;
 using BE_102024.DataAces.NetCore.DataOpject.RequestData;
 using System.Security.Claims;
 using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
-using Aesthetics.DTO.NetCore.DataObject;
 using System.IdentityModel.Tokens.Jwt;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 
 namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 {

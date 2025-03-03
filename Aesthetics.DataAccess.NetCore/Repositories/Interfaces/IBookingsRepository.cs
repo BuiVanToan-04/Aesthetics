@@ -1,5 +1,5 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using System;
@@ -40,7 +40,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		Task<Booking> GetBooKingByBookingID(int? BookingID);
 
 		//10.Funcion get Booking_Assignment by Booking_AssignmentID 
-		Task<Booking_Assignment> GetBooking_AssignmentByID(int? AssignmentID);
+		Task<BookingAssignment> GetBooking_AssignmentByID(int? AssignmentID);
 
 		//11.Funciton get Servicess by ServicessName
 		Task<Servicess> GetServicessByServicessName(string? servicessName);

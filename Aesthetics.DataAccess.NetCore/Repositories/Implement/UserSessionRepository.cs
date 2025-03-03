@@ -1,6 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using BE_102024.DataAces.NetCore.Dapper;
 using Dapper;
 using System;
@@ -51,7 +52,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<int> Insert_Sesion(DTO.NetCore.DataObject.UserSession session)
+		public async Task<int> Insert_Sesion(UserSession session)
 		{
 			_context.UserSession.Add(session);
 			return _context.SaveChanges();

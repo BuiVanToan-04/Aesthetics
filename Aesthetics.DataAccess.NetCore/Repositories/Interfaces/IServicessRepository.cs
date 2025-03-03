@@ -1,5 +1,5 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using System;
@@ -13,13 +13,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 	public interface IServicessRepository
 	{
 		//1.Function insert Servicess
-		Task<ResponseData> Insert_Servicess(ServicessRequest servicess_);
+		Task<ResponseServicess_Loggin> Insert_Servicess(ServicessRequest servicess_);
 
 		//2.Function update Servicess
-		Task<ResponseData> Update_Servicess(Update_Servicess update_);
+		Task<ResponseServicess_Loggin> Update_Servicess(Update_Servicess update_);
 
 		//3.Function delete Servicess
-		Task<ResponseData> Delete_Servicess(Delete_Servicess delete_);
+		Task<ResponseServicess_LogginDelete> Delete_Servicess(Delete_Servicess delete_);
 
 		//4.Function Get list & Search Servicess
 		Task<ResponseServicessData> GetList_SearchServicess(GetList_SearchServicess getList_);

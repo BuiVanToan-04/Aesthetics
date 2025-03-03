@@ -2,7 +2,8 @@
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
-using Aesthetics.DTO.NetCore.DataObject;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
+using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
 using BE_102024.DataAces.NetCore.CheckConditions;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,9 +89,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					&& s.ProductsOfServicesType == ProductsOfServicesType).FirstOrDefaultAsync();
 		}
 
-		public async Task<ResponseData> Insert_Servicess(ServicessRequest servicess_)
+		public async Task<ResponseServicess_Loggin> Insert_Servicess(ServicessRequest servicess_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseServicess_Loggin();
+			var servicess_Loggins = new List<Servicess_Loggin>();
 			try
 			{
 				if (servicess_.ProductsOfServicesID <= 0)
@@ -98,28 +101,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckString(servicess_.ServiceName))
+				if (!Validation.CheckString(servicess_.ServiceName) || !Validation.CheckXSSInput(servicess_.ServiceName))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceName không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceName không hợp lệ || Dữ liệu ServiceName chứa kí tự không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(servicess_.ServiceName))
+				if (!Validation.CheckString(servicess_.Description) || !Validation.CheckXSSInput(servicess_.Description))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ServiceName chứa kí tự không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckString(servicess_.Description))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào Description không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckXSSInput(servicess_.Description))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu Description chứa kí tự không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào Description không hợp lệ || Dữ liệu Description chứa kí tự không hợp lệ!";
 					return returnData;
 				}
 				if (servicess_.PriceService < 0)
@@ -128,19 +119,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào PriceService không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(servicess_.ServiceImage))
+				if (!Validation.CheckXSSInput(servicess_.ServiceImage) || !Validation.CheckString(servicess_.ServiceImage))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ServiceImage chứa kí tự không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu ServiceImage chứa kí tự không hợp lệ || Dữ liệu đầu vào ServiceImage không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckString(servicess_.ServiceImage))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceImage không hợp lệ!";
-					return returnData;
-				}
-				
 
 				var imagePathServicess = await BaseProcessingFunction64(servicess_.ServiceImage);
 				var parameters = new DynamicParameters();
@@ -149,9 +133,21 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@Description", servicess_.Description);
 				parameters.Add("@ServiceImage", imagePathServicess);
 				parameters.Add("@PriceService", servicess_.PriceService);
+				parameters.Add("@ServiceID", dbType: DbType.Int32, direction: ParameterDirection.Output);
 				await DbConnection.ExecuteAsync("Insert_Servicess", parameters);
+				var newServicessID = parameters.Get<int>("@ServiceID");
+				servicess_Loggins.Add(new Servicess_Loggin
+				{
+					ServiceID = newServicessID,
+					ProductsOfServicesID = servicess_.ProductsOfServicesID,
+					ServiceName = servicess_.ServiceName,
+					Description = servicess_.Description,
+					ServiceImage = imagePathServicess,
+					PriceService = servicess_.PriceService,
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Service!";
+				returnData.servicess_Loggins = servicess_Loggins;
 				return returnData;
 			}
 			catch (Exception ex)
@@ -162,9 +158,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseData> Update_Servicess(Update_Servicess update_)
+		public async Task<ResponseServicess_Loggin> Update_Servicess(Update_Servicess update_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseServicess_Loggin();
+			var servicess_Loggins = new List<Servicess_Loggin>();
 			try
 			{
 				if (update_.ServiceID <= 0)
@@ -191,31 +188,19 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 	
 				if (update_.ServiceName != null) 
 				{
-					if (!Validation.CheckString(update_.ServiceName))
+					if (!Validation.CheckString(update_.ServiceName) || !Validation.CheckXSSInput(update_.ServiceName))
 					{
 						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào ServiceName không hợp lệ!";
-						return returnData;
-					}
-					if (!Validation.CheckXSSInput(update_.ServiceName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu ServiceName chứa kí tự không hợp lệ!";
+						returnData.ResposeMessage = "Dữ liệu đầu vào ServiceName không hợp lệ || Dữ liệu ServiceName chứa kí tự không hợp lệ!";
 						return returnData;
 					}
 				}
 				if (update_.Description != null) 
 				{
-					if (!Validation.CheckString(update_.Description))
+					if (!Validation.CheckString(update_.Description) || !Validation.CheckXSSInput(update_.Description))
 					{
 						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào Description không hợp lệ!";
-						return returnData;
-					}
-					if (!Validation.CheckXSSInput(update_.Description))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu Description chứa kí tự không hợp lệ!";
+						returnData.ResposeMessage = "Dữ liệu đầu vào Description không hợp lệ || Dữ liệu Description chứa kí tự không hợp lệ!";
 						return returnData;
 					}
 				}
@@ -230,19 +215,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				}
 				if (update_.ServiceImage != null)
 				{
-					if (!Validation.CheckXSSInput(update_.ServiceImage))
+					if (!Validation.CheckXSSInput(update_.ServiceImage) || !Validation.CheckString(update_.ServiceImage))
 					{
 						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu ServiceImage chứa kí tự không hợp lệ!";
+						returnData.ResposeMessage = "Dữ liệu ServiceImage chứa kí tự không hợp lệ || Dữ liệu đầu vào ServiceImage không hợp lệ!";
 						return returnData;
 					}
-					if (!Validation.CheckString(update_.ServiceImage))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = "Dữ liệu đầu vào ServiceImage không hợp lệ!";
-						return returnData;
-					}
-					
 				}
 				var imagePathServicess = update_.ServiceImage != null 
 					? await BaseProcessingFunction64(update_.ServiceImage) : null;
@@ -254,8 +232,18 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ServiceImage",imagePathServicess ?? null);
 				parameters.Add("@PriceService", update_.PriceService ?? null);
 				await DbConnection.ExecuteAsync("Update_Servicess", parameters);
+				servicess_Loggins.Add(new Servicess_Loggin
+				{
+					ServiceID = update_.ServiceID,
+					ProductsOfServicesID = update_.ProductsOfServicesID ?? 0,
+					ServiceName = update_.ServiceName ?? null,
+					Description = update_.Description ?? null,
+					ServiceImage = imagePathServicess ?? null,
+					PriceService = update_.PriceService ?? 0,
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Update thành công Service!";
+				returnData.servicess_Loggins = servicess_Loggins;
 				return returnData;
 			}
 			catch (Exception ex)
@@ -266,9 +254,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseData> Delete_Servicess(Delete_Servicess delete_)
+		public async Task<ResponseServicess_LogginDelete> Delete_Servicess(Delete_Servicess delete_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseServicess_LogginDelete();
+			var servicess_Loggins = new List<Servicess_Loggin>();
+			var booking_ServicessLoggins = new List<Booking_ServicessLoggin>();
+			var comment_Loggins = new List<Comment_Loggin>();
+			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				if(delete_.ServiceID <=0)
@@ -277,24 +269,82 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào ServiceID không hợp lệ!";
 					return returnData;
 				}
-				if (await GetServicessByServicesID(delete_.ServiceID) == null)
+				var servicess = await _context.Servicess
+					.Include(a => a.Booking_Servicesses)
+					.Include(b => b.Comments)
+					.AsSplitQuery()
+					.FirstOrDefaultAsync(s => s.ServiceID == delete_.ServiceID);
+				if (servicess != null)
 				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"Không tồn tại Service có ID: {delete_.ServiceID}";
+					//1. Xóa Sevicess nếu tồn tại
+					servicess.DeleteStatus = 0;
+					servicess_Loggins.Add(new Servicess_Loggin
+					{
+						ServiceID = servicess.ServiceID,
+						ProductsOfServicesID = servicess.ProductsOfServicesID,
+						ServiceName = servicess.ServiceName,
+						Description = servicess.Description,
+						ServiceImage = servicess.ServiceImage,
+						PriceService = servicess.PriceService,
+						DeleteStatus = servicess.DeleteStatus,
+					});
+
+					//2. Xóa BookingServicess liên quan đến ServiceID
+					var bookingServicess = servicess.Booking_Servicesses
+						.Where(s => s.ServiceID == servicess.ServiceID).ToList();
+					if (bookingServicess != null && bookingServicess.Any())
+					{
+						foreach (var item in bookingServicess)
+						{
+							item.DeleteStatus = 0;
+							booking_ServicessLoggins.Add(new Booking_ServicessLoggin
+							{
+								BookingServiceID = item.BookingServiceID,
+								BookingID = item.BookingID,
+								ServiceID = item.ServiceID,
+								ProductsOfServicesID = item.ProductsOfServicesID,
+								DeleteStatus = item.DeleteStatus,
+							});
+						}
+					}
+
+					//3. Xóa Comment liên quan đến ServiceID
+					var comments = servicess.Comments
+						.Where(s => s.ServiceID == servicess.ServiceID).ToList();
+					if (comments != null && comments.Any())
+					{
+						foreach (var item in comments)
+						{
+							_context.Comments.Remove(item);
+							comment_Loggins.Add(new Comment_Loggin
+							{
+								CommentID = item.CommentID,
+								ProductID = item.ProductID,
+								ServiceID = item.ServiceID,
+								UserID = item.UserID,
+								Comment_Content = item.Comment_Content,
+								CreationDate = item.CreationDate,
+							});
+						}
+					}
+					await _context.SaveChangesAsync();
+					//Commit transaction nếu thành công
+					await transaction.CommitAsync();
+
+					returnData.ResponseCode = 1;
+					returnData.ResposeMessage = "Xóa thành công Service!";
+					returnData.servicess_Loggins = servicess_Loggins;
+					returnData.booking_ServicessLoggins = booking_ServicessLoggins;
+					returnData.comment_Loggins = comment_Loggins;
 					return returnData;
 				}
-				var service = await _context.Servicess.FindAsync(delete_.ServiceID);
-				if (service != null)
-				{
-					service.DeleteStatus = 0;
-					await _context.SaveChangesAsync();
-					returnData.ResponseCode = 1;
-					returnData.ResposeMessage = $"Delete thành công Service có ID: {delete_.ServiceID}";
-				}
+				returnData.ResponseCode = -1;
+				returnData.ResposeMessage = "ServiceID không tồn tại. Vui lòng nhập lại!";
 				return returnData;
 			}
 			catch (Exception ex) 
 			{
+				await transaction.RollbackAsync();
 				returnData.ResponseCode = -99;
 				returnData.ResposeMessage = ex.Message;
 				return returnData;

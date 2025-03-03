@@ -1,0 +1,6 @@
+2025-03-02 22:09:29.1459 INFO Delete_User Request: {"UserID":2}
+2025-03-02 22:29:27.1532 INFO Create_Account Request: {"UserName":"lanAnh","PassWord":"123456","ReferralCode":null}
+2025-03-02 22:39:16.8836 INFO Create_Account Request: {"UserName":"quynhAnh","PassWord":"123456","ReferralCode":null}
+2025-03-02 22:44:37.0810 INFO Create_Account Request: {"UserName":"quynhAnh","PassWord":"123456","ReferralCode":null}
+2025-03-02 22:46:58.1303 INFO Create_Account Request: {"UserName":"quynhAnh","PassWord":"123456","ReferralCode":null}
+2025-03-02 23:00:37.6505 INFO Create_Account Request: {"UserName":"haMy","PassWord":"123456","ReferralCode":null}
