@@ -167,10 +167,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseSupplierData> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier)
+		public async Task<ResponseSupplier_Loggin> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier)
 		{
-			var responseData = new ResponseSupplierData();
-			var responeSupplier = new List<ResponseSupplier>();
+			var responseData = new ResponseSupplier_Loggin();
 			try
 			{
 				if (_searchSupplier.SupplierID <= 0)
@@ -208,12 +207,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					responseData.Data = result.ToList();
 					return responseData;
 				}
-				else
-				{
-					responseData.ResponseCode = 0;
-					responseData.ResposeMessage = "Không tìm thấy Supplier nào.";
-					return responseData;
-				}
+				responseData.ResponseCode = 0;
+				responseData.ResposeMessage = "Không tìm thấy Supplier nào.";
+				return responseData;
 			}
 			catch (Exception ex)
 			{

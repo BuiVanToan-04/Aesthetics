@@ -11,8 +11,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
 	{
 		[Key]
 		public int ClinicStaffID { get; set; }
-		public int ClinicID { get; set; }
-		public int UserID { get; set; }
+		public int? ClinicID { get; set; }
+		public int? UserID { get; set; }
 		public int? DeleteStatus { get; set; }
 		public Users Users { get; set; }
 		public Clinic Clinic { get; set; } 

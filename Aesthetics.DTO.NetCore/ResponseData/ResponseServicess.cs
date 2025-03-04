@@ -17,13 +17,10 @@ namespace Aesthetics.DTO.NetCore.Response
 		public string? ServiceImage { get; set; }
 		public double? PriceService { get; set; }
 	}
-	public class ResponseServicessData : ResponseData
-	{
-		public List<ResponseServicess> Data { get; set; }
-	}
 
 	public class ResponseServicess_Loggin : ResponseData
 	{
+		public List<ResponseServicess> Data { get; set; }
 		public List<Servicess_Loggin>? servicess_Loggins { get; set; }
 	}
 

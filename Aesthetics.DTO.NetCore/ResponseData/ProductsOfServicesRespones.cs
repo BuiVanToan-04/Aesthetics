@@ -15,13 +15,9 @@ namespace Aesthetics.DTO.NetCore.Response
 		public string ProductsOfServicesType { get; set; }
 	}
 
-	public class ProductsOfServicesData : ResponseData
-	{
-		public List<ProductsOfServicesRespones> Data { get; set; }
-	}
-
 	public class ProductsOfServices_Loggin : ResponseData
 	{
+		public List<ProductsOfServicesRespones> Data { get; set; }
 		public List<ProductsOfServices_Logginn>? productOfServicess_Loggin { get; set; }
 	}
 }

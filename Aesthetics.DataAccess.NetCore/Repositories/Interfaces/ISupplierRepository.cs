@@ -28,6 +28,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 		Task<ResponseSupplier_Loggin> Delete_Supplier(Delete_Supplier supplier);
 
 		//6.Get list Supplier & Search Supplier by SupplierName or SupplierID
-		Task<ResponseSupplierData> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier);
+		Task<ResponseSupplier_Loggin> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier);
 	}
 }

@@ -160,6 +160,38 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.Clinic_StaffController",
+    "Method": "GetList_SearchClinicStaff",
+    "RelativePath": "api/Clinic_Staff/GetList_SearchClinicStaff",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Clinic_StaffGetList",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.Clinic_StaffController",
+    "Method": "Insert_ClinicStaff",
+    "RelativePath": "api/Clinic_Staff/Insert_ClinicStaff",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clinic_Staff",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Clinic_StaffRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ClinicController",
     "Method": "Delete_Clinic",
     "RelativePath": "api/Clinic/Delete_Clinic",

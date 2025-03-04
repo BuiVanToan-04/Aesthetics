@@ -22,7 +22,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		Task<ResponseServicess_LogginDelete> Delete_Servicess(Delete_Servicess delete_);
 
 		//4.Function Get list & Search Servicess
-		Task<ResponseServicessData> GetList_SearchServicess(GetList_SearchServicess getList_);
+		Task<ResponseServicess_Loggin> GetList_SearchServicess(GetList_SearchServicess getList_);
 
 		//5.Base Processing Function 64
 		Task<string> BaseProcessingFunction64(string? ServicessImage);

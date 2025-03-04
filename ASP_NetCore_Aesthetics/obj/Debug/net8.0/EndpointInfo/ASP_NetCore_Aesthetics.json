@@ -439,6 +439,68 @@
         }
       }
     },
+    "/api/Clinic_Staff/Insert_ClinicStaff": {
+      "post": {
+        "tags": [
+          "Clinic_Staff"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Clinic_Staff/GetList_SearchClinicStaff": {
+      "get": {
+        "tags": [
+          "Clinic_Staff"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffGetList"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffGetList"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffGetList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Servicess/Insert_Servicess": {
       "post": {
         "tags": [
@@ -1049,6 +1111,41 @@
           "productsOfServicesName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Clinic_StaffGetList": {
+        "type": "object",
+        "properties": {
+          "clinicStaffID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clinicID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Clinic_StaffRequest": {
+        "type": "object",
+        "properties": {
+          "clinicID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

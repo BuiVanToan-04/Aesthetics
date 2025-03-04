@@ -22,7 +22,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 		Task<ProductsOfServices_Loggin> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_);
 
 		//4.Function get list & Search TypeProductsOfServices
-		Task<ProductsOfServicesData> GetList_SearchTypeProductsOfServices(GetList_SearchTypeProductsOfServices getList_Search);
+		Task<ProductsOfServices_Loggin> GetList_SearchTypeProductsOfServices(GetList_SearchTypeProductsOfServices getList_Search);
 
 		//5.Funciton get TypeProductsOfServices by TypeProductsOfServicesName
 		Task<TypeProductsOfServices> GetTypeByName(string? Name, string? Type);

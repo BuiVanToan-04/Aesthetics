@@ -345,9 +345,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponseServicessData> GetList_SearchServicess(GetList_SearchServicess getList_)
+		public async Task<ResponseServicess_Loggin> GetList_SearchServicess(GetList_SearchServicess getList_)
 		{
-			var returnData = new ResponseServicessData();
+			var returnData = new ResponseServicess_Loggin();
 			var listData = new List<ResponseServicess>();
 			try
 			{

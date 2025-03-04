@@ -321,9 +321,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ResponesClinicData> GetList_SearchClinic(GetList_Search getList_)
+		public async Task<ResponesClinic_Loggin> GetList_SearchClinic(GetList_Search getList_)
 		{
-			var responseData = new ResponesClinicData();
+			var responseData = new ResponesClinic_Loggin();
 			var listClinic = new List<ResponesClinic>();
 			try
 			{

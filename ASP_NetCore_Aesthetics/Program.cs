@@ -46,6 +46,7 @@ builder.Services.AddTransient<ITypeProductsOfServicesRepository, TypeProductsOfS
 builder.Services.AddTransient<IServicessRepository, ServicessRepository>();
 builder.Services.AddTransient<IBookingsRepository, BookingsRepository>();
 builder.Services.AddTransient<IClinicRepository, ClinicRepository>();
+builder.Services.AddTransient<IClinic_StaffRepository, Clinic_StaffRepository>();
 builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/NLog.config"));

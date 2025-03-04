@@ -22,7 +22,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interfaces
 		Task<ResponesClinic_DeleteLoggin> Delete_Clinic(Delete_Clinic delete_);
 
 		//4.Function get list & Search Clinic
-		Task<ResponesClinicData> GetList_SearchClinic(GetList_Search getList_);
+		Task<ResponesClinic_Loggin> GetList_SearchClinic(GetList_Search getList_);
 
 		//5.Function get Clinic by ClinicName
 		Task<Clinic> GetClinicByName(string? name);
