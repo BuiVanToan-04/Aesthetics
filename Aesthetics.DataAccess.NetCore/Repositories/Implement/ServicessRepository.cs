@@ -152,9 +152,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Insert_Servicess Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -248,9 +246,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Update_Servicess Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -342,12 +338,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				returnData.ResposeMessage = "ServiceID không tồn tại. Vui lòng nhập lại!";
 				return returnData;
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Delete_Servicess Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -432,11 +426,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error GetList_SearchServicess Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -492,9 +484,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error ExportServicessToExcel Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 

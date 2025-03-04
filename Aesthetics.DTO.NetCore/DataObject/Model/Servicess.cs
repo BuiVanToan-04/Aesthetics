@@ -12,11 +12,11 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         [Key]
         public int ServiceID { get; set; }
         public int ProductsOfServicesID { get; set; }
-        public string ServiceName { get; set; }
-        public string Description { get; set; }
-        public string ServiceImage { get; set; }
-        public double PriceService { get; set; }
-        public int DeleteStatus { get; set; }
+        public string? ServiceName { get; set; }
+        public string? Description { get; set; }
+        public string? ServiceImage { get; set; }
+        public double? PriceService { get; set; }
+        public int? DeleteStatus { get; set; }
         public TypeProductsOfServices TypeProductsOfServices { get; set; }
 		public ICollection<InvoiceDetail> InvoiceDetail { get; set; } 
 		public ICollection<Comments> Comments { get; set; }

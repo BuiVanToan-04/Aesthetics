@@ -12,7 +12,7 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
 		[Key]
 		public int CartID { get; set; }
 		public int UserID { get; set; }
-		public DateTime CreationDate { get; set; }
+		public DateTime? CreationDate { get; set; }
 		public ICollection<CartProduct> CartProducts { get; set; }
 		public Users Users { get; set; }
 	}

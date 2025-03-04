@@ -8,8 +8,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.LogginModel
 {
 	public class Carts_Loggin
 	{
-		public int CartID { get; set; }
-		public int UserID { get; set; }
-		public DateTime CreationDate { get; set; }
+		public int? CartID { get; set; }
+		public int? UserID { get; set; }
+		public DateTime? CreationDate { get; set; }
 	}
 }

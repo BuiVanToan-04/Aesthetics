@@ -87,7 +87,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 				// Kiểm tra ngày đặt lịch không được nhỏ hơn ngày hiện tại
-				if (insert_.ScheduledDate < DateTime.Now)
+				if (insert_.ScheduledDate.Date < DateTime.Today)
 				{
 					returnData.ResponseCode = -1;
 					returnData.ResposeMessage = "Dữ liệu ScheduledDate không hợp lệ!";
@@ -136,7 +136,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					}
 
 					// Kiểm tra xem ProductsOfServicesID đã có NumberOrder chưa
-					if (numberOrderMap.ContainsKey(servicess.ProductsOfServicesID))
+					if (numberOrderMap.ContainsKey(servicess.ProductsOfServicesID  ))
 					{
 						// Nếu đã có, sử dụng lại NumberOrder
 						numberOrder = numberOrderMap[servicess.ProductsOfServicesID];
@@ -215,9 +215,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Insert_Booking Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -491,9 +489,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Update_Booking Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -584,9 +580,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Delete_Booking Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -645,9 +639,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				responseData.ResponseCode = -99;
-				responseData.ResposeMessage = ex.Message;
-				return responseData;
+				throw new Exception($"Error GetList_SearchBooking Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -732,9 +724,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error GetList_SearchBooking Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 

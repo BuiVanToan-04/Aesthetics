@@ -1,6 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
 using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,35 +30,19 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			_configuration = configuration;
 		}
 
-		public async Task<Supplier> GetSupplierBySupplierID(int? supplierID)
+		public async Task<ResponseSupplier_Loggin> Insert_Supplier(SupplierRequest supplier)
 		{
-			return await _context.Supplier.Where(s => s.SupplierID == supplierID
-					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
-		}
-
-		public async Task<Supplier> GetSupplierBySupplierName(string? supplierName)
-		{
-			return await _context.Supplier.Where(s => s.SupplierName == supplierName
-					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
-		}
-
-		public async Task<ResponseData> Insert_Supplier(SupplierRequest supplier)
-		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseSupplier_Loggin();
+			var supplier_Loggins = new List<Supplier_Loggin>();
 			try
 			{
-				if (!Validation.CheckString(supplier.SupplierName))
+				if (!Validation.CheckXSSInput(supplier.SupplierName) || !Validation.CheckString(supplier.SupplierName))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName không hợp lệ || Dữ liệu đầu vào SupplierName chứa kí tự không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(supplier.SupplierName))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName chứa kí tự không hợp lệ!";
-					return returnData;
-				}
+				
 				if (await GetSupplierBySupplierName(supplier.SupplierName) != null)
 				{
 					returnData.ResponseCode = -1;
@@ -66,22 +52,30 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				}
 				var parameters = new DynamicParameters();
 				parameters.Add("@SupplierName", supplier.SupplierName);
+				parameters.Add("@SupplierID", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
 				await DbConnection.ExecuteAsync("Insert_Supplier", parameters);
+				var newSupplierID = parameters.Get<int>("@SupplierID");
+				supplier_Loggins.Add(new Supplier_Loggin
+				{
+					SupplierID = newSupplierID,
+					SupplierName = supplier.SupplierName,
+					DeleteStatus = 1
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Thêm thành công Supplier!";
+				returnData.supplier_Loggins = supplier_Loggins;
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error in Insert_Supplier Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
-		public async Task<ResponseData> Update_Supplier(Update_Supplier supplier)
+		public async Task<ResponseSupplier_Loggin> Update_Supplier(Update_Supplier supplier)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseSupplier_Loggin();
+			var supplier_Loggins = new List<Supplier_Loggin>();
 			try
 			{
 				if (supplier.SupplierID <= 0)
@@ -90,16 +84,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierID không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckString(supplier.SupplierName))
+				if (!Validation.CheckString(supplier.SupplierName) || !Validation.CheckXSSInput(supplier.SupplierName))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckXSSInput(supplier.SupplierName))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName chứa kí tự không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào SupplierName không hợp lệ || SupplierName chứa kí tự không hợp lệ!";
 					return returnData;
 				}
 				if (await GetSupplierBySupplierID(supplier.SupplierID) == null)
@@ -119,21 +107,26 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@SupplierID", supplier.SupplierID);
 				parameters.Add("@SupplierName", supplier.SupplierName);
 				await DbConnection.ExecuteAsync("Update_Supplier", parameters);
+				supplier_Loggins.Add(new Supplier_Loggin
+				{
+					SupplierID = supplier.SupplierID,
+					SupplierName = supplier.SupplierName,
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = $"Cập nhật thông tin thành công!";
+				returnData.supplier_Loggins = supplier_Loggins;
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error in Update_Supplier Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
-		public async Task<ResponseData> Delete_Supplier(Delete_Supplier supplier)
+		public async Task<ResponseSupplier_Loggin> Delete_Supplier(Delete_Supplier supplier)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ResponseSupplier_Loggin();
+			var supplier_Loggins = new List<Supplier_Loggin>();
 			try
 			{
 				if (supplier.SupplierID <= 0)
@@ -152,21 +145,25 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				if (supp != null)
 				{
 					supp.DeleteStatus = 0;
-					var result = await _context.SaveChangesAsync();
-					if (result > 0)
+					await _context.SaveChangesAsync();
+					supplier_Loggins.Add(new Supplier_Loggin
 					{
-						returnData.ResponseCode = 1;
-						returnData.ResposeMessage = $"Xóa Supplier: {supplier.SupplierID} thành công!";
-						return returnData;
-					}
+						SupplierID = supplier.SupplierID,
+						SupplierName = supp.SupplierName,
+						DeleteStatus = 0
+					});
+					returnData.ResponseCode = 1;
+					returnData.supplier_Loggins = supplier_Loggins;
+					returnData.ResposeMessage = $"Xóa Supplier: {supplier.SupplierID} thành công!";
+					return returnData;
 				}
+				returnData.ResponseCode = 0;
+				returnData.ResposeMessage = $"Không tìm thấy Supplier: {supplier.SupplierID}!";
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Delete_Supplier Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -220,10 +217,20 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				responseData.ResponseCode = -99;
-				responseData.ResposeMessage = ex.Message;
-				return responseData;
+				throw new Exception($"Error GetList_SearchSupplier Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
+		}
+
+		public async Task<Supplier> GetSupplierBySupplierID(int? supplierID)
+		{
+			return await _context.Supplier.Where(s => s.SupplierID == supplierID
+					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
+		}
+
+		public async Task<Supplier> GetSupplierBySupplierName(string? supplierName)
+		{
+			return await _context.Supplier.Where(s => s.SupplierName == supplierName
+					&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 	}
 }

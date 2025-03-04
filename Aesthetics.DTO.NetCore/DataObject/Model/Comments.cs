@@ -12,8 +12,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         [Key]
         public int CommentID { get; set; }
         public int? ProductID { get; set; }
-        public int ServiceID { get; set; }
-        public int? UserID { get; set; }
+        public int? ServiceID { get; set; }
+        public int UserID { get; set; }
         public string? Comment_Content { get; set; }
         public DateTime? CreationDate { get; set; }
         public Products Products { get; set; }

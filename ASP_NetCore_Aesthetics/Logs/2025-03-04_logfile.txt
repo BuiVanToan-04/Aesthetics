@@ -1,0 +1,22 @@
+2025-03-04 14:56:59.6582 INFO Insert_Supplier Request: {"SupplierName":"Công ty TNHH Thiết Bị Y Tế Hưng Yên"}
+2025-03-04 14:57:01.6348 INFO Insert_Supplier Response data: [{"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Hưng Yên","DeleteStatus":1}]
+2025-03-04 14:59:13.9917 INFO Insert_Supplier Request: {"SupplierName":"Công ty TNHH Thiết Bị Y Tế Hưng"}
+2025-03-04 14:59:14.0184 INFO Insert_Supplier Response data: null
+2025-03-04 21:42:50.4581 INFO Update_Supplier Request: {"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải"}
+2025-03-04 21:42:50.8797 INFO Update_Supplier Response data: [{"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải","DeleteStatus":null}]
+2025-03-04 21:44:19.0649 INFO Update_Supplier Request: {"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải"}
+2025-03-04 21:44:19.9864 INFO Update_Supplier Response data: [{"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải","DeleteStatus":null}]
+2025-03-04 21:45:34.8143 ERROR {Error Update_Supplier} Message: Error in Insert_Supplier: Could not find stored procedure 'Update_Supplier'.|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.SupplierRepository.Update_Supplier(Update_Supplier supplier) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\SupplierRepository.cs:line 123
+   at ASP_NetCore_Aesthetics.Controllers.SupplierController.Update_Supplier(Update_Supplier supplier) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\SupplierController.cs:line 62
+2025-03-04 21:46:57.0326 ERROR {Error Update_Supplier} Message: Error in Insert_Supplier: Could not find stored procedure 'Update_Supplier'.|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.SupplierRepository.Update_Supplier(Update_Supplier supplier) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\SupplierRepository.cs:line 125
+   at ASP_NetCore_Aesthetics.Controllers.SupplierController.Update_Supplier(Update_Supplier supplier) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\SupplierController.cs:line 62
+2025-03-04 21:51:46.1133 INFO Update_Supplier Request: {"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải"}
+2025-03-04 21:51:46.1278 INFO Update_Supplier Response data: [{"SupplierID":4,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Đức Hải","DeleteStatus":null}]
+2025-03-04 21:52:07.0189 INFO Delete_Supplier Request: {"SupplierID":3}
+2025-03-04 21:52:07.0189 INFO Update_Supplier Response data: [{"SupplierID":3,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Ngọc Anh","DeleteStatus":0}]
+2025-03-04 21:52:19.4265 INFO Delete_Supplier Request: {"SupplierID":3}
+2025-03-04 21:52:19.4265 INFO Update_Supplier Response data: [{"SupplierID":3,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Ngọc Anh","DeleteStatus":0}]
+2025-03-04 21:53:11.1924 INFO Delete_Supplier Request: {"SupplierID":3}
+2025-03-04 21:53:11.2334 INFO Update_Supplier Response data: [{"SupplierID":3,"SupplierName":"Công ty TNHH Thiết Bị Y Tế Ngọc Anh","DeleteStatus":0}]
+2025-03-04 21:53:20.9821 INFO Delete_Supplier Request: {"SupplierID":3}
+2025-03-04 21:53:20.9821 INFO Update_Supplier Response data: null

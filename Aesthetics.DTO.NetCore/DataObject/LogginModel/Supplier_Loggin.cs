@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Aesthetics.DTO.NetCore.DataObject.LogginModel
 {
-    public class Wallets_Loggin
-	{
-		public int? WalletsID { get; set; }
-		public int? UserID { get; set; }
-		public int? VoucherID { get; set; }
+    public class Supplier_Loggin
+    {
+		public int? SupplierID { get; set; }
+		public string? SupplierName { get; set; }
+		public int? DeleteStatus { get; set; }
 	}
 }

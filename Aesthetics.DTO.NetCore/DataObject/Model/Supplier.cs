@@ -11,8 +11,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
     {
         [Key]
         public int SupplierID { get; set; }
-        public string SupplierName { get; set; }
-        public int DeleteStatus { get; set; }
+        public string? SupplierName { get; set; }
+        public int? DeleteStatus { get; set; }
         public ICollection<Products> Products { get; set; }
     }
 }

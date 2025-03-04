@@ -19,13 +19,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 		Task<Supplier> GetSupplierBySupplierID(int? supplierID);
 
 		//3.Function thêm Supplier
-		Task<ResponseData> Insert_Supplier(SupplierRequest supplier);
+		Task<ResponseSupplier_Loggin> Insert_Supplier(SupplierRequest supplier);
 
 		//4.Function cập nhật Supplier
-		Task<ResponseData> Update_Supplier(Update_Supplier supplier);
+		Task<ResponseSupplier_Loggin> Update_Supplier(Update_Supplier supplier);
 
 		//5.Function xóa Supplier
-		Task<ResponseData> Delete_Supplier(Delete_Supplier supplier);
+		Task<ResponseSupplier_Loggin> Delete_Supplier(Delete_Supplier supplier);
 
 		//6.Get list Supplier & Search Supplier by SupplierName or SupplierID
 		Task<ResponseSupplierData> GetList_SearchSupplier(GetList_SearchSupplier _searchSupplier);

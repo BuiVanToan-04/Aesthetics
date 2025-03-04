@@ -62,11 +62,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				returnData.ResposeMessage = "Insert thành công Clinic_Staff!";
 				return returnData;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Insert_Clinic_Staff Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -104,11 +102,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				returnData.ResposeMessage = $"Update thành công Clinic_Staff: {update_.ClinicStaffID}!";
 				return returnData;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Update_Clinic_Staff Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -130,11 +126,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				returnData.ResposeMessage = $"Không tồn tại ClinicStaffID: {delete_.ClinicStaffID}. Vui lòng nhập ClinicStaffID khác!";
 				return returnData;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Update_Clinic_Staff Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 

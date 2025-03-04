@@ -11,8 +11,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
     {
         [Key]
         public int UserID { get; set; }
-        public string UserName { get; set; }
-        public string PassWord { get; set; }
+        public string? UserName { get; set; }
+        public string? PassWord { get; set; }
         public string? Email { get; set; }
         public DateTime? DateBirth { get; set; }
         public string? Sex { get; set; }

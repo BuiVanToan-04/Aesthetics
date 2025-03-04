@@ -11,9 +11,9 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
     {
         [Key]
         public int FunctionID { get; set; }
-        public string FunctionCode { get; set; }
-        public string FunctionName { get; set; }
-        public string FunctionDescription { get; set; }
+        public string? FunctionCode { get; set; }
+        public string? FunctionName { get; set; }
+        public string? FunctionDescription { get; set; }
         public int? DeleteStatus { get; set; }
         public ICollection<Permission> Permission { get; set; }
     }

@@ -31,8 +31,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error occurred: {ex.Message}");
-				return -1;
+				throw new Exception($"Error DeleleAll_Session Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -47,15 +46,21 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error occurred: {ex.Message}");
-				return -1;
+				throw new Exception($"Error Delele_Session Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
 		public async Task<int> Insert_Sesion(UserSession session)
 		{
-			_context.UserSession.Add(session);
-			return _context.SaveChanges();
+			try
+			{
+				_context.UserSession.Add(session);
+				return _context.SaveChanges();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception($"Error Insert_Sesion Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
+			}
 		}
 	}
 }

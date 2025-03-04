@@ -1,6 +1,7 @@
 ﻿using Aesthetics.DataAccess.NetCore.CheckConditions.Response;
 using Aesthetics.DataAccess.NetCore.DBContext;
 using Aesthetics.DataAccess.NetCore.Repositories.Interface;
+using Aesthetics.DTO.NetCore.DataObject.LogginModel;
 using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
 using Aesthetics.DTO.NetCore.Response;
@@ -31,48 +32,40 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesName)
 		{
-			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == ProductsOfServicesName)
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == ProductsOfServicesName
+				&& s.DeleteStatus == 1)
 				.FirstOrDefaultAsync();
 		}
 
 		public async Task<TypeProductsOfServices> GetTypeByName(string? Name, string? Type)
 		{
 			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesName == Name
-							&& s.ProductsOfServicesType == Type).FirstOrDefaultAsync();
+							&& s.ProductsOfServicesType == Type
+							&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
 		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesIDByID(int? ProductsOfServicesID)
 		{
-			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == ProductsOfServicesID).FirstOrDefaultAsync();
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == ProductsOfServicesID
+			&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		public async Task<ResponseData> Insert_TypeProductsOfServices(TypeProductsOfServicesRequest request)
+		public async Task<ProductsOfServices_Loggin> Insert_TypeProductsOfServices(TypeProductsOfServicesRequest request)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ProductsOfServices_Loggin();
+			var productOfServicess_Loggin = new List<ProductsOfServices_Logginn>();
 			try
 			{
-				if (!Validation.CheckString(request.ProductsOfServicesName))
+				if (!Validation.CheckString(request.ProductsOfServicesName) || !Validation.CheckXSSInput(request.ProductsOfServicesName))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ || ProductsOfServicesName chứa kí tự không hợp lệ!";
 					return returnData;
 				}
-				if (!Validation.CheckXSSInput(request.ProductsOfServicesName))
+				if (!Validation.CheckString(request.ProductsOfServicesType) || !Validation.CheckXSSInput(request.ProductsOfServicesType))
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ProductsOfServicesName chứa kí tự không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckString(request.ProductsOfServicesType))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesName không hợp lệ!";
-					return returnData;
-				}
-				if (!Validation.CheckXSSInput(request.ProductsOfServicesType))
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu ProductsOfServicesName chứa kí tự không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesType không hợp lệ || ProductsOfServicesType chứa kí tự không hợp lệ!";
 					return returnData;
 				}
 				if (await GetTypeByName(request.ProductsOfServicesName, request.ProductsOfServicesType) != null)
@@ -86,22 +79,31 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var parameters = new DynamicParameters();
 				parameters.Add("@ProductsOfServicesName", request.ProductsOfServicesName ?? null);
 				parameters.Add("@ProductsOfServicesType", request.ProductsOfServicesType ?? null);
+				parameters.Add("@ProductsOfServicesID", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
 				await DbConnection.ExecuteAsync("Insert_TypeProductsOfServices", parameters);
+				var newProductsOfServicesID = parameters.Get<int>("@ProductsOfServicesID");
+				productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
+				{
+					ProductsOfServicesID = newProductsOfServicesID,
+					ProductsOfServicesName = request.ProductsOfServicesName,
+					ProductsOfServicesType = request.ProductsOfServicesType,
+					DeleteStatus = 1
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = $"Thêm thành công Name:{request.ProductsOfServicesName}, Type: {request.ProductsOfServicesType}";
+				returnData.productOfServicess_Loggin = productOfServicess_Loggin;
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Insert_TypeProductsOfServices Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
-		public async Task<ResponseData> Update_TypeProductsOfServices(Update_TypeProductsOfServices update_)
+		public async Task<ProductsOfServices_Loggin> Update_TypeProductsOfServices(Update_TypeProductsOfServices update_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ProductsOfServices_Loggin();
+			var productOfServicess_Loggin = new List<ProductsOfServices_Logginn>();
 			try
 			{
 				if (update_.ProductsOfServicesID <= 0)
@@ -161,21 +163,27 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				parameters.Add("@ProductsOfServicesName", update_.ProductsOfServicesName ?? null);
 				parameters.Add("@ProductsOfServicesType", update_.ProductsOfServicesType ?? null);
 				await DbConnection.ExecuteAsync("Update_TypeProductsOfServices", parameters);
+				productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
+				{
+					ProductsOfServicesID = update_.ProductsOfServicesID,
+					ProductsOfServicesName = update_.ProductsOfServicesName ?? null,
+					ProductsOfServicesType = update_.ProductsOfServicesType ?? null,
+					DeleteStatus = 1
+				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = $"Update thành công Name:{update_.ProductsOfServicesName}, Type: {update_.ProductsOfServicesType}";
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Update_TypeProductsOfServices Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
-		public async Task<ResponseData> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_)
+		public async Task<ProductsOfServices_Loggin> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_)
 		{
-			var returnData = new ResponseData();
+			var returnData = new ProductsOfServices_Loggin();
+			var productOfServicess_Loggin = new List<ProductsOfServices_Logginn>();
 			try
 			{
 				if (delete_.ProductsOfServicesID <= 0)
@@ -195,17 +203,24 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				{
 					productsServices.DeleteStatus = 0;
 					await _context.SaveChangesAsync();
+					productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
+					{
+						ProductsOfServicesID = delete_.ProductsOfServicesID,
+						ProductsOfServicesName = productsServices.ProductsOfServicesName,
+						ProductsOfServicesType = productsServices.ProductsOfServicesType,
+						DeleteStatus = 0
+					});
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = $"Xóa thành công Product || Services ID: {delete_.ProductsOfServicesID}";
 					return returnData;
 				}
+				returnData.ResponseCode = 0;
+				returnData.ResposeMessage = $"Services ID: {delete_.ProductsOfServicesID}";
 				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error Delete_TypeProductsOfServices Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -280,11 +295,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage= ex.Message;
-				return returnData;
+				throw new Exception($"Error GetList_SearchTypeProductsOfServices Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 	}

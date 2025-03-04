@@ -13,14 +13,14 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         public int InvoiceDetailID { get; set; }
         public int InvoiceID { get; set; }
         public int UserID { get; set; }
-        public string UserName { get; set; }
-        public int ProductID { get; set; }
-        public string ProductName { get; set; }
-        public double SellingPrice { get; set; }
-        public int TotalQuantity { get; set; } 
-        public double TotalMoney { get; set; }
-        public int DeleteStatus { get; set; }
-        public string Type { get; set; }
+        public string? UserName { get; set; }
+        public int? ProductID { get; set; }
+        public string? ProductName { get; set; }
+        public double? SellingPrice { get; set; }
+        public int? TotalQuantity { get; set; } 
+        public double? TotalMoney { get; set; }
+        public int? DeleteStatus { get; set; }
+        public string? Type { get; set; }
         public Invoice Invoice { get; set; }
         public Users Users { get; set; }
         public Products Products { get; set; }

@@ -34,8 +34,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
             {
 				//1.Insert_Supplier 
 				var responseData = await _supplierRepository.Insert_Supplier(supplier);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Insert_Supplier Request: " + JsonConvert.SerializeObject(supplier));
+				//3. Lưu log data response
+				_loggerManager.LogInfo("Insert_Supplier Response data: " + JsonConvert.SerializeObject(responseData.supplier_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";
@@ -58,8 +60,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1.Update_Supplier
 				var responseData = await _supplierRepository.Update_Supplier(supplier);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Update_Supplier Request: " + JsonConvert.SerializeObject(supplier));
+				//3. Lưu log data response
+				_loggerManager.LogInfo("Update_Supplier Response data: " + JsonConvert.SerializeObject(responseData.supplier_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";
@@ -82,8 +86,10 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_Supplier
 				var responseData = await _supplierRepository.Delete_Supplier(supplier);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Delete_Supplier Request: " + JsonConvert.SerializeObject(supplier));
+				//3. Lưu log data response
+				_loggerManager.LogInfo("Update_Supplier Response data: " + JsonConvert.SerializeObject(responseData.supplier_Loggins));
 				if (responseData.ResponseCode == 1)
 				{
 					var cacheKey = "GetSupplier_Cache";

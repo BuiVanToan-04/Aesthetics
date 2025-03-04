@@ -202,10 +202,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error CreateAccount Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -303,20 +300,15 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					Addres = user_Update.Addres ?? null,
 					IDCard = user_Update.IDCard ?? null
 				});
-				if (result > 0)
-				{
-					returnData.ResponseCode = 1;
-					returnData.ResposeMessage = $"Cập nhật User có mã: {user_Update.UserID} thành công!";
-					returnData.listUser = listUser;
-					return returnData;
-				}
+				returnData.ResponseCode = 1;
+				returnData.ResposeMessage = $"Cập nhật User có mã: {user_Update.UserID} thành công!";
+				returnData.listUser = listUser;
+				return returnData;
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
+				throw new Exception($"Error UpdateUser Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
-			return returnData;
 		}
 
 		public async Task<ResponseUser_DeleteLoggin> DeleteUser(User_Delete user_Delete)
@@ -480,9 +472,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			catch (Exception ex)
 			{
 				await transaction.RollbackAsync();
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error DeleteUser Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 
@@ -539,9 +529,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 			catch (Exception ex)
 			{
-				returnData.ResponseCode = -99;
-				returnData.ResposeMessage = ex.Message;
-				return returnData;
+				throw new Exception($"Error GetList_SearchUser Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
 	}
