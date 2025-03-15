@@ -143,7 +143,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					UserName = account.UserName,
 					PassWord = passWordHash,
 					Creation = creation,
-					TypePerson = "Client",
+					TypePerson = "Customer",
 					AccumulatedPoints = 0,
 					DeleteStatus = 1,
 					Moneyy = 0,
@@ -430,7 +430,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 							{
 								PermissionID = permission.PermissionID,
 								UserID = permission.UserID,
-								UserName = permission.UserName,
 								FunctionID = permission.FunctionID,
 								IsView = permission.IsView,
 								IsInsert = permission.IsInsert,

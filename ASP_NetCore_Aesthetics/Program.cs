@@ -47,6 +47,7 @@ builder.Services.AddTransient<IServicessRepository, ServicessRepository>();
 builder.Services.AddTransient<IBookingsRepository, BookingsRepository>();
 builder.Services.AddTransient<IClinicRepository, ClinicRepository>();
 builder.Services.AddTransient<IClinic_StaffRepository, Clinic_StaffRepository>();
+builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
 builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/NLog.config"));
@@ -76,6 +77,18 @@ app.UseStaticFiles(new StaticFileOptions
 	FileProvider = new PhysicalFileProvider(
 		   Path.Combine(builder.Environment.ContentRootPath, "FilesImages/Servicess")),
 	RequestPath = "/FilesImages/Servicess"
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+	OnPrepareResponse = ctx =>
+	{
+		ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+		ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
+		  "Origin, X-Requested-With, Content-Type, Accept");
+	},
+	FileProvider = new PhysicalFileProvider(
+		   Path.Combine(builder.Environment.ContentRootPath, "FilesImages/Products")),
+	RequestPath = "/FilesImages/Products"
 });
 app.MapControllers();
 app.Run();

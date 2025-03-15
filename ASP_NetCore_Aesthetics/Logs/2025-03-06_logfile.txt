@@ -1,0 +1,69 @@
+2025-03-06 20:57:01.6952 INFO Create_Account Request: {"UserName":"manhDung","PassWord":"123456","ReferralCode":null}
+2025-03-06 20:57:01.7381 INFO Create_Account Response data : [{"CartID":9,"UserID":34,"CreationDate":"2025-03-06T20:57:01.5753875+07:00"}]
+2025-03-06 20:57:01.7381 INFO Create_Account Response data : [{"UserID":34,"UserName":"manhDung","PassWord":"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92","Email":null,"DateBirth":null,"Sex":null,"Creation":"2025-03-06T20:57:01.3093099+07:00","Phone":null,"Addres":null,"IDCard":null,"TypePerson":"Customer","AccumulatedPoints":0,"ReferralCode":"TSYGJ","RefeshToken":null,"DeleteStatus":1,"Moneyy":0.0,"TokenExprired":null,"RatingPoints":0,"RankMember":"Bronze"}]
+2025-03-06 20:57:53.4702 INFO Create_Account Request: {"UserName":"tuanHung","PassWord":"123456","ReferralCode":"ABCDE"}
+2025-03-06 20:57:53.4702 INFO Create_Account Response data : [{"CartID":10,"UserID":35,"CreationDate":"2025-03-06T20:57:53.450156+07:00"}]
+2025-03-06 20:57:53.4702 INFO Create_Account Response data : [{"UserID":35,"UserName":"tuanHung","PassWord":"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92","Email":null,"DateBirth":null,"Sex":null,"Creation":"2025-03-06T20:57:53.4433055+07:00","Phone":null,"Addres":null,"IDCard":null,"TypePerson":"Customer","AccumulatedPoints":0,"ReferralCode":"ZWMCX","RefeshToken":null,"DeleteStatus":1,"Moneyy":0.0,"TokenExprired":null,"RatingPoints":0,"RankMember":"Bronze"}]
+2025-03-06 22:29:33.7713 INFO Insert Clinic Request: {"ClinicName":"Phòng Giam Đốc Toản Dka","ProductsOfServicesID":1,"ProductsOfServicesName":"Phẫu thuật thẩm mỹ"}
+2025-03-06 22:29:33.7977 INFO Insert Clinic data: [{"ClinicID":17,"ClinicName":"Phòng Giam Đốc Toản Dka","ProductsOfServicesID":1,"ProductsOfServicesName":"Phẫu thuật thẩm mỹ","ClinicStatus":null}]
+2025-03-06 22:29:53.8295 ERROR {Error Update Clinic} Message: Error Update_Clinic Message: The instance of entity type 'Clinic' cannot be tracked because another instance with the same key value for {'ClinicID'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values. | StackTrace:    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey, Nullable`1 fallbackState)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintAction(EntityEntryGraphNode`1 node)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraph[TState](EntityEntryGraphNode`1 node, Func`2 handleNode)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraph(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.SetEntityState(InternalEntityEntry entry, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.Update(TEntity entity)
+   at Aesthetics.DataAccess.NetCore.Repositories.Implement.ClinicRepository.Update_Clinic(Update_Clinic update_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\ClinicRepository.cs:line 202|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.ClinicRepository.Update_Clinic(Update_Clinic update_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\ClinicRepository.cs:line 218
+   at ASP_NetCore_Aesthetics.Controllers.ClinicController.Update_Clinic(Update_Clinic update_) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\ClinicController.cs:line 64
+2025-03-06 22:34:37.0164 INFO Update Clinic Request: {"ClinicID":17,"ClinicName":"Phòng Chủ Tịch Toản ok","ProductsOfServicesID":null,"ProductsOfServicesName":null}
+2025-03-06 22:34:37.0549 INFO Update Clinic data: [{"ClinicID":17,"ClinicName":"Phòng Chủ Tịch Toản ok","ProductsOfServicesID":1,"ProductsOfServicesName":"Phẫu thuật thẩm mỹ","ClinicStatus":1}]
+2025-03-06 22:39:36.2209 INFO Delete Clinic Request: {"ClinicID":17}
+2025-03-06 22:39:36.2594 INFO Delete Clinic data: [{"ClinicID":17,"ClinicName":"Phòng Chủ Tịch Toản ok","ProductsOfServicesID":1,"ProductsOfServicesName":"Phẫu thuật thẩm mỹ","ClinicStatus":0}]
+2025-03-06 22:39:36.2594 INFO Delete Clinic_Staff data: []
+2025-03-06 22:39:36.2594 INFO Delete Booking_Assignment data: []
+2025-03-06 22:40:36.5827 INFO Insert_Supplier Request: {"SupplierName":"Công ty TNHH Kem Dưỡng Da Minh Anh"}
+2025-03-06 22:40:36.5827 INFO Insert_Supplier Response data: [{"SupplierID":7,"SupplierName":"Công ty TNHH Kem Dưỡng Da Minh Anh","DeleteStatus":1}]
+2025-03-06 22:41:01.0550 INFO Update_Supplier Request: {"SupplierID":7,"SupplierName":"Công ty TNHH Thiết Bị Y Minh Anh"}
+2025-03-06 22:41:01.0550 INFO Update_Supplier Response data: [{"SupplierID":7,"SupplierName":"Công ty TNHH Thiết Bị Y Minh Anh","DeleteStatus":1}]
+2025-03-06 22:41:12.8933 INFO Delete_Supplier Request: {"SupplierID":7}
+2025-03-06 22:41:12.8933 INFO Update_Supplier Response data: [{"SupplierID":7,"SupplierName":"Công ty TNHH Thiết Bị Y Minh Anh","DeleteStatus":0}]
+2025-03-06 22:50:06.4070 INFO Insert_ProductsOfServices Request: {"ProductsOfServicesName":"Kem chống nắng","ProductsOfServicesType":"Products"}
+2025-03-06 22:50:34.5638 INFO Update_ProductsOfServices Request: {"ProductsOfServicesID":12,"ProductsOfServicesName":"Kem chống nắng oke","ProductsOfServicesType":null}
+2025-03-06 22:50:43.8088 ERROR {Error Update_ProductsOfServices} Message: Error Update_TypeProductsOfServices Message: The instance of entity type 'TypeProductsOfServices' cannot be tracked because another instance with the same key value for {'ProductsOfServicesID'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values. | StackTrace:    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityStateAsync(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey, Nullable`1 fallbackState, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintActionAsync(EntityEntryGraphNode`1 node, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraphAsync[TState](EntityEntryGraphNode`1 node, Func`3 handleNode, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraphAsync(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.AddAsync(TEntity entity, CancellationToken cancellationToken)
+   at Aesthetics.DataAccess.NetCore.Repositories.Implement.TypeProductsOfServicesRepository.Update_TypeProductsOfServices(Update_TypeProductsOfServices update_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\TypeProductsOfServicesRepository.cs:line 164|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.TypeProductsOfServicesRepository.Update_TypeProductsOfServices(Update_TypeProductsOfServices update_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\TypeProductsOfServicesRepository.cs:line 179
+   at ASP_NetCore_Aesthetics.Controllers.TypeProductsServicesController.Update_TypeProductsOfServices(Update_TypeProductsOfServices request) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\TypeProductsServicesController.cs:line 60
+2025-03-06 22:53:16.2497 INFO Update_ProductsOfServices Request: {"ProductsOfServicesID":11,"ProductsOfServicesName":"Kem chống nắng oke","ProductsOfServicesType":null}
+2025-03-06 22:53:44.5721 INFO GetList_SreachProductsOfServices Request:{"ProductsOfServicesID":null,"ProductsOfServicesName":null,"ProductsOfServicesType":null}
+2025-03-06 22:53:44.7815 INFO GetList_SreachProductsOfServices db: [{"ProductsOfServicesID":1,"ProductsOfServicesName":"Phẫu thuật thẩm mỹ","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":2,"ProductsOfServicesName":"Giảm béo công nghệ cao","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":3,"ProductsOfServicesName":"Dịch vụ da liễu - Điều trị da chuyên sâu","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":4,"ProductsOfServicesName":"Dịch vụ thẩm mỹ không xâm lấn","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":5,"ProductsOfServicesName":"Triệt lông","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":6,"ProductsOfServicesName":"Cấy tóc","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":7,"ProductsOfServicesName":"Dịch vụ nha khoa thẩm mỹ","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":8,"ProductsOfServicesName":"Thẩm mỹ vùng kín","ProductsOfServicesType":"Servicess"},{"ProductsOfServicesID":10,"ProductsOfServicesName":"Thẩm mỹ vùng kíng","ProductsOfServicesType":"Products"},{"ProductsOfServicesID":11,"ProductsOfServicesName":"Kem chống nắng oke","ProductsOfServicesType":null}]
+2025-03-06 22:54:25.0528 INFO Delete_ProductsOfServices Request: {"ProductsOfServicesID":11}
+2025-03-06 22:54:25.0528 INFO Delete_ProductsOfServices data: [{"ProductsOfServicesID":11,"ProductsOfServicesName":"Kem chống nắng oke","ProductsOfServicesType":null,"DeleteStatus":0}]
+2025-03-06 22:54:25.0528 INFO Delete_Servicess data: []
+2025-03-06 22:54:25.0528 INFO Delete_Products data: []
+2025-03-06 22:54:25.0528 INFO Delete_Clinic data: []
+2025-03-06 22:54:25.0972 ERROR {Error Delete_ProductsOfServices} Message: MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk. Commands that may modify the data set are disabled, because this instance is configured to report errors during writes if RDB snapshotting fails (stop-writes-on-bgsave-error option). Please check the Redis logs for details about the RDB error.|Stack Trace:    at Microsoft.Extensions.Caching.StackExchangeRedis.RedisCache.RemoveAsync(String key, CancellationToken token)
+   at ASP_NetCore_Aesthetics.Controllers.TypeProductsServicesController.Delete_TypeProductsOfServices(Delete_TypeProductsOfServices request) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\TypeProductsServicesController.cs:line 98
+2025-03-06 22:54:45.7446 INFO Delete_ProductsOfServices Request: {"ProductsOfServicesID":11}
+2025-03-06 22:54:45.7446 INFO Delete_ProductsOfServices data: [{"ProductsOfServicesID":11,"ProductsOfServicesName":"Kem chống nắng oke","ProductsOfServicesType":null,"DeleteStatus":0}]
+2025-03-06 22:54:45.7446 INFO Delete_Servicess data: []
+2025-03-06 22:54:45.7446 INFO Delete_Products data: []
+2025-03-06 22:54:45.7446 INFO Delete_Clinic data: []
+2025-03-06 22:55:01.0370 INFO Delete_ProductsOfServices Request: {"ProductsOfServicesID":10}
+2025-03-06 22:55:01.0370 INFO Delete_ProductsOfServices data: [{"ProductsOfServicesID":10,"ProductsOfServicesName":"Thẩm mỹ vùng kíng","ProductsOfServicesType":"Products","DeleteStatus":0}]
+2025-03-06 22:55:01.0370 INFO Delete_Servicess data: []
+2025-03-06 22:55:01.0370 INFO Delete_Products data: []
+2025-03-06 22:55:01.0370 INFO Delete_Clinic data: []

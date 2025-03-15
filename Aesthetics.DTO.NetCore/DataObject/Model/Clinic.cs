@@ -15,6 +15,7 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
 		public int ProductsOfServicesID { get; set; }
 		public string? ProductsOfServicesName { get; set; }
 		public int? ClinicStatus { get; set; }
+		public TypeProductsOfServices TypeProductsOfServices { get; set; }
 		public ICollection<Clinic_Staff> Clinic_Staff { get; set; }
 		public ICollection<BookingAssignment> BookingAssignment { get; set; }
 	}

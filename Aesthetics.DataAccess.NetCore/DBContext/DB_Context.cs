@@ -59,6 +59,13 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.WithMany(s => s.Services)              
 				.HasForeignKey(v => v.ProductsOfServicesID);
 
+			//5.3 TypeProductsOfServices(1) & Clinic(1)
+			builder.Entity<Clinic>()
+				.HasOne(c => c.TypeProductsOfServices)
+				.WithOne(t => t.Clinic)
+				.HasForeignKey<Clinic>(c => c.ProductsOfServicesID);
+
+
 			//6.Chỉ định mối quan hệ N-N của Users & Clinic thông qua bảng trung gian Clinic_Staff
 			builder.Entity<Clinic_Staff>()
 				.HasKey(cs => cs.ClinicStaffID);
@@ -124,6 +131,36 @@ namespace Aesthetics.DataAccess.NetCore.DBContext
 				.HasOne(t => t.Products)
 				.WithMany(p => p.Comments)
 				.HasForeignKey(s => s.ProductID);
+
+			//13. Chỉ định mối Quan hệ 1-N giữa User (Khách hàng) và Invoice
+			builder.Entity<Invoice>()
+				.HasOne(i => i.Users)
+				.WithMany(u => u.Invoice)
+				.HasForeignKey(i => i.CustomerID);
+
+			//14. Quan hệ 1-N giữa User (Nhân viên) và Invoice
+			builder.Entity<Invoice>()
+				.HasOne(i => i.Users)
+				.WithMany(u => u.Invoice)
+				.HasForeignKey(i => i.EmployeeID);
+
+			//15. Quan hệ 1-N giữa Invoice và InvoiceDetail
+			builder.Entity<InvoiceDetail>()
+				.HasOne(id => id.Invoice)
+				.WithMany(i => i.InvoiceDetails)
+				.HasForeignKey(id => id.InvoiceID);
+
+			//16. Quan hệ 1-N giữa User (Khách hàng) và InvoiceDetail
+			builder.Entity<InvoiceDetail>()
+				.HasOne(id => id.Users)
+				.WithMany(u => u.InvoicesDetail)
+				.HasForeignKey(id => id.CustomerID);
+
+			//17. Quan hệ 1-N giữa User (Nhân viên) và InvoiceDetail
+			builder.Entity<InvoiceDetail>()
+				.HasOne(id => id.Users)
+				.WithMany(u => u.InvoicesDetail)
+				.HasForeignKey(id => id.EmployeeID);
 		}
 		public virtual DbSet<Booking> Booking { get; set; }
 		public virtual DbSet<Carts> Carts { get; set; }

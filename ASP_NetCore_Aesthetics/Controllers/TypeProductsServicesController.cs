@@ -82,8 +82,16 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			{
 				//1. Delete_ProductsOfServices 
 				var responesData = await _repository.Delete_TypeProductsOfServices(request);
-				//2. Lưu log
+				//2. Lưu log request
 				_loggerManager.LogInfo("Delete_ProductsOfServices Request: " + JsonConvert.SerializeObject(request));
+				//3. lưu log data ProductsOfServices
+				_loggerManager.LogInfo("Delete_ProductsOfServices data: " + JsonConvert.SerializeObject(responesData.productOfServicess_Loggin));
+				//4. lưu log data Servicess
+				_loggerManager.LogInfo("Delete_Servicess data: " + JsonConvert.SerializeObject(responesData.servicess_Loggins));
+				//5. lưu log data Products
+				_loggerManager.LogInfo("Delete_Products data: " + JsonConvert.SerializeObject(responesData.products_Loggins));
+				//6. lưu log data Clinic
+				_loggerManager.LogInfo("Delete_Clinic data: " + JsonConvert.SerializeObject(responesData.clinic_Loggins));
 				if (responesData.ResponseCode == 1)
 				{
 					var cacheKey = "GetProductOfServicess_Cache";

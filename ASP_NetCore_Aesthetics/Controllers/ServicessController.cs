@@ -124,6 +124,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				return Ok(ex.Message);
 			}
 		}
+
 		[HttpGet("GetList_SearchServicess")]
 		public async Task<IActionResult> GetList_SearchServicess(GetList_SearchServicess servicess)
 		{

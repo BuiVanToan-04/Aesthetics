@@ -37,7 +37,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 				//2. Lưu log request
 				_loggerManager.LogInfo("Create_Account Request: " + JsonConvert.SerializeObject(account));
 				//3. Lưu log data carts
-				_loggerManager.LogInfo("Create_Account Response data : " + JsonConvert.SerializeObject(responseData.listCarts));
+				_loggerManager.LogInfo("Insert Carts Response data : " + JsonConvert.SerializeObject(responseData.listCarts));
 				//4. Lưu log data user
 				_loggerManager.LogInfo("Create_Account Response data : " + JsonConvert.SerializeObject(responseData.listUser));
 

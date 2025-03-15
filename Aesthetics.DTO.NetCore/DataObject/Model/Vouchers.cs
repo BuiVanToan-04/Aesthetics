@@ -19,6 +19,7 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         public float? MinimumOrderValue { get; set; }
         public int? IsActive { get; set; }
         public ICollection<Invoice> Invoice { get; set; }
-        public ICollection<Wallets> Wallets { get; set; }
+		public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+		public ICollection<Wallets> Wallets { get; set; }
     }
 }

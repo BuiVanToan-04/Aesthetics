@@ -11,8 +11,10 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
     {
         [Key]
         public int InvoiceID { get; set; }
-        public int UserID { get; set; }
-        public int VoucherID { get; set; }
+        //public int UserID { get; set; }
+        public int CustomerID { get; set; }
+        public int EmployeeID { get; set; }
+		public int VoucherID { get; set; }
         public string? Code { get; set; }
         public double? DiscountValue { get; set; }
         public double? TotalAmount { get; set; }
@@ -23,6 +25,5 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         public Users Users { get; set; }
         public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
         public ICollection<Vouchers> Vouchers { get; set; }
-
     }
 }

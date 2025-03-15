@@ -256,6 +256,86 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
+    "Method": "Delete_Products",
+    "RelativePath": "api/Products/Delete_Products",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "product_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Products",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
+    "Method": "ExportProductsToExcel",
+    "RelativePath": "api/Products/ExportProductsToExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filePath",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.ExportExcel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
+    "Method": "GetList_SearchProducts",
+    "RelativePath": "api/Products/GetList_SearchProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchProducts",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
+    "Method": "Insert_Products",
+    "RelativePath": "api/Products/Insert_Products",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "product_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.ProductRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
+    "Method": "Update_Products",
+    "RelativePath": "api/Products/Update_Products",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "product_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Products",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ServicessController",
     "Method": "Delete_Servicess",
     "RelativePath": "api/Servicess/Delete_Servicess",

@@ -13,5 +13,6 @@ namespace Aesthetics.DTO.NetCore.DataObject.LogginModel
 		public int? ServiceID { get; set; }
 		public int? ProductsOfServicesID { get; set; }
 		public int? DeleteStatus { get; set; }
+		public DateTime? AssignedDate { get; set; }
 	}
 }

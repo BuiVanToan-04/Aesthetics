@@ -76,17 +76,19 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						$" Vui lòng nhập tên khác hoặc kiểu khác!";
 					return returnData;
 				}
-				var parameters = new DynamicParameters();
-				parameters.Add("@ProductsOfServicesName", request.ProductsOfServicesName ?? null);
-				parameters.Add("@ProductsOfServicesType", request.ProductsOfServicesType ?? null);
-				parameters.Add("@ProductsOfServicesID", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
-				await DbConnection.ExecuteAsync("Insert_TypeProductsOfServices", parameters);
-				var newProductsOfServicesID = parameters.Get<int>("@ProductsOfServicesID");
-				productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
+				var newProOfSer = new TypeProductsOfServices
 				{
-					ProductsOfServicesID = newProductsOfServicesID,
 					ProductsOfServicesName = request.ProductsOfServicesName,
 					ProductsOfServicesType = request.ProductsOfServicesType,
+					DeleteStatus = 1
+				};
+				await _context.TypeProductsOfServices.AddAsync(newProOfSer);
+				await _context.SaveChangesAsync();
+				productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
+				{
+					ProductsOfServicesID = newProOfSer.ProductsOfServicesID,
+					ProductsOfServicesName = newProOfSer.ProductsOfServicesName,
+					ProductsOfServicesType = newProOfSer.ProductsOfServicesType,
 					DeleteStatus = 1
 				});
 				returnData.ResponseCode = 1;
@@ -106,10 +108,11 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			var productOfServicess_Loggin = new List<ProductsOfServices_Logginn>();
 			try
 			{
-				if (update_.ProductsOfServicesID <= 0)
+				var _productOfServicess = await GetTypeProductsOfServicesIDByID(update_.ProductsOfServicesID);
+				if (update_.ProductsOfServicesID <= 0 || _productOfServicess == null)
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ || Không tồn tại!";
 					return returnData;
 				}
 				if(update_.ProductsOfServicesName != null)
@@ -143,13 +146,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					}
 				}
 
-				if (await GetTypeProductsOfServicesIDByID(update_.ProductsOfServicesID) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"Không tồn tại loại Product || Services có ID: {update_.ProductsOfServicesID}!";
-					return returnData;
-				}
-
 				if (await GetTypeByName(update_.ProductsOfServicesName, update_.ProductsOfServicesType) != null)
 				{
 					returnData.ResponseCode = -1;
@@ -158,20 +154,22 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						$" Vui lòng nhập tên khác hoặc kiểu khác!";
 					return returnData;
 				}
-				var parameters = new DynamicParameters();
-				parameters.Add("@ProductsOfServicesID", update_.ProductsOfServicesID);
-				parameters.Add("@ProductsOfServicesName", update_.ProductsOfServicesName ?? null);
-				parameters.Add("@ProductsOfServicesType", update_.ProductsOfServicesType ?? null);
-				await DbConnection.ExecuteAsync("Update_TypeProductsOfServices", parameters);
+				_productOfServicess.ProductsOfServicesName = update_.ProductsOfServicesName ?? null;
+				_productOfServicess.ProductsOfServicesType = update_.ProductsOfServicesType ?? null;
+				_productOfServicess.DeleteStatus = 1;
+
+				_context.TypeProductsOfServices.Update(_productOfServicess);
+				await _context.SaveChangesAsync();
+
 				productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
 				{
-					ProductsOfServicesID = update_.ProductsOfServicesID,
-					ProductsOfServicesName = update_.ProductsOfServicesName ?? null,
-					ProductsOfServicesType = update_.ProductsOfServicesType ?? null,
+					ProductsOfServicesID = _productOfServicess.ProductsOfServicesID,
+					ProductsOfServicesName = _productOfServicess.ProductsOfServicesName ?? null,
+					ProductsOfServicesType = _productOfServicess.ProductsOfServicesType ?? null,
 					DeleteStatus = 1
 				});
 				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = $"Update thành công Name:{update_.ProductsOfServicesName}, Type: {update_.ProductsOfServicesType}";
+				returnData.ResposeMessage = $"Update thành công ProductsOfServices";
 				return returnData;
 			}
 			catch (Exception ex)
@@ -180,10 +178,14 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			}
 		}
 
-		public async Task<ProductsOfServices_Loggin> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_)
+		public async Task<ProductsOfServices_LogginDelete> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_)
 		{
-			var returnData = new ProductsOfServices_Loggin();
+			var returnData = new ProductsOfServices_LogginDelete();
 			var productOfServicess_Loggin = new List<ProductsOfServices_Logginn>();
+			var clinic_Loggins = new List<Clinic_Loggin>();
+			var servicess_Loggins = new List<Servicess_Loggin>();
+			var products_Loggins = new List<Products_Loggin>();
+			using var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				if (delete_.ProductsOfServicesID <= 0)
@@ -192,17 +194,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 					return returnData;
 				}
-				if (await GetTypeProductsOfServicesIDByID(delete_.ProductsOfServicesID) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"Không tồn tại Sản Phẩm || Dịch vụ có ID: {delete_.ProductsOfServicesID}!";
-					return returnData;
-				}
-				var productsServices = await _context.TypeProductsOfServices.FindAsync(delete_.ProductsOfServicesID);
+				var productsServices = await _context.TypeProductsOfServices
+					.Include(p => p.Products)
+					.Include(s => s.Services)
+					.Include(c => c.Clinic)
+					.AsSplitQuery()
+					.FirstOrDefaultAsync(s => s.ProductsOfServicesID == delete_.ProductsOfServicesID);
 				if (productsServices != null)
 				{
+					//1. Xóa ProductOfServicess
 					productsServices.DeleteStatus = 0;
-					await _context.SaveChangesAsync();
 					productOfServicess_Loggin.Add(new ProductsOfServices_Logginn
 					{
 						ProductsOfServicesID = delete_.ProductsOfServicesID,
@@ -210,12 +211,78 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						ProductsOfServicesType = productsServices.ProductsOfServicesType,
 						DeleteStatus = 0
 					});
+
+					//2. Xóa Producst liên quan đến ProductsOfServicesID
+					var products = productsServices.Products
+							.Where(s => s.ProductsOfServicesID == productsServices.ProductsOfServicesID).ToList();
+					if (products != null && products.Any())
+					{
+						foreach (var pro in products)
+						{
+							pro.DeleteStatus = 0;
+							products_Loggins.Add(new Products_Loggin
+							{
+								ProductID = pro.ProductID,
+								ProductName = pro.ProductName,
+								ProductsOfServicesID = pro.ProductsOfServicesID,
+								SupplierID = pro.SupplierID,
+								ProductDescription = pro.ProductDescription,
+								SellingPrice = pro.SellingPrice,
+								Quantity = pro.Quantity,
+								ProductImages = pro.ProductImages,
+								DeleteStatus = 0
+							});
+						}
+					}
+
+					//3. Xóa Services liên quan đến ProductsOfServicesID
+					var services = productsServices.Services
+							.Where(s => s.ProductsOfServicesID == productsServices.ProductsOfServicesID).ToList();
+					if (services != null && services.Any())
+					{
+						foreach (var ser in services)
+						{
+							ser.DeleteStatus = 0;
+							servicess_Loggins.Add(new Servicess_Loggin
+							{
+								ServiceID = ser.ServiceID,
+								ProductsOfServicesID = ser.ProductsOfServicesID,
+								ServiceName = ser.ServiceName,
+								Description = ser.Description,
+								ServiceImage = ser.ServiceImage,
+								PriceService = ser.PriceService,
+								DeleteStatus = 0
+							});
+						}
+					}
+
+					//4. Xóa Clinic liên quan đến ProductsOfServicesID
+					var clinics = productsServices.Clinic;
+					if (clinics != null && clinics.ProductsOfServicesID == productsServices.ProductsOfServicesID)
+					{
+						clinics.ClinicStatus = 0;
+						clinic_Loggins.Add(new Clinic_Loggin
+						{
+							ClinicID = clinics.ClinicID,
+							ClinicName = clinics.ClinicName,
+							ProductsOfServicesID = clinics.ProductsOfServicesID,
+							ProductsOfServicesName = clinics.ProductsOfServicesName,
+							ClinicStatus = 0
+						});
+					}
+					//Commit transaction nếu thành công
+					await _context.SaveChangesAsync();
+					await transaction.CommitAsync();
 					returnData.ResponseCode = 1;
-					returnData.ResposeMessage = $"Xóa thành công Product || Services ID: {delete_.ProductsOfServicesID}";
+					returnData.ResposeMessage = $"Xóa thành công ProductOfServices: {delete_.ProductsOfServicesID}";
+					returnData.productOfServicess_Loggin = productOfServicess_Loggin;
+					returnData.products_Loggins = products_Loggins;
+					returnData.servicess_Loggins = servicess_Loggins;
+					returnData.clinic_Loggins = clinic_Loggins;
 					return returnData;
 				}
 				returnData.ResponseCode = 0;
-				returnData.ResposeMessage = $"Services ID: {delete_.ProductsOfServicesID}";
+				returnData.ResposeMessage = $"Services ID: {delete_.ProductsOfServicesID} không tồn tại";
 				return returnData;
 			}
 			catch (Exception ex)

@@ -103,17 +103,23 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 
-				var parameters = new DynamicParameters();
-				parameters.Add("@ClinicName", insert_.ClinicName);
-				parameters.Add("@ProductsOfServicesID", insert_.ProductsOfServicesID);
-				parameters.Add("@ProductsOfServicesName", insert_.ProductsOfServicesName);
-				listClinics.Add(new Clinic_Loggin
+				var newClinic = new Clinic
 				{
 					ClinicName = insert_.ClinicName,
 					ProductsOfServicesID = insert_.ProductsOfServicesID,
-					ProductsOfServicesName = insert_.ProductsOfServicesName
+					ProductsOfServicesName = insert_.ProductsOfServicesName,
+					ClinicStatus = 1
+				};
+				await _context.Clinic.AddAsync(newClinic);
+				await _context.SaveChangesAsync();
+				listClinics.Add(new Clinic_Loggin
+				{
+					ClinicID = newClinic.ClinicID,
+					ClinicName = newClinic.ClinicName,
+					ProductsOfServicesID = newClinic.ProductsOfServicesID,
+					ProductsOfServicesName = newClinic.ProductsOfServicesName,
+					ClinicStatus = 1
 				});
-				await DbConnection.ExecuteAsync("Insert_Clinic", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Clinic!";
 				returnData.listClinics = listClinics;
@@ -131,30 +137,20 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			var listClinics = new List<Clinic_Loggin>();
 			try
 			{
-				if (update_.ClinicID <= 0)
+				var _clinic = await GetClinicByID(update_.ClinicID);
+				if (update_.ClinicID <= 0 || _clinic == null)
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ClinicID không hợp lệ!";
+					returnData.ResposeMessage = $"Dữ liệu đầu vào ClinicID không hợp lệ || Không tồn tại Clinic có ID: {update_.ClinicID}!";
 					return returnData;
 				}
-				if (await GetClinicByID(update_.ClinicID) == null)
-				{
-					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = $"Không tồn tại Clinic có ID: {update_.ClinicID}!";
-					return returnData;
-				}
+				_clinic.ClinicID = update_.ClinicID;
 				if (update_.ClinicName != null)
 				{
-					if (!Validation.CheckString(update_.ClinicName))
+					if (!Validation.CheckString(update_.ClinicName) || !Validation.CheckXSSInput(update_.ClinicName))
 					{
 						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = $"Dữ liệu đầu vào {update_.ClinicName} không hợp lệ!";
-						return returnData;
-					}
-					if (!Validation.CheckXSSInput(update_.ClinicName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = $"Dữ liệu {update_.ClinicName} chứa kí tự không hợp lệ!";
+						returnData.ResposeMessage = $"Dữ liệu {update_.ClinicName} không hợp lệ!";
 						return returnData;
 					}
 
@@ -164,6 +160,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = $"{update_.ClinicName} đã tồn tại. Vui lòng nhập ClinicName khác!";
 						return returnData;
 					}
+					_clinic.ClinicName = update_.ClinicName;
 				}
 				if (update_.ProductsOfServicesID != null)
 				{
@@ -180,21 +177,18 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = $"Không tồn tại ProductsOfServicesID: {update_.ProductsOfServicesID}";
 						return returnData;
 					}
+					_clinic.ProductsOfServicesID = update_.ProductsOfServicesID ?? 0;
 				}
 				if (update_.ProductsOfServicesName != null)
 				{
-					if (!Validation.CheckString(update_.ProductsOfServicesName))
+					if (!Validation.CheckString(update_.ProductsOfServicesName) 
+						|| !Validation.CheckXSSInput(update_.ProductsOfServicesName))
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = $"Dữ liệu đầu vào {update_.ProductsOfServicesName} không hợp lệ!";
 						return returnData;
 					}
-					if (!Validation.CheckXSSInput(update_.ProductsOfServicesName))
-					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = $"Dữ liệu {update_.ProductsOfServicesName} chứa kí tự không hợp lệ!";
-						return returnData;
-					}
+
 					if (await _productsOfServicesRepository
 						.GetTypeProductsOfServicesByName(update_.ProductsOfServicesName) == null)
 					{
@@ -202,19 +196,18 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = $"Không tồn tại ProductsOfServices có Name: {update_.ProductsOfServicesName}";
 						return returnData;
 					}
+					_clinic.ProductsOfServicesName = update_.ProductsOfServicesName;
 				}
-				var parameters = new DynamicParameters();
-				parameters.Add("@ClinicID", update_.ClinicID);
-				parameters.Add("@ClinicName", update_.ClinicName ?? null);
-				parameters.Add("@ProductsOfServicesID", update_.ProductsOfServicesID ?? null);
-				parameters.Add("@ProductsOfServicesName", update_.ProductsOfServicesName ?? null);
+				_context.Clinic.Update(_clinic);
+				await _context.SaveChangesAsync();
 				listClinics.Add(new Clinic_Loggin
 				{
-					ClinicName = update_.ClinicName ?? null,
-					ProductsOfServicesID = update_.ProductsOfServicesID ?? null,
-					ProductsOfServicesName = update_.ProductsOfServicesName ?? null
+					ClinicID = _clinic.ClinicID,
+					ClinicName = _clinic.ClinicName ?? null,
+					ProductsOfServicesID = _clinic.ProductsOfServicesID,
+					ProductsOfServicesName = _clinic.ProductsOfServicesName,
+					ClinicStatus = 1
 				});
-				await DbConnection.ExecuteAsync("Update_Clinic", parameters);
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Update thành công Clinic!";
 				returnData.listClinics = listClinics;
@@ -279,7 +272,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 					//3. Xóa BookingAssignment liên quan đến ClinicID
 					var bookingAssignment = dataClinic.BookingAssignment
-						.Where(s => s.ClinicID == dataClinic.ClinicID).ToList();
+						.Where(s => s.ClinicID == dataClinic.ClinicID && s.AssignedDate > DateTime.Today).ToList();
 					if (bookingAssignment != null && bookingAssignment.Any()) 
 					{
 						foreach (var bookAssign in bookingAssignment)

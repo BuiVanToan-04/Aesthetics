@@ -12,7 +12,6 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         [Key]
         public int? PermissionID { get; set; }
         public int UserID { get; set; }
-        public string? UserName { get; set; }
         public int FunctionID { get; set; }
         public int? IsView { get; set; } 
         public int? IsInsert { get; set; }

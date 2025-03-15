@@ -76,17 +76,11 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			return await _context.Servicess.Where(s => s.ServiceID == ServicesID && s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
-		//public async Task<TypeProductsOfServices> GetTypeProductsOfServices(int? TypeProductsOfServicesID, string? ProductsOfServicesType)
-		//{
-		//	return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == TypeProductsOfServicesID
-		//			&& s.ProductsOfServicesType == ProductsOfServicesType
-		//			&& s.DeleteStatus == 1).FirstOrDefaultAsync();
-		//}
-
-		public async Task<TypeProductsOfServices> GetTypeProductsOfServicesByName(string? ProductsOfServicesType)
+		public async Task<TypeProductsOfServices> GetProductOfServicesByID(int? ProductsOfServicesID)
 		{
-			return await _context.TypeProductsOfServices.Where(s => s.DeleteStatus == 1 
-					&& s.ProductsOfServicesType == ProductsOfServicesType).FirstOrDefaultAsync();
+			return await _context.TypeProductsOfServices.Where(s => s.ProductsOfServicesID == ProductsOfServicesID
+				&& s.ProductsOfServicesType == "Servicess"
+				&& s.DeleteStatus == 1).FirstOrDefaultAsync();
 		}
 
 		public async Task<ResponseServicess_Loggin> Insert_Servicess(ServicessRequest servicess_)
@@ -95,10 +89,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			var servicess_Loggins = new List<Servicess_Loggin>();
 			try
 			{
-				if (servicess_.ProductsOfServicesID <= 0)
+				if (servicess_.ProductsOfServicesID <= 0
+					|| await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(servicess_.ProductsOfServicesID) == null
+					|| await GetProductOfServicesByID(servicess_.ProductsOfServicesID) == null)
 				{
 					returnData.ResponseCode = -1;
-					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
+					returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ || Không tồn tại!";
 					return returnData;
 				}
 				if (!Validation.CheckString(servicess_.ServiceName) || !Validation.CheckXSSInput(servicess_.ServiceName))
@@ -269,7 +265,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					.Include(a => a.Booking_Servicesses)
 					.Include(b => b.Comments)
 					.AsSplitQuery()
-					.FirstOrDefaultAsync(s => s.ServiceID == delete_.ServiceID);
+					.FirstOrDefaultAsync(s => s.ServiceID == delete_.ServiceID && s.DeleteStatus == 1);
 				if (servicess != null)
 				{
 					//1. Xóa Sevicess nếu tồn tại
@@ -287,7 +283,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 					//2. Xóa BookingServicess liên quan đến ServiceID
 					var bookingServicess = servicess.Booking_Servicesses
-						.Where(s => s.ServiceID == servicess.ServiceID).ToList();
+						.Where(s => s.ServiceID == servicess.ServiceID && s.AssignedDate > DateTime.Today).ToList();
 					if (bookingServicess != null && bookingServicess.Any())
 					{
 						foreach (var item in bookingServicess)
@@ -487,6 +483,5 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				throw new Exception($"Error ExportServicessToExcel Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
-
 	}
 }

@@ -19,7 +19,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Interface
 		Task<ProductsOfServices_Loggin> Update_TypeProductsOfServices(Update_TypeProductsOfServices update_);
 
 		//3.Function xóa TypeProductsOfServices
-		Task<ProductsOfServices_Loggin> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_);
+		Task<ProductsOfServices_LogginDelete> Delete_TypeProductsOfServices(Delete_TypeProductsOfServices delete_);
 
 		//4.Function get list & Search TypeProductsOfServices
 		Task<ProductsOfServices_Loggin> GetList_SearchTypeProductsOfServices(GetList_SearchTypeProductsOfServices getList_Search);
