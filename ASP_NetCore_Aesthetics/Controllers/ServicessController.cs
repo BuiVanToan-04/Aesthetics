@@ -155,9 +155,6 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						).ToList();
 					//1.4. Lưu log dữ liệu servicess trả về trong cache
 					_loggerManager.LogInfo("GetList_SearchServicess cache: " + cachedDataString);
-
-					//1.5 Lưu log kết quả dữ liệu khi có request
-					_loggerManager.LogInfo("GetList_SearchServicess cache Request: " + JsonConvert.SerializeObject(listServicess));
 					return Ok(listServicess);
 				}
 				else

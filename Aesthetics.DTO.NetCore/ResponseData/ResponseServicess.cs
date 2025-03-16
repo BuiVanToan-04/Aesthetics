@@ -24,6 +24,7 @@ namespace Aesthetics.DTO.NetCore.Response
 		public List<Servicess_Loggin>? servicess_Loggins { get; set; }
 	}
 
+
 	public class ResponseServicess_LogginDelete : ResponseData
 	{
 		public List<Servicess_Loggin>? servicess_Loggins { get; set; }

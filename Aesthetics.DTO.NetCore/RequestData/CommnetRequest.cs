@@ -8,12 +8,11 @@ namespace Aesthetics.DTO.NetCore.RequestData
 {
     public class CommnetRequest
     {
-		public int CommentID { get; set; }
 		public int? ProductID { get; set; }
 		public int? ServiceID { get; set; }
 		public int UserID { get; set; }
-		public string? Comment_Content { get; set; }
-		public DateTime? CreationDate { get; set; }
+		public string Comment_Content { get; set; }
+		public DateTime CreationDate { get; set; }
 	}
 
 	public class Update_Comment
@@ -33,7 +32,7 @@ namespace Aesthetics.DTO.NetCore.RequestData
 
 	public class GetList_SearchCommnet
 	{
-		public int CommentID { get; set; }
+		public int? CommentID { get; set; }
 		public int? ProductID { get; set; }
 		public int? ServiceID { get; set; }
 	}

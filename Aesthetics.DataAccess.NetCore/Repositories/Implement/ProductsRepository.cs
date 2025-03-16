@@ -420,10 +420,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					}
 				}
 				var parametters = new DynamicParameters();
-				parametters.Add("@ProductID", getList_.ProductID);
-				parametters.Add("@ProductName", getList_.ProductName);
-				parametters.Add("@ProductsOfServicesName", getList_.ProductsOfServicesName);
-				parametters.Add("@SupplierName", getList_.SupplierName);
+				parametters.Add("@ProductID", getList_.ProductID ?? null);
+				parametters.Add("@ProductName", getList_.ProductName ?? null);
+				parametters.Add("@ProductsOfServicesName", getList_.ProductsOfServicesName ?? null);
+				parametters.Add("@SupplierName", getList_.SupplierName ?? null);
 
 				var result = await DbConnection.QueryAsync<ResponseGetListProducts>("GetList_SearchProduct", parametters);
 				if (result != null && result.Any())

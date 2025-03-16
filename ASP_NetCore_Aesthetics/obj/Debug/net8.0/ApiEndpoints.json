@@ -256,6 +256,54 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CommentController",
+    "Method": "Delete_Comment",
+    "RelativePath": "api/Comment/Delete_Comment",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "_comment",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Comment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CommentController",
+    "Method": "Insert_Comment",
+    "RelativePath": "api/Comment/Insert_Comment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "_comment",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.CommnetRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CommentController",
+    "Method": "Update_Comment",
+    "RelativePath": "api/Comment/Update_Comment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "_comment",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Comment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.ProductsController",
     "Method": "Delete_Products",
     "RelativePath": "api/Products/Delete_Products",

@@ -48,6 +48,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			var bookingAss_List = new List<Booking_AssignmentLoggin>();
 			var bookingSer_List = new List<Booking_ServicessLoggin>();
 			var booking_Loggins = new List<Booking_Loggin>();
+			var invalidServiceIDs = new List<int>();
 
 			// Bắt đầu một transaction để đảm bảo tính toàn vẹn dữ liệu
 			using var transaction = await _context.Database.BeginTransactionAsync();
@@ -98,7 +99,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					return returnData;
 				}
 
-				//1.Lấy thời gian hiệ tại
+				//1.Lấy thời gian hiện tại
 				var bookingCreation = DateTime.Now;
 
 				var newBooking = new Booking()
@@ -138,9 +139,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					var servicess = await GetServicessByServicessID(servicessID);
 					if (servicess == null)
 					{
-						returnData.ResponseCode = -1;
-						returnData.ResposeMessage = $"ServicessID: {servicessID} không tồn tại!";
-						return returnData;
+						invalidServiceIDs.Add(servicessID);
+						continue;
 					}
 
 					// Kiểm tra xem ProductsOfServicesID đã có NumberOrder chưa
@@ -164,6 +164,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						numberOrderMap[servicess.ProductsOfServicesID] = numberOrder;
 					}
 
+					//Thêm vào bookingServices
 					var newBooking_Servicess = new BookingServicess
 					{
 						BookingID = newBooking.BookingID,
@@ -173,6 +174,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						AssignedDate = insert_.ScheduledDate
 					};
 					await _context.Booking_Servicess.AddAsync(newBooking_Servicess);
+					await _context.SaveChangesAsync();
+
+					//Lưu log
 					bookingSer_List.Add(new Booking_ServicessLoggin
 					{
 						BookingServiceID = newBooking_Servicess.BookingServiceID,
@@ -182,8 +186,9 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						DeleteStatus = newBooking_Servicess.DeleteStatus,
 						AssignedDate = newBooking_Servicess.AssignedDate
 					});
-					await _context.SaveChangesAsync();
+					
 
+					//Thêm vào booking Assignment
 					var newBooking_Assignment = new BookingAssignment
 					{
 						BookingID = newBooking.BookingID,
@@ -199,9 +204,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					await _context.Booking_Assignment.AddAsync(newBooking_Assignment);
 					await _context.SaveChangesAsync();
 
-					//Thêm newBooking_Assignment vào danh sách
+					//Lưu log
 					bookingAss_List.Add(new Booking_AssignmentLoggin
 					{
+						AssignmentID = newBooking_Assignment.AssignmentID,
 						BookingID = newBooking_Assignment.BookingID,
 						ClinicID = newBooking_Assignment.ClinicID,
 						ProductsOfServicesID = newBooking_Assignment.ProductsOfServicesID,
@@ -214,8 +220,16 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					});
 				}
 				await _context.SaveChangesAsync();
-				returnData.ResponseCode = 1;
-				returnData.ResposeMessage = "Insert Booking thành công!";
+				if (invalidServiceIDs.Any())
+				{
+					returnData.ResponseCode = 1;
+					returnData.ResposeMessage = $"Insert Booking thành công, Ngoại trừ các ServicessID: {string.Join(", ", invalidServiceIDs)} không hợp lệ!";
+				}
+				else
+				{
+					returnData.ResponseCode = 1;
+					returnData.ResposeMessage = $"Insert Booking thành công!";
+				}
 				returnData.booking_Loggins = booking_Loggins;
 				returnData.Booking_AssData = bookingAss_List;
 				returnData.Booking_SerData = bookingSer_List;
@@ -398,6 +412,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 									});
 								}
 							}
+							else
 							{
 								// Nếu chưa có thì thêm Booking_Assignment mới
 								var (generatedNumberOrder, message) = await GenerateNumberOrder(update_.ScheduledDate, servicess.ProductsOfServicesID);
@@ -411,33 +426,35 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								numberOrder = generatedNumberOrder ?? 0;
 								numberOrderMap[servicess.ProductsOfServicesID] = numberOrder;
 
-								var newAssignment = new BookingAssignment
+								foreach (var item in update_.ServiceIDs)
 								{
-									BookingID = booking.BookingID,
-									ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
-									ProductsOfServicesID = servicess.ProductsOfServicesID,
-									UserName = update_.UserName,
-									ServiceName = servicess.ServiceName,
-									NumberOrder = numberOrder, 
-									AssignedDate = update_.ScheduledDate,
-									Status = 0,
-									DeleteStatus = 1
-								};
+									var newAssignment = new BookingAssignment
+									{
+										BookingID = booking.BookingID,
+										ClinicID = await GetClinicIDByProductsOfServicesID(servicess.ProductsOfServicesID),
+										ProductsOfServicesID = servicess.ProductsOfServicesID,
+										UserName = update_.UserName,
+										ServiceName = servicess.ServiceName,
+										NumberOrder = numberOrder,
+										AssignedDate = update_.ScheduledDate,
+										Status = 0,
+										DeleteStatus = 1
+									};
+									await _context.Booking_Assignment.AddAsync(newAssignment);
 
-								await _context.Booking_Assignment.AddAsync(newAssignment);
-
-								bookingAss_Insert.Add(new Booking_AssignmentLoggin
-								{
-									BookingID = newAssignment.BookingID,
-									ClinicID = newAssignment.ClinicID,
-									ProductsOfServicesID = newAssignment.ProductsOfServicesID,
-									UserName = newAssignment.UserName,
-									ServiceName = newAssignment.ServiceName,
-									NumberOrder = newAssignment.NumberOrder,
-									AssignedDate = newAssignment.AssignedDate,
-									Status = newAssignment.Status,
-									DeleteStatus = newAssignment.DeleteStatus
-								});
+									bookingAss_Insert.Add(new Booking_AssignmentLoggin
+									{
+										BookingID = newAssignment.BookingID,
+										ClinicID = newAssignment.ClinicID,
+										ProductsOfServicesID = newAssignment.ProductsOfServicesID,
+										UserName = newAssignment.UserName,
+										ServiceName = newAssignment.ServiceName,
+										NumberOrder = newAssignment.NumberOrder,
+										AssignedDate = newAssignment.AssignedDate,
+										Status = newAssignment.Status,
+										DeleteStatus = newAssignment.DeleteStatus
+									});
+								}
 							}
 						}
 						//if (update_.ScheduledDate.Date != )

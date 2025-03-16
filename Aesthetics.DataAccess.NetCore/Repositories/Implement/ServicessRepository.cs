@@ -27,14 +27,12 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 	{
 		private DB_Context _context;
 		private IConfiguration _configuration;
-		private ITypeProductsOfServicesRepository _typeProductsOfServices;
 		private static List<Servicess> _listSevicess;
 		public ServicessRepository(DB_Context context, IConfiguration configuration,
-			ITypeProductsOfServicesRepository typeProductsOfServices, IServiceProvider serviceProvider) : base(serviceProvider)
+			 IServiceProvider serviceProvider) : base(serviceProvider)
 		{
 			_context = context;
 			_configuration = configuration;
-			_typeProductsOfServices = typeProductsOfServices;
 			_listSevicess = new List<Servicess>();
 		}
 
@@ -90,7 +88,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			try
 			{
 				if (servicess_.ProductsOfServicesID <= 0
-					|| await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(servicess_.ProductsOfServicesID) == null
 					|| await GetProductOfServicesByID(servicess_.ProductsOfServicesID) == null)
 				{
 					returnData.ResponseCode = -1;
@@ -140,6 +137,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					Description = servicess_.Description,
 					ServiceImage = imagePathServicess,
 					PriceService = servicess_.PriceService,
+					DeleteStatus = 1
 				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Service!";
@@ -172,7 +170,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 						return returnData;
 					}
-					if (await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(update_.ProductsOfServicesID) == null)
+					if (await GetProductOfServicesByID(update_.ProductsOfServicesID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = "ProductsOfServicesID không tồn tại. Vui lòng nhập lại!";
@@ -234,6 +232,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					Description = update_.Description ?? null,
 					ServiceImage = imagePathServicess ?? null,
 					PriceService = update_.PriceService ?? 0,
+					DeleteStatus = 1
 				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Update thành công Service!";
@@ -296,6 +295,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 								ServiceID = item.ServiceID,
 								ProductsOfServicesID = item.ProductsOfServicesID,
 								DeleteStatus = item.DeleteStatus,
+								AssignedDate = item.AssignedDate
 							});
 						}
 					}
@@ -386,7 +386,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 						returnData.ResposeMessage = "Dữ liệu đầu vào ProductsOfServicesID không hợp lệ!";
 						return returnData;
 					}
-					if (await _typeProductsOfServices.GetTypeProductsOfServicesIDByID(getList_.ProductsOfServicesID) == null)
+					if (await GetProductOfServicesByID(getList_.ProductsOfServicesID) == null)
 					{
 						returnData.ResponseCode = -1;
 						returnData.ResposeMessage = $"Danh sách Service không tồn tại Service có ProductsOfServicesID: {getList_.ProductsOfServicesID}!";
@@ -404,15 +404,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = "Lấy danh sách người dùng thành công!";
 					returnData.Data = result.ToList();
-					_listSevicess = returnData.Data.Select(x => new Servicess
-					{
-						ServiceID = x.ServiceID ?? 0,
-						ProductsOfServicesID = x.ProductsOfServicesID ?? 0,
-						ServiceName = x.ServiceName,
-						Description = x.Description,
-						ServiceImage = x.ServiceImage,
-						PriceService = x.PriceService ?? 0,
-					}).ToList();
 					return returnData;
 				}
 				else
