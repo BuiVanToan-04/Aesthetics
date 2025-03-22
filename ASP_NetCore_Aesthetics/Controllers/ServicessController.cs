@@ -168,6 +168,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						ServiceID = s.ServiceID,
 						ServiceName = s.ServiceName,
 						ProductsOfServicesID = s.ProductsOfServicesID,
+						ProductsOfServicesName = s.ProductsOfServicesName,
 						Description = s.Description,
 						ServiceImage = s.ServiceImage,
 						PriceService = s.PriceService,

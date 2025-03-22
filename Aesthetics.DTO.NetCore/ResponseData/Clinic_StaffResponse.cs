@@ -15,7 +15,7 @@ namespace Aesthetics.DTO.NetCore.Response
 		public int? UserID { get; set; }
 		public string? UserName { get; set; }
 		public string? Phone { get; set; }
-		public int? DeleteStatus { get; set; }
+		public string? TypePerson { get; set; }
 	}
 
 	public class Response_ClinicStaff_Loggin : ResponseData

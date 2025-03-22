@@ -12,7 +12,6 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? ServiceID { get; set; }
 		public int UserID { get; set; }
 		public string Comment_Content { get; set; }
-		public DateTime CreationDate { get; set; }
 	}
 
 	public class Update_Comment
@@ -22,7 +21,6 @@ namespace Aesthetics.DTO.NetCore.RequestData
 		public int? ServiceID { get; set; }
 		public int UserID { get; set; }
 		public string? Comment_Content { get; set; }
-		public DateTime? CreationDate { get; set; }
 	}
 
 	public class Delete_Comment

@@ -287,14 +287,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					{
 						foreach (var item in bookingServicess)
 						{
-							item.DeleteStatus = 0;
+							_context.Booking_Servicess.Remove(item);
 							booking_ServicessLoggins.Add(new Booking_ServicessLoggin
 							{
 								BookingServiceID = item.BookingServiceID,
 								BookingID = item.BookingID,
 								ServiceID = item.ServiceID,
 								ProductsOfServicesID = item.ProductsOfServicesID,
-								DeleteStatus = item.DeleteStatus,
 								AssignedDate = item.AssignedDate
 							});
 						}
@@ -444,7 +443,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				{
 					var workSheet = workBook.AddWorksheet("List_Servicess");
 					workSheet.Cell(1, 1).Value = "ServiceID";
-					workSheet.Cell(1, 2).Value = "ProductsOfServicesID";
+					workSheet.Cell(1, 2).Value = "ProductsOfServicesName";
 					workSheet.Cell(1, 3).Value = "ServiceName";
 					workSheet.Cell(1, 4).Value = "Description";
 					workSheet.Cell(1, 5).Value = "ServiceImage";
@@ -454,7 +453,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					foreach (var item in listServicess)
 					{
 						workSheet.Cell(row, 1).Value = item.ServiceID;
-						workSheet.Cell(row, 2).Value = item.ProductsOfServicesID;
+						workSheet.Cell(row, 2).Value = item.ProductsOfServicesName;
 						workSheet.Cell(row, 3).Value = item.ServiceName;
 						workSheet.Cell(row, 4).Value = item.Description;
 						workSheet.Cell(row, 5).Value = item.ServiceImage;

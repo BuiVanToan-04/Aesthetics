@@ -1,0 +1,97 @@
+2025-03-21 17:58:12.9475 INFO GetList_SearchBooking_Services Requets: {"BookingID":7}
+2025-03-21 17:58:12.9815 INFO GetList_SearchBooking_Services data: [{"BookingID":7,"ServiceName":"Nâng mũi bọc sụn","ProductsOfServicesName":"Phẫu thuật thẩm mỹ","AssignedDate":"2025-03-28T00:00:00"},{"BookingID":7,"ServiceName":"Tạo má lúm đồng tiền","ProductsOfServicesName":"Phẫu thuật thẩm mỹ","AssignedDate":"2025-03-28T00:00:00"},{"BookingID":7,"ServiceName":"Thu nhỏ môi lớn","ProductsOfServicesName":"Thẩm mỹ vùng kín","AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 18:40:34.3096 INFO GetList_SearchBooking_Assignment Requets: {"AssignmentID":null,"BookingID":null,"ClinicID":null,"ServiceName":null,"AssignedDate":null}
+2025-03-21 18:40:34.3456 INFO GetList_SearchBooking_Assignment data: [{"AssignmentID":4,"BookingID":56,"ClinicName":"Phòng Khám Phẫu Thuật Thẩm Mỹ","ProductsOfServicesName":"Phẫu thuật thẩm mỹ","UserName":null,"ServiceName":"dcbb","NumberOrder":1,"AssignedDate":"2025-03-03T00:00:00"},{"AssignmentID":6,"BookingID":116,"ClinicName":"Phòng Khám Phẫu Thuật Thẩm Mỹ","ProductsOfServicesName":"Phẫu thuật thẩm mỹ","UserName":"minhNhat","ServiceName":"Nâng mũi bọc sụn","NumberOrder":2,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 19:01:57.4063 INFO Insert_Booking Request: {"BookingID":0,"ServiceID":0}
+2025-03-21 19:01:57.4174 INFO Insert_Booking_Assignment Request: null
+2025-03-21 19:01:57.4174 INFO Insert_Booking_Servicess Request: null
+2025-03-21 19:03:07.9515 INFO Insert_Booking Request: {"BookingID":56,"ServiceID":8}
+2025-03-21 19:03:07.9515 INFO Insert_Booking_Assignment Request: null
+2025-03-21 19:03:07.9515 INFO Insert_Booking_Servicess Request: null
+2025-03-21 19:03:27.9910 ERROR {Error Insert_BookingSer_Assi} Message: Error Insert_BookingSer_Assi Message: An error occurred while saving the entity changes. See the inner exception for details. | StackTrace:    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Aesthetics.DataAccess.NetCore.Repositories.Implement.BookingsRepository.Insert_BookingSer_Assi(Insert_Booking_Services insert_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\BookingsRepository.cs:line 555|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.BookingsRepository.Insert_BookingSer_Assi(Insert_Booking_Services insert_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\BookingsRepository.cs:line 579
+   at ASP_NetCore_Aesthetics.Controllers.BookingsController.Insert_BookingSer_Assi(Insert_Booking_Services request) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\BookingsController.cs:line 143
+2025-03-21 19:11:21.6669 ERROR {Error Insert_BookingSer_Assi} Message: Error Insert_BookingSer_Assi Message: An error occurred while saving the entity changes. See the inner exception for details. | StackTrace:    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Aesthetics.DataAccess.NetCore.Repositories.Implement.BookingsRepository.Insert_BookingSer_Assi(Insert_Booking_Services insert_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\BookingsRepository.cs:line 555|Stack Trace:    at Aesthetics.DataAccess.NetCore.Repositories.Implement.BookingsRepository.Insert_BookingSer_Assi(Insert_Booking_Services insert_) in D:\Aesthetics\ASP_NetCore_Aesthetics\Aesthetics.DataAccess.NetCore\Repositories\Implement\BookingsRepository.cs:line 579
+   at ASP_NetCore_Aesthetics.Controllers.BookingsController.Insert_BookingSer_Assi(Insert_Booking_Services request) in D:\Aesthetics\ASP_NetCore_Aesthetics\ASP_NetCore_Aesthetics\Controllers\BookingsController.cs:line 143
+2025-03-21 19:11:50.8953 INFO Insert_Booking Request: {"ServiceIDs":[2],"UserID":4,"ScheduledDate":"2025-03-28T00:00:00"}
+2025-03-21 19:11:50.9001 INFO Insert_Booking_Assignment Request: [{"AssignmentID":10,"BookingID":117,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"minhNhat","ServiceName":"Nâng mũi bọc sụn","NumberOrder":3,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 19:11:50.9001 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":252,"BookingID":117,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 19:12:11.2580 INFO Insert_Booking Request: {"ServiceIDs":[2],"UserID":1,"ScheduledDate":"2025-03-28T00:00:00"}
+2025-03-21 19:12:11.2586 INFO Insert_Booking_Assignment Request: [{"AssignmentID":11,"BookingID":118,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Nâng mũi bọc sụn","NumberOrder":4,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 19:12:11.2586 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":253,"BookingID":118,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 19:15:17.3684 INFO Insert_Booking Request: {"BookingID":118,"ServiceID":8}
+2025-03-21 19:15:17.3837 INFO Insert_Booking_Assignment Request: [{"AssignmentID":13,"BookingID":118,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Hạ gò má","NumberOrder":4,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 19:15:17.4012 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":255,"BookingID":118,"ServiceID":8,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 19:24:15.1559 INFO Insert_Booking Request: {"BookingID":118,"ServiceID":15}
+2025-03-21 19:24:15.1897 INFO Insert_Booking_Assignment Request: [{"AssignmentID":14,"BookingID":118,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Lấy bọng mỡ mắt","NumberOrder":4,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 19:24:15.1897 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":256,"BookingID":118,"ServiceID":15,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 19:24:34.1935 INFO Insert_Booking Request: {"BookingID":118,"ServiceID":100}
+2025-03-21 19:24:34.1935 INFO Insert_Booking_Assignment Request: [{"AssignmentID":15,"BookingID":118,"ClinicID":10,"ProductsOfServicesID":8,"UserName":"buiToan","ServiceName":"Thu nhỏ môi lớn","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 19:24:34.1935 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":257,"BookingID":118,"ServiceID":100,"ProductsOfServicesID":8,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 22:22:29.5411 INFO Insert_Booking Request: {"ServiceIDs":[2],"UserID":1,"ScheduledDate":"2025-03-28T00:00:00"}
+2025-03-21 22:22:29.5561 INFO Insert_Booking_Assignment Request: [{"AssignmentID":16,"BookingID":119,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Nâng mũi bọc sụn","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 22:22:29.5838 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":258,"BookingID":119,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 22:22:52.1714 INFO Delete_Booking Request: {"BookingID":119}
+2025-03-21 22:22:52.1714 INFO Delete_Booking_Assignment Request: [{"AssignmentID":16,"BookingID":119,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Nâng mũi bọc sụn","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":0}]
+2025-03-21 22:22:52.1714 INFO Delete_Booking_Servicess Request: [{"BookingServiceID":258,"BookingID":119,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":null}]
+2025-03-21 22:27:36.9626 INFO GetList_SearchBooking_Assignment Requets: {"AssignmentID":null,"BookingID":null,"ClinicID":null,"ServiceName":null,"AssignedDate":null}
+2025-03-21 22:27:36.9626 INFO GetList_SearchBooking_Assignment data: null
+2025-03-21 22:27:45.4319 INFO GetList_SearchBooking_Services Requets: {"BookingID":null}
+2025-03-21 22:27:45.4319 INFO GetList_SearchBooking_Services data: null
+2025-03-21 22:27:52.4062 INFO GetList_SearchBooking_Services Requets: {"BookingID":7}
+2025-03-21 22:27:52.4062 INFO GetList_SearchBooking_Services data: null
+2025-03-21 22:58:44.1702 INFO Insert_Booking Request: {"BookingID":0,"ServiceID":0}
+2025-03-21 22:58:44.1834 INFO Insert_Booking_Assignment Request: null
+2025-03-21 22:58:44.1834 INFO Insert_Booking_Servicess Request: null
+2025-03-21 22:58:59.4384 INFO Delete_Booking Request: {"BookingServiceID":0}
+2025-03-21 22:58:59.4384 INFO Delete_Booking_Assi Request: null
+2025-03-21 22:58:59.4384 INFO Delete_Booking_Ser Request: null
+2025-03-21 23:00:01.2339 INFO Insert_Booking Request: {"ServiceIDs":[2,30,88],"UserID":1,"ScheduledDate":"2025-03-28T00:00:00"}
+2025-03-21 23:00:01.2339 INFO Insert_Booking_Assignment Request: [{"AssignmentID":17,"BookingID":120,"ClinicID":1,"ProductsOfServicesID":1,"UserName":"buiToan","ServiceName":"Nâng mũi bọc sụn","NumberOrder":2,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1},{"AssignmentID":18,"BookingID":120,"ClinicID":2,"ProductsOfServicesID":2,"UserName":"buiToan","ServiceName":"Giảm béo bụng trên/bụng dưới bằng Lipo Cavitation","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1},{"AssignmentID":19,"BookingID":120,"ClinicID":8,"ProductsOfServicesID":6,"UserName":"buiToan","ServiceName":"Tiêm huyết tương giàu tiểu cầu (PRP) kích thích mọc tóc","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":1}]
+2025-03-21 23:00:01.2339 INFO Insert_Booking_Servicess Request: [{"BookingServiceID":259,"BookingID":120,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"},{"BookingServiceID":260,"BookingID":120,"ServiceID":30,"ProductsOfServicesID":2,"AssignedDate":"2025-03-28T00:00:00"},{"BookingServiceID":261,"BookingID":120,"ServiceID":88,"ProductsOfServicesID":6,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 23:01:12.7632 INFO Delete_Booking Request: {"BookingServiceID":120}
+2025-03-21 23:01:12.7632 INFO Delete_Booking_Assi Request: null
+2025-03-21 23:01:12.7632 INFO Delete_Booking_Ser Request: null
+2025-03-21 23:01:19.6256 INFO Delete_Booking Request: {"BookingServiceID":17}
+2025-03-21 23:01:19.6256 INFO Delete_Booking_Assi Request: null
+2025-03-21 23:01:19.6256 INFO Delete_Booking_Ser Request: null
+2025-03-21 23:02:26.9743 INFO Delete_Booking Request: {"BookingServiceID":17}
+2025-03-21 23:02:26.9743 INFO Delete_Booking_Assi Request: null
+2025-03-21 23:02:26.9743 INFO Delete_Booking_Ser Request: null
+2025-03-21 23:03:32.9590 INFO Delete_Booking Request: {"BookingServiceID":259}
+2025-03-21 23:03:32.9590 INFO Delete_Booking_Assi Request: [{"AssignmentID":17,"BookingID":120,"ClinicID":1,"ProductsOfServicesID":null,"UserName":"buiToan","ServiceName":"Nâng mũi bọc sụn","NumberOrder":2,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":0}]
+2025-03-21 23:03:32.9590 INFO Delete_Booking_Ser Request: [{"BookingServiceID":259,"BookingID":120,"ServiceID":2,"ProductsOfServicesID":1,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 23:05:24.4261 INFO Delete_Booking Request: {"BookingServiceID":259}
+2025-03-21 23:05:24.4387 INFO Delete_Booking_Assi Request: null
+2025-03-21 23:05:24.4468 INFO Delete_Booking_Ser Request: null
+2025-03-21 23:05:59.0401 INFO Delete_Booking Request: {"BookingServiceID":260}
+2025-03-21 23:05:59.0496 INFO Delete_Booking_Assi Request: [{"AssignmentID":18,"BookingID":120,"ClinicID":2,"ProductsOfServicesID":2,"UserName":"buiToan","ServiceName":"Giảm béo bụng trên/bụng dưới bằng Lipo Cavitation","NumberOrder":1,"AssignedDate":"2025-03-28T00:00:00","Status":0,"DeleteStatus":0}]
+2025-03-21 23:05:59.0496 INFO Delete_Booking_Ser Request: [{"BookingServiceID":260,"BookingID":120,"ServiceID":30,"ProductsOfServicesID":2,"AssignedDate":"2025-03-28T00:00:00"}]
+2025-03-21 23:07:39.6745 INFO Delete_Booking Request: {"BookingServiceID":261}
+2025-03-21 23:07:39.6972 INFO Delete_Booking_Assi Request: null
+2025-03-21 23:07:39.6972 INFO Delete_Booking_Ser Request: null

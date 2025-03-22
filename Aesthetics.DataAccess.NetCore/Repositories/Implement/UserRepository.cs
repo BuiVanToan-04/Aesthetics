@@ -372,13 +372,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					{
 						foreach (var user_clinic_staff in clinic_staff)
 						{
-							user_clinic_staff.DeleteStatus = 0;
+							_context.Clinic_Staff.Remove(user_clinic_staff);
+							await _context.SaveChangesAsync();
 							listClinicStaff.Add(new Clinic_Staff_Loggin
 							{
 								ClinicStaffID = user_clinic_staff.ClinicStaffID,
 								ClinicID = user_clinic_staff.ClinicID,
 								UserID = user_clinic_staff.UserID,
-								DeleteStatus = user_clinic_staff.DeleteStatus
 							});
 						}
 					}

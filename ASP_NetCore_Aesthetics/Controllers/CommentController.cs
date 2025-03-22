@@ -1,12 +1,16 @@
 ﻿using Aesthetics.DataAccess.NetCore.Repositories.Implement;
+using Aesthetics.DataAccess.NetCore.Repositories.Interface;
 using Aesthetics.DataAccess.NetCore.Repositories.Interfaces;
 using Aesthetics.DTO.NetCore.DataObject.Model;
 using Aesthetics.DTO.NetCore.RequestData;
+using Aesthetics.DTO.NetCore.ResponesComment;
+using Aesthetics.DTO.NetCore.Response;
 using ASP_NetCore_Aesthetics.Loggin;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace ASP_NetCore_Aesthetics.Controllers
 {
@@ -90,6 +94,22 @@ namespace ASP_NetCore_Aesthetics.Controllers
 			catch (Exception ex)
 			{
 				_loggerManager.LogError("{Error Delete Comment} Message: " + ex.Message +
+					"|" + "Stack Trace: " + ex.StackTrace);
+				return Ok(ex.Message);
+			}
+		}
+
+		[HttpGet("GetList_SearchComment")]
+		public async Task<IActionResult> GetList_SearchComment(GetList_SearchCommnet _searchComment)
+		{
+			try
+			{
+				var responseData = await _commentRepository.GetList_SearchComment(_searchComment);
+				return Ok(responseData);
+			}
+			catch (Exception ex)
+			{
+				_loggerManager.LogError("{Error GetList_SearchComment} Message: " + ex.Message +
 					"|" + "Stack Trace: " + ex.StackTrace);
 				return Ok(ex.Message);
 			}

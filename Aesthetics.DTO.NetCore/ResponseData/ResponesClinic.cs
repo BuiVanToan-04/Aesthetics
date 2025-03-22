@@ -14,6 +14,7 @@ namespace Aesthetics.DTO.NetCore.Response
 		public string ClinicName { get; set; }
 		public int ProductsOfServicesID { get; set; }
 		public string ProductsOfServicesName { get; set; }
+		public string ClinicStatus { get; set; }
 	}
 
 	public class ResponesClinic_Loggin : ResponseData

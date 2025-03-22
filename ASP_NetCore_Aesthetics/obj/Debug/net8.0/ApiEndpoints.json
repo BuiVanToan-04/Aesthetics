@@ -97,6 +97,22 @@
   },
   {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "Delete_BookingSer_Assi",
+    "RelativePath": "api/Bookings/Delete_BookingSer_Assi",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "delete_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Booking_Services",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
     "Method": "GetList_SearchBooking",
     "RelativePath": "api/Bookings/GetList_SearchBooking",
     "HttpMethod": "GET",
@@ -129,6 +145,22 @@
   },
   {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
+    "Method": "GetList_SearchBooking_Services",
+    "RelativePath": "api/Bookings/GetList_SearchBooking_Services",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchBooking_Services",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
     "Method": "Insert_Booking",
     "RelativePath": "api/Bookings/Insert_Booking",
     "HttpMethod": "POST",
@@ -145,15 +177,95 @@
   },
   {
     "ContainingType": "ASP_NetCore_Aesthetics.Controllers.BookingsController",
-    "Method": "Update_Booking",
-    "RelativePath": "api/Bookings/Update_Booking",
+    "Method": "Insert_BookingSer_Assi",
+    "RelativePath": "api/Bookings/Insert_BookingSer_Assi",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Booking",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Insert_Booking_Services",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CartProductController",
+    "Method": "Delete_CartProduct",
+    "RelativePath": "api/CartProduct/Delete_CartProduct",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "delete_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Cart_ProductRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CartProductController",
+    "Method": "GetList_SearchCartProduct",
+    "RelativePath": "api/CartProduct/GetList_SearchCartProduct",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getList_SearchCart_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchCart_ProductRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CartProductController",
+    "Method": "Insert_CartProduct",
+    "RelativePath": "api/CartProduct/Insert_CartProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "insert_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Cart_ProductRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CartProductController",
+    "Method": "Update_CartProduct",
+    "RelativePath": "api/CartProduct/Update_CartProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "update_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Update_Cart_ProductRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.Clinic_StaffController",
+    "Method": "Delete_ClinicStaff",
+    "RelativePath": "api/Clinic_Staff/Delete_ClinicStaff",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clinic_Staff",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Clinic_StaffDelete",
         "IsRequired": true
       }
     ],
@@ -186,6 +298,22 @@
       {
         "Name": "clinic_Staff",
         "Type": "Aesthetics.DTO.NetCore.RequestData.Clinic_StaffRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.Clinic_StaffController",
+    "Method": "Update_ClinicStaff",
+    "RelativePath": "api/Clinic_Staff/Update_ClinicStaff",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clinic_Staff",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.Clinic_StaffUpdate",
         "IsRequired": true
       }
     ],
@@ -266,6 +394,22 @@
       {
         "Name": "_comment",
         "Type": "Aesthetics.DTO.NetCore.RequestData.Delete_Comment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.CommentController",
+    "Method": "GetList_SearchComment",
+    "RelativePath": "api/Comment/GetList_SearchComment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "_searchComment",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.GetList_SearchCommnet",
         "IsRequired": true
       }
     ],
@@ -650,6 +794,22 @@
       {
         "Name": "user_",
         "Type": "Aesthetics.DTO.NetCore.RequestData.User_Update",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASP_NetCore_Aesthetics.Controllers.VouchersController",
+    "Method": "Insert_Vouchers",
+    "RelativePath": "api/Vouchers/Insert_Vouchers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "insert_",
+        "Type": "Aesthetics.DTO.NetCore.RequestData.VouchersRequest",
         "IsRequired": true
       }
     ],

@@ -57,7 +57,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				{
 					ClinicID = insert_.ClinicID,
 					UserID = insert_.UserID,
-					DeleteStatus = 1,
 				};
 				await _context.Clinic_Staff.AddAsync(clinic_staff);
 				await _context.SaveChangesAsync();
@@ -66,7 +65,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					ClinicStaffID = clinic_staff.ClinicStaffID,
 					ClinicID = clinic_staff.ClinicID,
 					UserID = clinic_staff.UserID,
-					DeleteStatus = clinic_staff.DeleteStatus,
 				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = "Insert thành công Clinic_Staff!";
@@ -115,7 +113,6 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					ClinicStaffID = clinic_staff.ClinicStaffID,
 					ClinicID = clinic_staff.ClinicID,
 					UserID = clinic_staff.UserID,
-					DeleteStatus = clinic_staff.DeleteStatus,
 				});
 				returnData.ResponseCode = 1;
 				returnData.ResposeMessage = $"Update thành công Clinic_Staff: {update_.ClinicStaffID}!";
@@ -137,14 +134,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var clinic_staff = await _context.Clinic_Staff.FindAsync(delete_.ClinicStaffID);
 				if (clinic_staff != null) 
 				{
-					clinic_staff.DeleteStatus = 0;
+					_context.Clinic_Staff.Remove(clinic_staff);
 					await _context.SaveChangesAsync();
 					clinic_Staff_Loggins.Add(new Clinic_Staff_Loggin
 					{
 						ClinicStaffID = clinic_staff.ClinicStaffID,
 						ClinicID = clinic_staff.ClinicID,
 						UserID = clinic_staff.UserID,
-						DeleteStatus = clinic_staff.DeleteStatus,
 					});
 					returnData.ResponseCode = 1;
 					returnData.ResposeMessage = $"Delete thành công Clinic_Staff: {delete_.ClinicStaffID}!";
@@ -218,8 +214,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 
 		public async Task<Clinic_Staff> GetClinic_StaffByID(int? ClinicStaffID)
 		{
-			return _context.Clinic_Staff.Where(s => s.ClinicStaffID == ClinicStaffID 
-					&& s.DeleteStatus == 1).FirstOrDefault();
+			return _context.Clinic_Staff.Where(s => s.ClinicStaffID == ClinicStaffID).FirstOrDefault();
 		}
 	}
 }

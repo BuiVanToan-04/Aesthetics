@@ -11,11 +11,10 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
 	{
 		[Key]
 		public int BookingID { get; set; }
-		public string? UserName { get; set; }
-		public string? Email { get; set; }
-		public string? Phone { get; set; }
+		public int UserID { get; set; }
 		public DateTime? BookingCreation { get; set; }
 		public int? DeleteStatus { get; set; }
+		public Users Users { get; set; }
 		public ICollection<BookingServicess> Booking_Servicesses { get; set; }
 		public ICollection<BookingAssignment> Booking_Assignment { get; set; }
 	}

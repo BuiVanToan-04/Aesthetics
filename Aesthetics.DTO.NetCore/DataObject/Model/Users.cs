@@ -31,7 +31,8 @@ namespace Aesthetics.DTO.NetCore.DataObject.Model
         public string? RankMember { get; set; }
 		public Carts Carts { get; set; }
         public ICollection<Wallets> Wallets { get; set; }
-        public ICollection<UserSession> UserSession { get; set; }
+		public ICollection<Booking> Bookings { get; set; }
+		public ICollection<UserSession> UserSession { get; set; }
         public ICollection<Comments> Comments { get; set; }
         public ICollection<Invoice> Invoice { get; set; }
         public ICollection<InvoiceDetail> InvoicesDetail { get; set; }

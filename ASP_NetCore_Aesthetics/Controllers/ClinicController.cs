@@ -160,6 +160,7 @@ namespace ASP_NetCore_Aesthetics.Controllers
 						ClinicName = c.ClinicName,
 						ProductsOfServicesID = c.ProductsOfServicesID,
 						ProductsOfServicesName = c.ProductsOfServicesName,
+						ClinicStatus = c.ClinicStatus
 					}).ToList() ?? new List<ResponesClinic>();
 
 					//2.2Lưu danh sách vào Redis Cache

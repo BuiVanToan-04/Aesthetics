@@ -81,7 +81,8 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					responseData.ResposeMessage = "User không tồn tại!";
 					return responseData;
 				}
-				if (_comment.Comment_Content != null)
+				newComment.UserID = _comment.UserID;
+				if (_comment.Comment_Content == null)
 				{
 					responseData.ResponseCode = -1;
 					responseData.ResposeMessage = "Nhập nội dùng comment ...!";
@@ -123,49 +124,20 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 			var comment_Loggin = new List<Comment_Loggin>();
 			try
 			{
-				var newComment = new Comments();
-				if (_comment.ProductID != null)
-				{
-					if (await _productsRepository.GetProductsByProductID(_comment.ProductID) == null)
-					{
-						responseData.ResponseCode = -1;
-						responseData.ResposeMessage = "Product không tồn tại!";
-						return responseData;
-					}
-					newComment.ProductID = _comment.ProductID;
-				}
-				if (_comment.ServiceID != null)
-				{
-					if (await _servicessRepository.GetServicessByServicesID(_comment.ServiceID) == null)
-					{
-						responseData.ResponseCode = -1;
-						responseData.ResposeMessage = "Sevicess không tồn tại!";
-						return responseData;
-					}
-					newComment.ServiceID = _comment.ServiceID;
-				}
-				if (_comment.ServiceID != null && _comment.ProductID != null)
+				// Lấy comment hiện có từ DB
+				var existingComment = await GetCommentByCommentID(_comment.CommentID);
+				if (existingComment == null)
 				{
 					responseData.ResponseCode = -1;
-					responseData.ResposeMessage = "Chỉ comment được 1 nội dung!";
+					responseData.ResposeMessage = "CommentID không hợp lệ || không tồn tại!";
 					return responseData;
 				}
-				if (_comment.ServiceID == null && _comment.ProductID == null)
+
+				// Kiểm tra nội dung bình luận hợp lệ
+				if (string.IsNullOrWhiteSpace(_comment.Comment_Content))
 				{
 					responseData.ResponseCode = -1;
-					responseData.ResposeMessage = "Vui lòng chọn 1 nội dung để comment!";
-					return responseData;
-				}
-				if (await _userRepository.GetUserByUserID(_comment.UserID) == null)
-				{
-					responseData.ResponseCode = -1;
-					responseData.ResposeMessage = "User không tồn tại!";
-					return responseData;
-				}
-				if (_comment.Comment_Content != null)
-				{
-					responseData.ResponseCode = -1;
-					responseData.ResposeMessage = "Nhập nội dùng comment ...!";
+					responseData.ResposeMessage = "Nhập nội dung comment ...!";
 					return responseData;
 				}
 				if (!Validation.CheckString(_comment.Comment_Content) || !Validation.CheckXSSInput(_comment.Comment_Content))
@@ -174,19 +146,19 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					responseData.ResposeMessage = "Comment không hợp lệ || chứa kí tự không hợp lệ!";
 					return responseData;
 				}
-				newComment.Comment_Content = _comment.Comment_Content;
-				newComment.CreationDate = DateTime.Now;
-				_context.Comments.Update(newComment);
+
+				existingComment.Comment_Content = _comment.Comment_Content;
+				existingComment.CreationDate = DateTime.Now;
+
 				await _context.SaveChangesAsync();
+
 				comment_Loggin.Add(new Comment_Loggin
 				{
-					CommentID = newComment.CommentID,
-					ProductID = newComment.ProductID,
-					ServiceID = newComment.ServiceID,
-					UserID = newComment.UserID,
-					Comment_Content = newComment.Comment_Content,
-					CreationDate = newComment.CreationDate,
+					CommentID = existingComment.CommentID,
+					Comment_Content = existingComment.Comment_Content,
+					CreationDate = existingComment.CreationDate,
 				});
+
 				responseData.ResponseCode = 1;
 				responseData.comment_Loggins = comment_Loggin;
 				responseData.ResposeMessage = "Update Comment thành công!";
@@ -197,6 +169,7 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				throw new Exception($"Error in Update_Comment Message: {ex.Message} | StackTrace: {ex.StackTrace}", ex);
 			}
 		}
+
 
 		public async Task<ResponesCommentData> Delete_Comment(Delete_Comment _comment)
 		{

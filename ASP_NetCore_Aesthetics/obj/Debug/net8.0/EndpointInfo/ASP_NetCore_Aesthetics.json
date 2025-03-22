@@ -191,37 +191,6 @@
         }
       }
     },
-    "/api/Bookings/Update_Booking": {
-      "post": {
-        "tags": [
-          "Bookings"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Update_Booking"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Update_Booking"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Update_Booking"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/Bookings/Delete_Booking": {
       "delete": {
         "tags": [
@@ -304,6 +273,223 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/GetList_SearchBooking_Assignment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Bookings/Insert_BookingSer_Assi": {
+      "post": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insert_Booking_Services"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insert_Booking_Services"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insert_Booking_Services"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Bookings/Delete_BookingSer_Assi": {
+      "delete": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking_Services"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking_Services"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Booking_Services"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Bookings/GetList_SearchBooking_Services": {
+      "get": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Services"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Services"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchBooking_Services"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CartProduct/Insert_CartProduct": {
+      "post": {
+        "tags": [
+          "CartProduct"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart_ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart_ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cart_ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CartProduct/Update_CartProduct": {
+      "post": {
+        "tags": [
+          "CartProduct"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Cart_ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Cart_ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Update_Cart_ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CartProduct/Delete_CartProduct": {
+      "delete": {
+        "tags": [
+          "CartProduct"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Cart_ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Cart_ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Delete_Cart_ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/CartProduct/GetList_SearchCartProduct": {
+      "get": {
+        "tags": [
+          "CartProduct"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCart_ProductRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCart_ProductRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCart_ProductRequest"
               }
             }
           }
@@ -470,6 +656,68 @@
         }
       }
     },
+    "/api/Clinic_Staff/Update_ClinicStaff": {
+      "post": {
+        "tags": [
+          "Clinic_Staff"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Clinic_Staff/Delete_ClinicStaff": {
+      "delete": {
+        "tags": [
+          "Clinic_Staff"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffDelete"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffDelete"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clinic_StaffDelete"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Clinic_Staff/GetList_SearchClinicStaff": {
       "get": {
         "tags": [
@@ -583,6 +831,37 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/Delete_Comment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Comment/GetList_SearchComment": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCommnet"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCommnet"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetList_SearchCommnet"
               }
             }
           }
@@ -1275,6 +1554,37 @@
           }
         }
       }
+    },
+    "/api/Vouchers/Insert_Vouchers": {
+      "post": {
+        "tags": [
+          "Vouchers"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VouchersRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VouchersRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VouchersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1304,21 +1614,31 @@
             },
             "nullable": true
           },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
+          "userID": {
+            "type": "integer",
+            "format": "int32"
           },
           "scheduledDate": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Cart_ProductRequest": {
+        "type": "object",
+        "properties": {
+          "cartID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1363,6 +1683,16 @@
         },
         "additionalProperties": false
       },
+      "Clinic_StaffDelete": {
+        "type": "object",
+        "properties": {
+          "clinicStaffID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Clinic_StaffGetList": {
         "type": "object",
         "properties": {
@@ -1398,6 +1728,26 @@
         },
         "additionalProperties": false
       },
+      "Clinic_StaffUpdate": {
+        "type": "object",
+        "properties": {
+          "clinicStaffID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clinicID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CommnetRequest": {
         "type": "object",
         "properties": {
@@ -1418,10 +1768,6 @@
           "comment_Content": {
             "type": "string",
             "nullable": true
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -1430,6 +1776,27 @@
         "type": "object",
         "properties": {
           "bookingID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Delete_Booking_Services": {
+        "type": "object",
+        "properties": {
+          "bookingServiceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Delete_Cart_ProductRequest": {
+        "type": "object",
+        "properties": {
+          "cartProductID": {
             "type": "integer",
             "format": "int32"
           }
@@ -1538,8 +1905,9 @@
             "format": "int32",
             "nullable": true
           },
-          "userName": {
-            "type": "string",
+          "userID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "startDate": {
@@ -1573,10 +1941,6 @@
             "format": "int32",
             "nullable": true
           },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
           "serviceName": {
             "type": "string",
             "nullable": true
@@ -1584,6 +1948,48 @@
           "assignedDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_SearchBooking_Services": {
+        "type": "object",
+        "properties": {
+          "bookingID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_SearchCart_ProductRequest": {
+        "type": "object",
+        "properties": {
+          "cartID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetList_SearchCommnet": {
+        "type": "object",
+        "properties": {
+          "commentID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "serviceID": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -1677,6 +2083,20 @@
           "userName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Insert_Booking_Services": {
+        "type": "object",
+        "properties": {
+          "bookingID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serviceID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1791,36 +2211,16 @@
         },
         "additionalProperties": false
       },
-      "Update_Booking": {
+      "Update_Cart_ProductRequest": {
         "type": "object",
         "properties": {
-          "serviceIDs": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
-          },
-          "bookingID": {
+          "cartProductID": {
             "type": "integer",
             "format": "int32"
           },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "scheduledDate": {
-            "type": "string",
-            "format": "date-time"
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1871,11 +2271,6 @@
           },
           "comment_Content": {
             "type": "string",
-            "nullable": true
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time",
             "nullable": true
           }
         },
@@ -2044,6 +2439,44 @@
             "nullable": true
           },
           "idCard": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VouchersRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "discountValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "minimumOrderValue": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "rankMember": {
+            "type": "string",
+            "nullable": true
+          },
+          "voucherImage": {
             "type": "string",
             "nullable": true
           }

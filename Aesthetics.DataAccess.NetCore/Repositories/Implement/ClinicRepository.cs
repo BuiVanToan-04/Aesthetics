@@ -259,13 +259,13 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 					{
 						foreach(var clinStaf in clinic_Staff)
 						{
-							clinStaf.DeleteStatus = 0;
+							_context.Clinic_Staff.Remove(clinStaf);
+							await _context.SaveChangesAsync();
 							clinic_Staff_Loggins.Add(new Clinic_Staff_Loggin
 							{
 								ClinicStaffID = clinStaf.ClinicStaffID,
 								ClinicID = clinStaf.ClinicID,
 								UserID = clinStaf.UserID,
-								DeleteStatus = clinStaf.DeleteStatus
 							});
 						}
 					}
@@ -403,6 +403,10 @@ namespace Aesthetics.DataAccess.NetCore.Repositories.Implement
 				var result = await DbConnection.QueryAsync<ResponesClinic>("GetList_SearchLinic", parameters);
 				if (result != null && result.Any())
 				{
+					foreach (var clinic in result)
+					{
+						clinic.ClinicStatus = clinic.ClinicStatus == "Hoạt động" ? "Hoạt động" : "Dừng hoạt động";
+					}
 					responseData.ResponseCode = 1;
 					responseData.ResposeMessage = "Lấy thành công danh sách";
 					responseData.Data = result.ToList();
